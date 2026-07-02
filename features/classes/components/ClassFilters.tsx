@@ -147,14 +147,14 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
             
             .react-datepicker {
               background-color: var(--background) !important;
-              border: 1px solid rgba(var(--foreground-rgb), 0.1) !important;
+              border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent) !important;
               border-radius: 1rem !important;
               font-family: inherit !important;
               box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
             }
             .react-datepicker__header {
               background-color: var(--container) !important;
-              border-bottom: 1px solid rgba(var(--foreground-rgb), 0.05) !important;
+              border-bottom: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent) !important;
               border-top-left-radius: 1rem !important;
               border-top-right-radius: 1rem !important;
             }
@@ -166,7 +166,7 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
             .react-datepicker__day-name, 
             .react-datepicker__day, 
             .react-datepicker__time-name {
-              color: rgba(var(--foreground-rgb), 0.8) !important;
+              color: var(--foreground) !important;
             }
             .react-datepicker__day:hover,
             .react-datepicker__month-text:hover,
@@ -183,7 +183,8 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
               border-radius: 0.5rem !important;
             }
             .react-datepicker__day--outside-month {
-              color: rgba(var(--foreground-rgb), 0.3) !important;
+              color: var(--foreground) !important;
+              opacity: 0.3 !important;
             }
           `}} />
           <DatePicker
