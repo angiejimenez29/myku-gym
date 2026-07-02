@@ -61,7 +61,8 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
     ? (Array.isArray(session.instructor) ? session.instructor[0]?.full_name : session.instructor.full_name)
     : 'Instructor'
 
-  const spotsArray = (reservation.reservation_spots as any[]).map(rs => rs.session_spots?.spot_number).sort((a,b)=>a-b)
+  const rs = Array.isArray(reservation.reservation_spots) ? reservation.reservation_spots : (reservation.reservation_spots ? [reservation.reservation_spots] : [])
+  const spotsArray = rs.map((r: any) => r.session_spots?.spot_number).sort((a: number, b: number) => a - b)
   const totalAmount = Number(reservation.total_amount)
 
   return (

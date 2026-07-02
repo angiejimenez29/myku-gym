@@ -45,8 +45,9 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
   // Passive release of expired spots
   spots = spots.map((spot: any) => {
     if (spot.status !== 'available') {
-      const resSpots = spot.reservation_spots || [];
-      const hasExpired = resSpots.some((rs: any) => {
+      const resSpots = spot.reservation_spots;
+      const resSpotsArray = Array.isArray(resSpots) ? resSpots : (resSpots ? [resSpots] : []);
+      const hasExpired = resSpotsArray.some((rs: any) => {
         const res = rs.reservations;
         return res && res.estado_pago === 'pendiente' && res.expira_en && new Date(res.expira_en) < new Date();
       });
