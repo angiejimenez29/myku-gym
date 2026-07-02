@@ -12,7 +12,6 @@ export default async function PagoExitoPage({ searchParams }: { searchParams: Pr
 
   const supabase = await createClient()
 
-  // Wait a little bit for the webhook to process if needed, or just check the status
   const { data: reservation } = await supabase
     .from('reservations')
     .select('estado_pago, session_id')

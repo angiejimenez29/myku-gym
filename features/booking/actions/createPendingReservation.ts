@@ -48,7 +48,7 @@ export async function createPendingReservation(formData: FormData) {
             .eq('id', rs.reservation_id)
             .single();
             
-          if (res && res.estado_pago === 'pendiente' && new Date(res.expira_en) < new Date()) {
+          if (res && res.estado_pago === 'pendiente' && res.expira_en && new Date(res.expira_en) < new Date()) {
             // Delete the expired reservation, which cascades to reservation_spots
             // and we need to free the spot manually because refund_reservation does it, but we can just delete it
             await supabase.from('reservations').delete().eq('id', rs.reservation_id);
@@ -60,7 +60,7 @@ export async function createPendingReservation(formData: FormData) {
     }
   }
 
-  const unavailableSpots = spotsData.filter(s => s.status !== 'available');
+  const unavailableSpots = spotsData.filter((s: any) => s.status !== 'available');
   if (unavailableSpots.length > 0) {
      throw new Error('Lo sentimos, uno o más espacios ya fueron reservados.');
   }
@@ -93,7 +93,7 @@ export async function createPendingReservation(formData: FormData) {
   }
 
   // 5. Insert reservation spots
-  const reservationSpotsToInsert = spotsData.map(s => ({
+  const reservationSpotsToInsert = spotsData.map((s: any) => ({
     reservation_id: reservation.id,
     spot_id: s.id
   }));

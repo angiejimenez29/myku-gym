@@ -51,7 +51,7 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
     redirect(`/pago/exito?reservaId=${reservaId}`)
   }
 
-  if (new Date(reservation.expira_en) < new Date()) {
+  if (reservation.expira_en && new Date(reservation.expira_en) < new Date()) {
     redirect(`/reserva/${resolvedParams.id}/espacio`)
   }
 
@@ -71,7 +71,7 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
       <div className="flex-1 w-full max-w-md md:max-w-4xl lg:max-w-5xl mx-auto px-5 py-6 space-y-6">
         <BookingStepper currentStep={3} />
 
-        <CountdownTimer expiresAt={reservation.expira_en} fallbackUrl={`/reserva/${resolvedParams.id}/espacio`} />
+        {reservation.expira_en && <CountdownTimer expiresAt={reservation.expira_en} fallbackUrl={`/reserva/${resolvedParams.id}/espacio`} />}
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Columna Izquierda: Detalles de Pago */}

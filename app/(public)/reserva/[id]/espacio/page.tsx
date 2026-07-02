@@ -48,7 +48,7 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
       const resSpots = spot.reservation_spots || [];
       const hasExpired = resSpots.some((rs: any) => {
         const res = rs.reservations;
-        return res && res.estado_pago === 'pendiente' && new Date(res.expira_en) < new Date();
+        return res && res.estado_pago === 'pendiente' && res.expira_en && new Date(res.expira_en) < new Date();
       });
       if (hasExpired) {
         return { ...spot, status: 'available' };
