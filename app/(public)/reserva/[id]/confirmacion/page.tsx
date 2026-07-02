@@ -18,46 +18,48 @@ export default async function ConfirmationPage({ params, searchParams }: { param
     notFound()
   }
 
-  const clientNameRaw = resolvedSearchParams.name || 'Cliente'
-  const clientName = clientNameRaw.includes('%20') || clientNameRaw.includes('+')
-    ? decodeURIComponent(clientNameRaw.replace(/\+/g, ' '))
-    : clientNameRaw
-  const clientPhone = resolvedSearchParams.phone || '--'
-  const spotsRaw = resolvedSearchParams.spots || ''
-  
-  const spotNumbersArray = spotsRaw.split(',').map(s => parseInt(s.trim(), 10)).filter(s => !isNaN(s))
-  const spotsString = spotNumbersArray.length > 0 ? spotNumbersArray.map((s: number) => `#${s}`).join(', ') : '--'
-  const isMultiple = spotNumbersArray.length > 1
-
   const supabase = createAdminClient()
 
-  // We query ONLY sessions because reservations table is blocked by RLS for public read
-  const { data, error } = await supabase
-    .from('sessions')
+  // Fetch Reservation using admin client to get all details securely
+  const { data: reservation, error } = await supabase
+    .from('reservations')
     .select(`
-      session_date,
-      start_time,
-      theme,
-      price,
-      instructor:instructors ( full_name )
+      id, client_name, client_phone, total_amount, estado_pago,
+      session_id,
+      sessions (
+        session_date, start_time, theme, price,
+        instructor:instructors (full_name)
+      ),
+      reservation_spots (
+        session_spots ( spot_number )
+      )
     `)
-    .eq('id', resolvedParams.id)
+    .eq('id', resolvedSearchParams.reservaId)
     .single()
 
-  const session = data as any
-
-  if (error || !session) {
+  if (error || !reservation) {
     // Return a fallback UI instead of 404 just in case
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-4">
         <h1 className="text-3xl font-bold text-foreground">Reserva Confirmada</h1>
-        <p className="text-foreground/70">Tu reserva se guardó, pero hubo un problema al cargar los detalles de la sesión.</p>
+        <p className="text-foreground/70">Tu reserva se guardó, pero hubo un problema al cargar los detalles de la reserva.</p>
         <Link href="/">
           <button className="px-6 py-3 bg-[#D6007A] text-white rounded-xl font-bold">Volver al Inicio</button>
         </Link>
       </div>
     )
   }
+
+  const clientName = reservation.client_name || 'Cliente'
+  const clientPhone = reservation.client_phone || '--'
+  
+  const rs = Array.isArray(reservation.reservation_spots) ? reservation.reservation_spots : (reservation.reservation_spots ? [reservation.reservation_spots] : [])
+  const spotNumbersArray = rs.map((r: any) => r.session_spots?.spot_number).filter(Boolean).sort((a: number, b: number) => a - b)
+  
+  const spotsString = spotNumbersArray.length > 0 ? spotNumbersArray.map((s: number) => `#${s}`).join(', ') : '--'
+  const isMultiple = spotNumbersArray.length > 1
+
+  const session = reservation.sessions as any
 
   const instructorName = session?.instructor 
     ? (Array.isArray(session.instructor) ? session.instructor[0]?.full_name : session.instructor.full_name)
