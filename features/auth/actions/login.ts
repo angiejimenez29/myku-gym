@@ -23,5 +23,5 @@ export async function login(prevState: any, formData: FormData) {
   }
 
   // Redirigir al portal de instructor tras el éxito
-  redirect('/instructor')
+  redirect('/panel')
 }
