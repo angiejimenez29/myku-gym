@@ -25,7 +25,8 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
       session_date,
       start_time,
       capacity,
-      session_spots ( id, spot_number, status )
+      capacity,
+      session_spots ( id, spot_number, status, reservation_spots( reservation_id, reservations( estado_pago, expira_en ) ) )
     `)
     .eq('id', resolvedParams.id)
     .single()
@@ -39,7 +40,22 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
   const dateStr = formatSessionDate(`${session.session_date}T${session.start_time}`)
   const timeStr = formatSessionTime(`${session.session_date}T${session.start_time}`)
   
-  const spots = session.session_spots || []
+  let spots = session.session_spots || []
+  
+  // Passive release of expired spots
+  spots = spots.map((spot: any) => {
+    if (spot.status !== 'available') {
+      const resSpots = spot.reservation_spots || [];
+      const hasExpired = resSpots.some((rs: any) => {
+        const res = rs.reservations;
+        return res && res.estado_pago === 'pendiente' && new Date(res.expira_en) < new Date();
+      });
+      if (hasExpired) {
+        return { ...spot, status: 'available' };
+      }
+    }
+    return spot;
+  });
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">

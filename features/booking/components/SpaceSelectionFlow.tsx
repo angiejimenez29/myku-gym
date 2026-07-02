@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { SpaceGrid, Spot } from './SpaceGrid'
 import { Input } from '@/features/shared/components/Input'
+import { createPendingReservation } from '@/features/booking/actions/createPendingReservation'
+import { Loader2 } from 'lucide-react'
 
 interface SpaceSelectionFlowProps {
   sessionId: string
@@ -13,6 +15,7 @@ interface SpaceSelectionFlowProps {
 
 export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectionFlowProps) {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const [selectedSpots, setSelectedSpots] = useState<number[]>([])
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -33,12 +36,19 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
   const handleContinue = () => {
     if (selectedSpots.length === 0 || !isNameValid || !isPhoneValid) return
 
-    const params = new URLSearchParams()
-    params.set('spots', selectedSpots.join(','))
-    params.set('name', name.trim())
-    params.set('phone', phone)
+    startTransition(async () => {
+      const formData = new FormData()
+      formData.set('sessionId', sessionId)
+      formData.set('spots', selectedSpots.join(','))
+      formData.set('clientName', name.trim())
+      formData.set('clientPhone', phone)
 
-    router.push(`/reserva/${sessionId}/pago?${params.toString()}`)
+      try {
+        await createPendingReservation(formData)
+      } catch (error: any) {
+        alert(error.message || 'Ocurrió un error al reservar.')
+      }
+    })
   }
 
   return (
@@ -110,10 +120,11 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                 </div>
 
                 <button 
-                  disabled={!isNameValid || !isPhoneValid || selectedSpots.length === 0}
+                  disabled={!isNameValid || !isPhoneValid || selectedSpots.length === 0 || isPending}
                   onClick={handleContinue}
-                  className="w-full mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-2"
                 >
+                  {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
                   Continuar al Pago
                 </button>
               </div>
@@ -175,10 +186,11 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
           </div>
 
           <button 
-            disabled={!isNameValid || !isPhoneValid || selectedSpots.length === 0}
+            disabled={!isNameValid || !isPhoneValid || selectedSpots.length === 0 || isPending}
             onClick={handleContinue}
-            className="w-full mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-2"
           >
+            {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
             Continuar al Pago
           </button>
         </div>
