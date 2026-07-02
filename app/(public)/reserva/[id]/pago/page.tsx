@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { TopBar } from '@/features/shared/components/TopBar'
@@ -23,7 +23,7 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
     redirect(`/reserva/${resolvedParams.id}/espacio`)
   }
 
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   // Fetch Reservation
   const { data: reservation, error: resError } = await supabase
@@ -61,7 +61,8 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
     ? (Array.isArray(session.instructor) ? session.instructor[0]?.full_name : session.instructor.full_name)
     : 'Instructor'
 
-  const spotsArray = (reservation.reservation_spots as any[]).map(rs => rs.session_spots?.spot_number).sort((a,b)=>a-b)
+  const rs = Array.isArray(reservation.reservation_spots) ? reservation.reservation_spots : (reservation.reservation_spots ? [reservation.reservation_spots] : [])
+  const spotsArray = rs.map((r: any) => r.session_spots?.spot_number).sort((a: number, b: number) => a - b)
   const totalAmount = Number(reservation.total_amount)
 
   return (
