@@ -28,6 +28,7 @@ export default async function LandingPage() {
       session_date,
       start_time,
       theme,
+      class_type,
       capacity,
       price,
       created_at,
@@ -74,6 +75,7 @@ export default async function LandingPage() {
         createdAt: session.created_at,
         instructorName,
         theme: session.theme,
+        classType: session.class_type,
         totalSpots: session.capacity,
         availableSpots,
         price: session.price || 25

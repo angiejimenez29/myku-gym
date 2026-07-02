@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { TopBar } from '@/features/shared/components/TopBar'
-import { ShieldCheck } from 'lucide-react'
+import { ShieldCheck, Dumbbell } from 'lucide-react'
 import { MercadoPagoButton } from '@/features/booking/components/MercadoPagoButton'
 import { CountdownTimer } from '@/features/booking/components/CountdownTimer'
 
@@ -32,7 +32,7 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
       id, client_name, client_phone, total_amount, estado_pago, expira_en,
       session_id,
       sessions (
-        session_date, start_time, theme, price,
+        session_date, start_time, theme, price, class_type,
         instructor:instructors (full_name)
       ),
       reservation_spots (
@@ -135,10 +135,16 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
                   <span className="text-foreground/70">Instructor</span>
                   <span className="text-foreground font-medium">{instructorName}</span>
                 </div>
+                {session.class_type && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-foreground/70 flex items-center gap-1"><Dumbbell className="w-3 h-3"/> Tipo de Clase</span>
+                    <span className="text-foreground font-medium">{session.class_type}</span>
+                  </div>
+                )}
                 {session.theme && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-foreground/70">Temática</span>
-                    <span className="text-foreground font-medium">{session.theme}</span>
+                    <span className="text-foreground/70">Temática del Día</span>
+                    <span className="text-state-yellow font-medium">{session.theme}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">

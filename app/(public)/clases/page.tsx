@@ -31,6 +31,7 @@ export default async function ClassesPage(props: { searchParams: SearchParams })
       session_date,
       start_time,
       theme,
+      class_type,
       capacity,
       price,
       instructor_id,
@@ -73,6 +74,7 @@ export default async function ClassesPage(props: { searchParams: SearchParams })
         time: formatSessionTime(`${session.session_date}T${session.start_time}`),
         instructorName,
         theme: session.theme,
+        classType: session.class_type,
         totalSpots: session.capacity,
         availableSpots,
         price: session.price || 25
