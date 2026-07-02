@@ -52,8 +52,8 @@ export default function LoginPage() {
     
     if (val.length === 0) {
       setPasswordError(null)
-    } else if (val.length < 6) {
-      setPasswordError("La contraseña debe tener al menos 6 caracteres")
+    } else if (val.length < 5) {
+      setPasswordError("La contraseña debe tener al menos 5 caracteres")
     } else {
       setPasswordError(null)
     }
