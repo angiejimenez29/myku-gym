@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { LocationMap } from '@/features/booking/components/LocationMap'
 import { TopBar } from '@/features/shared/components/TopBar'
-import { Calendar, Clock, MapPin, User as UserIcon } from 'lucide-react'
+import { Calendar, Clock, MapPin, User as UserIcon, Dumbbell } from 'lucide-react'
 
 function formatSessionDate(isoString: string) {
   const date = new Date(isoString)
@@ -91,6 +91,12 @@ export default async function ClassDetailsPage({ params }: { params: Promise<{ i
                   <div>
                     <p className="text-xs text-foreground/70 uppercase tracking-wider mb-1">Invitado Especial</p>
                     <p className="text-foreground text-sm font-medium">{session.special_guest}</p>
+                  </div>
+                )}
+                {session.class_type && (
+                  <div>
+                    <p className="text-xs text-foreground/70 uppercase tracking-wider mb-1 flex items-center gap-1"><Dumbbell className="w-3 h-3"/> Tipo de Clase</p>
+                    <p className="text-foreground text-sm font-medium">{session.class_type}</p>
                   </div>
                 )}
                 {session.theme && (

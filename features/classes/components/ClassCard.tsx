@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Calendar, Clock, User, Sparkles, Users, ChevronRight } from 'lucide-react'
+import { Calendar, Clock, User, Sparkles, Users, ChevronRight, Dumbbell } from 'lucide-react'
 
 interface ClassCardProps {
   id: string
@@ -7,12 +7,13 @@ interface ClassCardProps {
   time: string
   instructorName: string
   theme?: string | null
+  classType?: string | null
   totalSpots: number
   availableSpots: number
   price: number
 }
 
-export function ClassCard({ id, date, time, instructorName, theme, totalSpots, availableSpots, price }: ClassCardProps) {
+export function ClassCard({ id, date, time, instructorName, theme, classType, totalSpots, availableSpots, price }: ClassCardProps) {
   const isSoldOut = availableSpots <= 0
   const occupancyPercentage = Math.round(((totalSpots - availableSpots) / totalSpots) * 100)
   
@@ -59,6 +60,22 @@ export function ClassCard({ id, date, time, instructorName, theme, totalSpots, a
              </div>
              
              <div className="w-full h-[1px] bg-foreground/10"></div>
+             
+             {classType && (
+               <>
+                 <div className="flex items-center gap-3">
+                   <div className="bg-[#9B00E8]/20 p-2 rounded-full text-[#9B00E8] shrink-0">
+                     <Dumbbell className="w-4 h-4" />
+                   </div>
+                   <div className="flex flex-col min-w-0">
+                     <span className="text-[10px] uppercase tracking-wider text-foreground/70 font-bold">Tipo de Clase</span>
+                     <span className="text-[13px] text-foreground font-semibold truncate">{classType}</span>
+                   </div>
+                 </div>
+                 
+                 <div className="w-full h-[1px] bg-foreground/10"></div>
+               </>
+             )}
              
              <div className="flex items-center gap-3">
                <div className="bg-state-cyan/20 p-2 rounded-full text-state-cyan shrink-0">

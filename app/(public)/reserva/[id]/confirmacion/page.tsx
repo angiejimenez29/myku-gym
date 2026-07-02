@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
-import { Check } from 'lucide-react'
+import { Check, Dumbbell } from 'lucide-react'
 import { TopBar } from '@/features/shared/components/TopBar'
 
 function formatSessionDateTimeStr(isoDate: string, isoTime: string) {
@@ -27,7 +27,7 @@ export default async function ConfirmationPage({ params, searchParams }: { param
       id, client_name, client_phone, total_amount, estado_pago,
       session_id,
       sessions (
-        session_date, start_time, theme, price,
+        session_date, start_time, theme, price, class_type,
         instructor:instructors (full_name)
       ),
       reservation_spots (
@@ -145,10 +145,16 @@ export default async function ConfirmationPage({ params, searchParams }: { param
                   <span className="text-foreground/70">Día y hora</span>
                   <span className="text-foreground font-medium capitalize">{dateTimeStr}</span>
                 </div>
+                {session.class_type && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-foreground/70 flex items-center gap-1"><Dumbbell className="w-3 h-3"/> Tipo de Clase</span>
+                    <span className="text-foreground font-medium">{session.class_type}</span>
+                  </div>
+                )}
                 {session.theme && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-foreground/70">Temática</span>
-                    <span className="text-foreground font-medium">{session.theme}</span>
+                    <span className="text-foreground/70">Temática del Día</span>
+                    <span className="text-state-yellow font-medium">{session.theme}</span>
                   </div>
                 )}
               </div>
