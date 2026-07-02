@@ -30,8 +30,12 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
     })
   }
 
-  const isNameValid = name.trim().split(' ').filter(Boolean).length >= 2
-  const isPhoneValid = phone.length >= 9
+  const isNameFormatValid = name === '' || /^[A-Za-zÀ-ÿ\s]+$/.test(name)
+  const isNameComplete = name.trim().split(' ').filter(Boolean).length >= 2
+  const isNameValid = name.length > 0 && isNameFormatValid && isNameComplete
+
+  const isPhoneFormatValid = phone === '' || /^9\d{8}$/.test(phone)
+  const isPhoneValid = phone.length === 9 && isPhoneFormatValid
 
   const handleContinue = () => {
     if (selectedSpots.length === 0 || !isNameValid || !isPhoneValid) return
@@ -93,11 +97,14 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                       id="client-name-desktop"
                       value={name}
                       autoComplete="name"
-                      onChange={e => setName(e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, ''))}
+                      onChange={e => setName(e.target.value)}
                       placeholder="Ej. Luz Maria Begonias"
                       className={`bg-background text-foreground transition-colors ${name.length > 0 && !isNameValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
                     />
-                    {name.length > 0 && !isNameValid && (
+                    {name.length > 0 && !isNameFormatValid && (
+                       <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El nombre solo debe contener letras y espacios.</span>
+                    )}
+                    {name.length > 0 && isNameFormatValid && !isNameComplete && (
                        <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">Ingresa tu nombre y apellido.</span>
                     )}
                   </div>
@@ -108,12 +115,16 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                       value={phone}
                       autoComplete="tel"
                       inputMode="tel"
-                      onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                      onChange={e => setPhone(e.target.value)}
                       placeholder="Ej. 956632585"
+                      maxLength={9}
                       type="tel"
                       className={`bg-background text-foreground transition-colors ${phone.length > 0 && !isPhoneValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
                     />
-                    {phone.length > 0 && !isPhoneValid && (
+                    {phone.length > 0 && !isPhoneFormatValid && (
+                       <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe empezar con 9 y tener 9 dígitos numéricos.</span>
+                    )}
+                    {phone.length > 0 && isPhoneFormatValid && phone.length < 9 && (
                        <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe tener 9 dígitos.</span>
                     )}
                   </div>
@@ -159,11 +170,14 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                 id="client-name"
                 value={name}
                 autoComplete="name"
-                onChange={e => setName(e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, ''))}
+                onChange={e => setName(e.target.value)}
                 placeholder="Ej. Luz Maria Begonias"
                 className={`bg-background text-foreground transition-colors ${name.length > 0 && !isNameValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
               />
-              {name.length > 0 && !isNameValid && (
+              {name.length > 0 && !isNameFormatValid && (
+                 <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El nombre solo debe contener letras y espacios.</span>
+              )}
+              {name.length > 0 && isNameFormatValid && !isNameComplete && (
                  <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">Ingresa tu nombre y apellido.</span>
               )}
             </div>
@@ -174,12 +188,16 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                 value={phone}
                 autoComplete="tel"
                 inputMode="tel"
-                onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                onChange={e => setPhone(e.target.value)}
                 placeholder="Ej. 956632585"
+                maxLength={9}
                 type="tel"
                 className={`bg-background text-foreground transition-colors ${phone.length > 0 && !isPhoneValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
               />
-              {phone.length > 0 && !isPhoneValid && (
+              {phone.length > 0 && !isPhoneFormatValid && (
+                 <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe empezar con 9 y tener 9 dígitos numéricos.</span>
+              )}
+              {phone.length > 0 && isPhoneFormatValid && phone.length < 9 && (
                  <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe tener 9 dígitos.</span>
               )}
             </div>
