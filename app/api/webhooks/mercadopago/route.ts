@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const reservationId = paymentInfo.external_reference;
     const status = paymentInfo.status; // 'approved', 'rejected', 'pending', etc.
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     if (status === 'approved') {
       // 1. Update reservation status

@@ -1,10 +1,10 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export async function createPendingReservation(formData: FormData) {
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   const sessionId = formData.get('sessionId') as string
   const spotsRaw = formData.get('spots') as string
