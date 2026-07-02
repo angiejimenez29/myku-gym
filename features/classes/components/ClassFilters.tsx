@@ -116,8 +116,8 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
           <style dangerouslySetInnerHTML={{__html: `
             .custom-datepicker .react-datepicker__input-container input {
               width: 100%;
-              background-color: var(--background);
-              border: 1px solid rgba(var(--foreground-rgb), 0.1);
+              background-color: rgba(214, 0, 122, 0.05);
+              border: 1px solid rgba(214, 0, 122, 0.2);
               border-radius: 0.75rem;
               padding: 0.875rem 1rem 0.875rem 2.5rem;
               font-size: 13px;
@@ -126,9 +126,14 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
               transition: all 0.2s;
               box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
             }
+            .custom-datepicker .react-datepicker__input-container input:hover {
+              border-color: rgba(214, 0, 122, 0.5);
+              background-color: rgba(214, 0, 122, 0.08);
+            }
             .custom-datepicker .react-datepicker__input-container input:focus {
               outline: none;
-              border-color: rgba(214, 0, 122, 0.5);
+              border-color: rgba(214, 0, 122, 0.8);
+              box-shadow: 0 0 0 3px rgba(214, 0, 122, 0.15);
             }
             
             /* DatePicker Popup Theme Overrides */
