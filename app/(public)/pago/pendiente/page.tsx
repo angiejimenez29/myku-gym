@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Clock } from 'lucide-react'
 
@@ -10,7 +10,7 @@ export default async function PagoPendientePage({ searchParams }: { searchParams
     redirect('/')
   }
 
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   const { data: reservation } = await supabase
     .from('reservations')

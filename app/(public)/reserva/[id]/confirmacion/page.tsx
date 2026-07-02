@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
@@ -29,7 +29,7 @@ export default async function ConfirmationPage({ params, searchParams }: { param
   const spotsString = spotNumbersArray.length > 0 ? spotNumbersArray.map((s: number) => `#${s}`).join(', ') : '--'
   const isMultiple = spotNumbersArray.length > 1
 
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   // We query ONLY sessions because reservations table is blocked by RLS for public read
   const { data, error } = await supabase

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { TopBar } from '@/features/shared/components/TopBar'
@@ -23,7 +23,7 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
     redirect(`/reserva/${resolvedParams.id}/espacio`)
   }
 
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   // Fetch Reservation
   const { data: reservation, error: resError } = await supabase
