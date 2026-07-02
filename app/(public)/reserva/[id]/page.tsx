@@ -68,70 +68,60 @@ export default async function ClassDetailsPage({ params }: { params: Promise<{ i
           {/* Columna Izquierda: Información de la sesión y ubicación */}
           <div className="md:col-span-7 space-y-6">
             {/* Info Box */}
-            <div className="bg-gradient-to-r from-pink-500/20 to-purple-600/20 rounded-2xl p-5 border border-foreground/5 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-pink-500/20 p-2 rounded-xl">
-                  <Calendar className="w-5 h-5 text-pink-500" />
+            <div className="bg-gradient-to-r from-pink-500/20 to-purple-600/20 rounded-2xl p-4 border border-foreground/5">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-pink-500" />
+                  <span className="text-foreground text-sm font-medium capitalize">{dateStr}</span>
                 </div>
-                <div>
-                  <p className="text-foreground font-medium capitalize">{dateStr}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="bg-pink-500/20 p-2 rounded-xl">
-                  <Clock className="w-5 h-5 text-pink-500" />
-                </div>
-                <div>
-                  <p className="text-foreground font-medium">{timeStr}</p>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-pink-500" />
+                  <span className="text-foreground text-sm font-medium">{timeStr}</span>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-foreground/10 space-y-3">
-                {session.special_guest && (
-                  <div>
-                    <p className="text-xs text-foreground/70 uppercase tracking-wider mb-1">Invitado Especial</p>
-                    <p className="text-foreground text-sm font-medium">{session.special_guest}</p>
-                  </div>
-                )}
+              <div className="mt-4 pt-4 border-t border-foreground/10 grid grid-cols-2 gap-4">
                 {session.class_type && (
                   <div>
-                    <p className="text-xs text-foreground/70 uppercase tracking-wider mb-1 flex items-center gap-1"><Dumbbell className="w-3 h-3"/> Tipo de Clase</p>
+                    <p className="text-[10px] text-foreground/70 uppercase tracking-wider flex items-center gap-1 mb-0.5"><Dumbbell className="w-3 h-3"/> Tipo de Clase</p>
                     <p className="text-foreground text-sm font-medium">{session.class_type}</p>
                   </div>
                 )}
                 {session.theme && (
                   <div>
-                    <p className="text-xs text-foreground/70 uppercase tracking-wider mb-1">Temática del Día</p>
+                    <p className="text-[10px] text-foreground/70 uppercase tracking-wider mb-0.5">Temática del Día</p>
                     <p className="text-state-yellow text-sm font-medium">{session.theme}</p>
+                  </div>
+                )}
+                {session.special_guest && (
+                  <div className="col-span-2">
+                    <p className="text-[10px] text-foreground/70 uppercase tracking-wider mb-0.5">Invitado Especial</p>
+                    <p className="text-foreground text-sm font-medium">{session.special_guest}</p>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Ubicación y Precio */}
-            <div className="space-y-3">
-              <h2 className="text-foreground font-semibold">Ubicación y Precio</h2>
-              <div className="bg-container p-4 rounded-2xl border border-foreground/5 space-y-4">
-                <div className="flex gap-3">
-                  <MapPin className="w-5 h-5 text-pink-500 shrink-0" />
-                  <div>
-                    <p className="text-foreground/80 text-xs">Ubicación</p>
-                    <p className="text-foreground text-sm font-medium">Super Exlocal</p>
-                    <p className="text-foreground/80 text-xs">Av. Principal 123, San Isidro, Lima</p>
+            {/* Ubicación */}
+            <div>
+              <details className="group bg-container rounded-2xl border border-foreground/5 [&_summary::-webkit-details-marker]:hidden overflow-hidden">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-foreground">
+                  <div className="flex items-center gap-3">
+                    <MapPin className="w-5 h-5 text-pink-500 shrink-0" />
+                    <div>
+                      <p className="text-foreground/80 text-xs font-normal">Ubicación</p>
+                      <p className="text-foreground text-sm font-medium">Super Exlocal</p>
+                    </div>
                   </div>
+                  <span className="transition-transform group-open:rotate-180">
+                    <svg fill="none" height="24" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                  </span>
+                </summary>
+                <div className="p-4 pt-0 space-y-4">
+                  <p className="text-foreground/80 text-xs">Av. Principal 123, San Isidro, Lima</p>
+                  <LocationMap />
                 </div>
-                <div className="flex gap-3">
-                  <div className="w-5 h-5 rounded-full bg-state-yellow/20 flex items-center justify-center shrink-0">
-                    <span className="text-state-yellow text-xs font-bold">$</span>
-                  </div>
-                  <div>
-                    <p className="text-foreground/80 text-xs">Precio por persona</p>
-                    <p className="text-foreground font-bold">S/. {session.price.toFixed(2)}</p>
-                  </div>
-                </div>
-
-                <LocationMap />
-              </div>
+              </details>
             </div>
           </div>
 
@@ -139,7 +129,6 @@ export default async function ClassDetailsPage({ params }: { params: Promise<{ i
           <div className="md:col-span-5 space-y-6 md:sticky md:top-40">
             {/* Instructor */}
             <div className="space-y-3">
-              <h2 className="text-foreground font-semibold">Instructor</h2>
               <div className="bg-container p-4 rounded-2xl flex items-center gap-4 border border-foreground/5">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shrink-0">
                   <span className="text-white font-bold text-lg">{instructorName.substring(0, 2).toUpperCase()}</span>
@@ -184,17 +173,17 @@ export default async function ClassDetailsPage({ params }: { params: Promise<{ i
       </main>
 
       {/* Floating Bottom Bar (Mobile only) */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-background/95 border-t border-foreground/10 p-5 px-6 pb-8 z-50">
-        <div className="max-w-md mx-auto space-y-4">
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-background/95 border-t border-foreground/10 p-4 px-5 pb-6 z-50">
+        <div className="max-w-md mx-auto space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-foreground/70 text-sm">Cupos disponibles</span>
-            <span className="text-state-yellow font-bold">{availableSpots} de {session.capacity}</span>
-          </div>
-          <div className="w-full h-2 bg-foreground/10 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-state-yellow rounded-full"
-              style={{ width: `${progressPercentage}%` }}
-            />
+            <div className="flex flex-col">
+              <span className="text-foreground/70 text-xs">Precio total</span>
+              <span className="text-foreground font-bold text-lg">S/. {session.price.toFixed(2)}</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-foreground/70 text-xs">Cupos</span>
+              <span className="text-state-yellow font-bold text-sm">{availableSpots} de {session.capacity} libres</span>
+            </div>
           </div>
           
           <Link href={`/reserva/${resolvedParams.id}/espacio`} className="block w-full">

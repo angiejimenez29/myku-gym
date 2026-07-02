@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SpaceGrid, Spot } from './SpaceGrid'
 import { Input } from '@/features/shared/components/Input'
 import { createPendingReservation } from '@/features/booking/actions/createPendingReservation'
-import { Loader2 } from 'lucide-react'
+import { Loader2, X } from 'lucide-react'
 
 interface SpaceSelectionFlowProps {
   sessionId: string
@@ -19,6 +19,17 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
   const [selectedSpots, setSelectedSpots] = useState<number[]>([])
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+
+  useEffect(() => {
+    try {
+      const savedName = localStorage.getItem('meykogym_client_name')
+      const savedPhone = localStorage.getItem('meykogym_client_phone')
+      if (savedName) setName(savedName)
+      if (savedPhone) setPhone(savedPhone)
+    } catch (e) {
+      // ignore localStorage errors (e.g., in incognito mode)
+    }
+  }, [])
 
   const handleToggleSpot = (spot: number) => {
     setSelectedSpots(prev => {
@@ -41,6 +52,13 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
     if (selectedSpots.length === 0 || !isNameValid || !isPhoneValid) return
 
     startTransition(async () => {
+      try {
+        localStorage.setItem('meykogym_client_name', name.trim())
+        localStorage.setItem('meykogym_client_phone', phone)
+      } catch (e) {
+        // ignore
+      }
+
       const formData = new FormData()
       formData.set('sessionId', sessionId)
       formData.set('spots', selectedSpots.join(','))
@@ -85,9 +103,18 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                   <span className="text-foreground/80 text-xs">
                     {selectedSpots.length === 1 ? 'Espacio seleccionado' : 'Espacios seleccionados'}
                   </span>
-                  <span className="text-state-yellow text-2xl font-bold">
-                    {selectedSpots.map(s => `#${s}`).join(', ')}
-                  </span>
+                  <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                    {selectedSpots.map(s => (
+                       <button 
+                         key={s} 
+                         onClick={() => handleToggleSpot(s)} 
+                         title="Deseleccionar espacio"
+                         className="flex items-center gap-1 bg-state-yellow/10 border border-state-yellow/50 text-state-yellow text-xl font-bold px-3 py-1 rounded-lg hover:bg-state-yellow hover:text-black transition-colors"
+                       >
+                         #{s} <X className="w-4 h-4 ml-1 opacity-70" />
+                       </button>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="space-y-3">
@@ -158,9 +185,18 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
              <span className="text-foreground/80 text-xs">
                 {selectedSpots.length === 1 ? 'Espacio seleccionado' : 'Espacios seleccionados'}
              </span>
-             <span className="text-state-yellow text-2xl font-bold">
-                {selectedSpots.length > 0 ? selectedSpots.map(s => `#${s}`).join(', ') : '--'}
-             </span>
+             <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                {selectedSpots.map(s => (
+                   <button 
+                     key={s} 
+                     onClick={() => handleToggleSpot(s)} 
+                     title="Deseleccionar espacio"
+                     className="flex items-center gap-1 bg-state-yellow/10 border border-state-yellow/50 text-state-yellow text-xl font-bold px-3 py-1 rounded-lg hover:bg-state-yellow hover:text-black transition-colors"
+                   >
+                     #{s} <X className="w-4 h-4 ml-1 opacity-70" />
+                   </button>
+                ))}
+             </div>
           </div>
 
           <div className="space-y-3">
