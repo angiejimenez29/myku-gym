@@ -94,6 +94,41 @@ export type Database = {
           },
         ]
       }
+      refunds: {
+        Row: {
+          id: string
+          reservation_id: string
+          amount: number
+          status: string
+          created_at: string | null
+          completed_at: string | null
+        }
+        Insert: {
+          id?: string
+          reservation_id: string
+          amount: number
+          status?: string
+          created_at?: string | null
+          completed_at?: string | null
+        }
+        Update: {
+          id?: string
+          reservation_id?: string
+          amount?: number
+          status?: string
+          created_at?: string | null
+          completed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refunds_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       reservation_spots: {
         Row: {
           created_at: string | null

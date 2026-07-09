@@ -20,6 +20,14 @@ function formatSessionTime(isoString: string) {
 export default async function LandingPage() {
   const supabase = await createClient()
 
+  // Calculate local date of yesterday to make sure we don't miss late sessions crossing midnight or timezone offsets
+  const localDate = new Date()
+  const yesterday = new Date(localDate.getTime() - 24 * 60 * 60 * 1000)
+  const yYear = yesterday.getFullYear()
+  const yMonth = String(yesterday.getMonth() + 1).padStart(2, '0')
+  const yDay = String(yesterday.getDate()).padStart(2, '0')
+  const yesterdayString = `${yYear}-${yMonth}-${yDay}`
+
   // Fetch nearest upcoming sessions, ordering by closest start time first
   const { data: sessionsData, error } = await supabase
     .from('sessions')
@@ -38,7 +46,7 @@ export default async function LandingPage() {
         whatsapp_phone
       )
     `)
-    .gte('session_date', new Date().toISOString().split('T')[0])
+    .gte('session_date', yesterdayString)
     .order('session_date', { ascending: true })
     .order('start_time', { ascending: true })
     .limit(15)
@@ -51,11 +59,17 @@ export default async function LandingPage() {
     .order('created_at', { ascending: true })
     .limit(4)
 
-  const nowStr = new Date().toISOString()
+  const now = Date.now()
   const processedSessions = ((sessionsData as any[]) || [])
     .filter((session: any) => {
-      const sessionDateTime = new Date(`${session.session_date}T${session.start_time}`)
-      return sessionDateTime.toISOString() > nowStr
+      // Parse local class date and start time manually to ensure it uses the local timezone
+      const [year, month, day] = session.session_date.split('-').map(Number)
+      const [hour, minute] = session.start_time.split(':').map(Number)
+      const sessionDateTime = new Date(year, month - 1, day, hour, minute)
+      
+      // A class expires exactly 2 hours after its start time
+      const expirationTime = sessionDateTime.getTime() + 2 * 60 * 60 * 1000
+      return now <= expirationTime
     })
     .map((session: any) => {
       const instructorName = session.instructor
@@ -84,9 +98,7 @@ export default async function LandingPage() {
 
   processedSessions.sort((a, b) => {
     if (a.sessionDate !== b.sessionDate) return a.sessionDate.localeCompare(b.sessionDate)
-    if (a.startTime !== b.startTime) return a.startTime.localeCompare(b.startTime)
-    if (a.availableSpots !== b.availableSpots) return a.availableSpots - b.availableSpots
-    return a.createdAt.localeCompare(b.createdAt)
+    return a.startTime.localeCompare(b.startTime)
   })
 
   const mappedSessions = processedSessions.slice(0, 3)
@@ -129,7 +141,7 @@ export default async function LandingPage() {
             </div>
 
             <h1 className="text-[28px] md:text-5xl lg:text-6xl font-extrabold text-white mb-3 md:mb-6 leading-tight">
-              Bienvenido a<br />Meikyo Gym
+              Bienvenido a<br />Myku
             </h1>
             <p className="text-white/90 text-[13px] md:text-lg font-medium mb-8 max-w-md">
               Transforma tu cuerpo, eleva tu mente. Entrena con los mejores profesionales en un ambiente exclusivo.
@@ -180,7 +192,7 @@ export default async function LandingPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
               {mappedSessions.map(session => (
-                <ClassCard key={session.id} {...session} />
+                <ClassCard key={session.id} {...session} referrer="landing" />
               ))}
             </div>
           )}
@@ -250,13 +262,13 @@ export default async function LandingPage() {
                 </div>
               </a>
 
-              <a href="mailto:info@meikyogym.com" className="flex items-start gap-4 md:gap-6 group hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-xl p-1 -m-1">
+              <a href="mailto:info@myku.com" className="flex items-start gap-4 md:gap-6 group hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-xl p-1 -m-1">
                 <div className="bg-[#D6007A]/10 p-3 md:p-4 rounded-full text-[#D6007A] mt-1 shadow-inner group-hover:bg-[#D6007A]/20 transition-colors">
                   <Mail className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm md:text-lg text-foreground font-bold mb-1">Email</div>
-                  <div className="text-[13px] md:text-base text-[#D6007A] font-medium truncate">info@meikyogym.com</div>
+                  <div className="text-[13px] md:text-base text-[#D6007A] font-medium truncate">info@myku.com</div>
                 </div>
               </a>
             </div>

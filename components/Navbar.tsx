@@ -2,21 +2,39 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Menu, X, LogIn, Calendar, Users, Home, LayoutDashboard } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Menu, X, LogIn, Calendar, Users, Home, LayoutDashboard, LogOut, PlusCircle, Activity, Undo2 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
 export function Navbar({ user }: { user?: any }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const pathname = usePathname()
 
-  const navLinks = [
+  const router = useRouter()
+  const supabase = createClient()
+
+  const publicNavLinks = [
     { href: '/', label: 'Inicio', icon: Home },
     { href: '/clases', label: 'Clases', icon: Calendar },
     { href: '/instructores', label: 'Nuestro Equipo', icon: Users },
   ]
 
-  const isActive = (path: string) => pathname === path
+  const instructorNavLinks = [
+    { href: '/panel', label: 'Panel de Control', icon: LayoutDashboard },
+    { href: '/panel/nueva-sesion', label: 'Crear Clase', icon: PlusCircle },
+    { href: '/panel/asistencia', label: 'Monitoreo en Vivo', icon: Activity },
+    { href: '/panel/devoluciones', label: 'Gestión de Devoluciones', icon: Undo2 },
+  ]
+
+  const desktopNavLinks = user ? instructorNavLinks : publicNavLinks
+
+  const isActive = (path: string) => {
+    if (path === '/') return pathname === '/'
+    if (path === '/panel') return pathname === '/panel'
+    return pathname.startsWith(path)
+  }
 
   return (
     <>
@@ -26,14 +44,14 @@ export function Navbar({ user }: { user?: any }) {
           <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#D6007A] to-[#9B00E8] flex items-center justify-center shadow-md">
              <span className="text-white font-bold text-xs md:text-sm">M</span>
           </div>
-          <span className="text-base md:text-xl font-bold text-foreground tracking-wide">Meikyo Gym</span>
+          <span className="text-base md:text-xl font-bold text-foreground tracking-wide">Myku</span>
         </Link>
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-8 items-center">
-          {navLinks.map((link) => (
+          {desktopNavLinks.map((link) => (
             <Link 
-              key={link.href} 
+              key={link.href + link.label} 
               href={link.href} 
               className={`text-sm font-semibold transition-colors ${
                 isActive(link.href) ? 'text-foreground border-b-2 border-[#D6007A] pb-1' : 'text-foreground/70 hover:text-foreground'
@@ -44,12 +62,34 @@ export function Navbar({ user }: { user?: any }) {
           ))}
           <ThemeToggle />
           {user ? (
-            <Link 
-              href="/instructor" 
-              className="text-sm font-bold bg-[#D6007A] hover:bg-[#D6007A]/80 text-white px-5 py-2 rounded-full transition-colors shadow-lg flex items-center gap-2"
-            >
-              <LayoutDashboard className="w-4 h-4" /> Mi Portal
-            </Link>
+            <div className="relative">
+              <button 
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="text-sm font-bold bg-foreground/5 hover:bg-foreground/10 text-foreground px-4 py-2 rounded-full transition-colors flex items-center gap-2"
+              >
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#D6007A] to-[#9B00E8] text-white flex items-center justify-center text-xs">
+                  {user.email?.charAt(0).toUpperCase() || 'I'}
+                </div>
+                Mi Portal
+              </button>
+              
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-container border border-foreground/10 rounded-xl shadow-xl py-2 flex flex-col z-50">
+                  <button 
+                    onClick={async () => {
+                      setIsDropdownOpen(false)
+                      await supabase.auth.signOut()
+                      router.push('/')
+                      router.refresh()
+                    }} 
+                    className="px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-foreground/5 transition-colors flex items-center gap-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Cerrar Sesión
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link 
               href="/login" 
@@ -97,11 +137,11 @@ export function Navbar({ user }: { user?: any }) {
         </div>
 
         <nav className="flex flex-col p-4 gap-2 flex-1">
-          {navLinks.map((link) => {
+          {publicNavLinks.map((link) => {
             const Icon = link.icon
             return (
               <Link
-                key={link.href}
+                key={link.href + link.label}
                 href={link.href}
                 onClick={() => setIsSidebarOpen(false)}
                 className={`flex items-center gap-3 p-4 rounded-2xl font-bold transition-colors ${
@@ -119,13 +159,26 @@ export function Navbar({ user }: { user?: any }) {
 
         <div className="p-5 border-t border-foreground/10">
           {user ? (
-            <Link
-              href="/instructor"
-              onClick={() => setIsSidebarOpen(false)}
-              className="w-full bg-[#D6007A] text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-[#D6007A]/80 transition-colors"
-            >
-              <LayoutDashboard className="w-5 h-5" /> Mi Portal
-            </Link>
+            <div className="flex flex-col gap-3">
+              <Link
+                href="/panel"
+                onClick={() => setIsSidebarOpen(false)}
+                className="w-full bg-[#D6007A] text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-[#D6007A]/80 transition-colors"
+              >
+                <LayoutDashboard className="w-5 h-5" /> Panel de Instructor
+              </Link>
+              <button
+                onClick={async () => {
+                  setIsSidebarOpen(false)
+                  await supabase.auth.signOut()
+                  router.push('/')
+                  router.refresh()
+                }}
+                className="w-full bg-red-500/10 text-red-500 font-bold py-4 rounded-2xl flex justify-center items-center gap-2 hover:bg-red-500 hover:text-white transition-colors"
+              >
+                <LogOut className="w-5 h-5" /> Cerrar Sesión
+              </button>
+            </div>
           ) : (
             <Link
               href="/login"

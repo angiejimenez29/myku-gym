@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Meikyo Gym",
-  description: "Plataforma de reservas para clases en Meikyo Gym",
+  title: "Myku",
+  description: "Plataforma de reservas para clases en Myku",
 };
 
 export default function RootLayout({

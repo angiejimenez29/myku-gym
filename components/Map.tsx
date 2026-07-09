@@ -33,7 +33,7 @@ export default function Map() {
       <Marker position={position} icon={icon}>
         <Popup>
           <div className="text-center leading-tight mt-1">
-            <strong className="text-[#D6007A] block mb-1">Meikyo Gym</strong>
+            <strong className="text-[#D6007A] block mb-1">Myku</strong>
             <span className="text-xs">Av Tupac Amaru km 13.5<br />Prdo Depósito Año Nuevo, Comas</span>
           </div>
         </Popup>

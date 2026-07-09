@@ -34,7 +34,7 @@ export async function updateSession(request: NextRequest) {
   /*
   if (
     !user &&
-    request.nextUrl.pathname.startsWith('/instructor')
+    request.nextUrl.pathname.startsWith('/panel')
   ) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
