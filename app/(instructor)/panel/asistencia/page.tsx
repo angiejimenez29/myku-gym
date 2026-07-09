@@ -2,15 +2,28 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Clock, User as UserIcon } from 'lucide-react'
+import { getLimaDateString } from '@/lib/utils'
 
 function formatSessionDate(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'long' }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long',
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 function formatSessionTime(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true,
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 function getOccupationTextColor(percentage: number) {
@@ -44,7 +57,7 @@ export default async function AsistenciaIndexPage() {
     .in('status', ['published', 'draft'])
     .order('session_date', { ascending: true })
     .order('start_time', { ascending: true })
-    .gte('session_date', new Date().toISOString().split('T')[0])
+    .gte('session_date', getLimaDateString())
 
   if (error) {
     console.error('Error fetching sessions:', error)

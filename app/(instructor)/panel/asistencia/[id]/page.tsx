@@ -6,13 +6,25 @@ import { LiveAttendance, SpotData } from '@/features/instructor/components/LiveA
 import { AttendanceQRModal } from '@/features/instructor/components/AttendanceQRModal'
 
 function formatSessionDate(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'long' }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long',
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 function formatSessionTime(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true,
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 export default async function AttendancePage({ params }: { params: Promise<{ id: string }> }) {
@@ -58,25 +70,27 @@ export default async function AttendancePage({ params }: { params: Promise<{ id:
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-6 pb-6 px-5 text-white relative">
-        <div className="max-w-3xl mx-auto w-full">
+      <div className="bg-gradient-to-r from-pink-500 to-purple-600 py-8 md:py-10 text-white relative">
+        <div className="max-w-3xl mx-auto px-4 w-full">
           <Link href="/panel" className="inline-flex items-center gap-1 text-white/90 hover:text-white mb-4 text-sm font-medium transition-colors">
             <ChevronLeft className="w-4 h-4" />
             Volver al Panel
           </Link>
           
-          <div className="flex justify-between items-end">
+          <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-bold">Asistencia en Vivo</h1>
               <p className="text-white/80 text-sm mt-1 capitalize">{dateStr} - {timeStr}</p>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center shrink-0">
               <span className="text-3xl font-bold">{countPresent}</span>
               <span className="text-xs text-white/80 uppercase tracking-wider font-medium">Presentes</span>
             </div>
           </div>
 
-          <AttendanceQRModal />
+          <div className="mt-6 md:mt-8">
+            <AttendanceQRModal />
+          </div>
         </div>
       </div>
 

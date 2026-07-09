@@ -6,27 +6,35 @@ import { MapPin, Phone, Mail, ChevronRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { InstructorCard } from '@/features/instructors/components/InstructorCard'
 import MapWrapper from '@/components/MapWrapper'
+import { getCurrentLimaTime, getLimaYesterdayDateString } from '@/lib/utils'
 
 function formatSessionDate(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'short' }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'short',
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 function formatSessionTime(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true,
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 export default async function LandingPage() {
   const supabase = await createClient()
 
   // Calculate local date of yesterday to make sure we don't miss late sessions crossing midnight or timezone offsets
-  const localDate = new Date()
-  const yesterday = new Date(localDate.getTime() - 24 * 60 * 60 * 1000)
-  const yYear = yesterday.getFullYear()
-  const yMonth = String(yesterday.getMonth() + 1).padStart(2, '0')
-  const yDay = String(yesterday.getDate()).padStart(2, '0')
-  const yesterdayString = `${yYear}-${yMonth}-${yDay}`
+  const yesterdayString = getLimaYesterdayDateString()
 
   // Fetch nearest upcoming sessions, ordering by closest start time first
   const { data: sessionsData, error } = await supabase
@@ -59,17 +67,17 @@ export default async function LandingPage() {
     .order('created_at', { ascending: true })
     .limit(4)
 
-  const now = Date.now()
+  const limaNow = getCurrentLimaTime()
   const processedSessions = ((sessionsData as any[]) || [])
     .filter((session: any) => {
-      // Parse local class date and start time manually to ensure it uses the local timezone
+      // Parse local class date and start time manually to ensure it uses the local timezone (local server timezone representation)
       const [year, month, day] = session.session_date.split('-').map(Number)
       const [hour, minute] = session.start_time.split(':').map(Number)
       const sessionDateTime = new Date(year, month - 1, day, hour, minute)
       
-      // A class expires exactly 2 hours after its start time
-      const expirationTime = sessionDateTime.getTime() + 2 * 60 * 60 * 1000
-      return now <= expirationTime
+      // A class expires exactly 1 hour after its start time
+      const expirationTime = sessionDateTime.getTime() + 1 * 60 * 60 * 1000
+      return limaNow.getTime() <= expirationTime
     })
     .map((session: any) => {
       const instructorName = session.instructor
