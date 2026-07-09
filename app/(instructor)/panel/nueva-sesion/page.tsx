@@ -14,6 +14,13 @@ export default async function NuevaSesionPage() {
     redirect('/login')
   }
 
+  // Fetch the logged-in instructor's phone number
+  const { data: instructor } = await supabase
+    .from('instructors')
+    .select('whatsapp_phone')
+    .eq('id', user.id)
+    .single()
+
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
@@ -29,7 +36,7 @@ export default async function NuevaSesionPage() {
       </div>
 
       <main className="max-w-3xl mx-auto px-4 mt-6">
-        <NewSessionForm />
+        <NewSessionForm defaultWhatsappContact={instructor?.whatsapp_phone || ''} />
       </main>
     </div>
   )
