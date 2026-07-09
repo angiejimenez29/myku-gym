@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-interface Reservation {
+export interface Reservation {
   id: string
   date: string
   time: string
@@ -20,23 +20,8 @@ interface Reservation {
   spots: string[]
 }
 
-// ─── Mock data ────────────────────────────────────────────────────────────────
-const MOCK_RESERVATIONS: Reservation[] = [
-  {
-    id: 'r1',
-    date: '30/05/2026',
-    time: '6:00 PM',
-    theme: 'Turquesa / Negro',
-    spots: ['#3', '#4', '#5'],
-  },
-  {
-    id: 'r2',
-    date: '01/06/2026',
-    time: '7:30 PM',
-    theme: 'Rojo / Blanco',
-    spots: ['#7', '#8'],
-  },
-]
+import { getReservationsForCheckin } from './actions'
+
 
 // ─── Inline keyframes injected once ─────────────────────────────────────────
 const KEYFRAMES = `
@@ -134,10 +119,12 @@ function ScreenPhone({
   phone,
   onChange,
   onSearch,
+  isLoading,
 }: {
   phone: string
   onChange: (v: string) => void
   onSearch: () => void
+  isLoading?: boolean
 }) {
   return (
     <div className="flex flex-col flex-1">
@@ -198,7 +185,7 @@ function ScreenPhone({
       <button
         id="btn-search-reservations"
         onClick={onSearch}
-        disabled={phone.trim().length < 7}
+        disabled={phone.trim().length < 7 || isLoading}
         className="w-full py-4 rounded-2xl font-bold text-white text-base transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
         style={{
           background: 'linear-gradient(135deg, #D6007A, #9B00E8)',
@@ -207,8 +194,14 @@ function ScreenPhone({
         }}
       >
         <span className="flex items-center justify-center gap-2">
-          <Search size={17} />
-          Buscar mis reservas
+          {isLoading ? (
+            'Buscando...'
+          ) : (
+            <>
+              <Search size={17} />
+              Buscar mis reservas
+            </>
+          )}
         </span>
       </button>
     </div>
@@ -536,6 +529,22 @@ export default function CheckinPage() {
   const [phone, setPhone] = useState('')
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null)
+  
+  const [reservations, setReservations] = useState<Reservation[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSearch = async () => {
+    setIsLoading(true)
+    try {
+      const data = await getReservationsForCheckin(phone)
+      setReservations(data)
+      setStep('reservations')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <>
@@ -573,13 +582,14 @@ export default function CheckinPage() {
               <ScreenPhone
                 phone={phone}
                 onChange={setPhone}
-                onSearch={() => setStep('reservations')}
+                onSearch={handleSearch}
+                isLoading={isLoading}
               />
             )}
 
             {(step === 'reservations' || step === 'confirm') && (
               <ScreenReservations
-                reservations={MOCK_RESERVATIONS}
+                reservations={reservations}
                 onMark={(r) => {
                   setSelectedReservation(r)
                   setStep('confirm')
