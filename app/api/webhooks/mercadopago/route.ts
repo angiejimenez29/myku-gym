@@ -48,8 +48,58 @@ export async function POST(req: NextRequest) {
       // 3. Mark spots as permanently reserved if not already done by triggers
       // (The trigger mark_spot_reserved runs on insert to reservation_spots, so they are already 'reserved')
 
-      // 4. Fire WhatsApp Confirmation logic (stub)
-      console.log(`WhatsApp confirmation sent for reservation ${reservationId}`);
+      // 4. Fire WhatsApp Confirmation logic
+      try {
+        const { data: resData } = await supabase
+          .from('reservations')
+          .select(`
+            client_name,
+            client_phone,
+            session:sessions (
+              class_type,
+              theme,
+              session_date,
+              start_time
+            ),
+            spots:reservation_spots (
+              spot:session_spots (
+                spot_number
+              )
+            )
+          `)
+          .eq('id', reservationId)
+          .single();
+
+        if (resData && resData.session) {
+          const accountSid = process.env.TWILIO_ACCOUNT_SID;
+          const authToken = process.env.TWILIO_AUTH_TOKEN;
+          const fromNumber = process.env.TWILIO_WHATSAPP_NUMBER;
+          
+          if (accountSid && authToken && fromNumber) {
+            const twilio = require('twilio');
+            const twilioClient = twilio(accountSid, authToken);
+
+            const spotNumbers = (resData.spots as any[])?.map(s => s.spot?.spot_number).filter(Boolean).join(', ');
+            
+            const session = resData.session as any;
+            const messageBody = `¡Hola ${resData.client_name}!\n\nTu reserva está confirmada ✅\n\nClase: ${session.class_type}${session.theme ? ` - ${session.theme}` : ''}\nFecha: ${session.session_date}\nHora: ${session.start_time.substring(0,5)}\nEspacio(s): ${spotNumbers}\n\n¡Te esperamos en Meyko Gym! 💪`;
+
+            let phone = resData.client_phone.replace(/\D/g, '');
+            if (phone.startsWith('51')) {
+              phone = phone.substring(2);
+            }
+
+            await twilioClient.messages.create({
+              body: messageBody,
+              from: fromNumber.startsWith('whatsapp:') ? fromNumber : `whatsapp:${fromNumber}`,
+              to: `whatsapp:+51${phone}`
+            });
+            console.log(`WhatsApp confirmation sent for reservation ${reservationId} to ${phone}`);
+          }
+        }
+      } catch (waError) {
+        console.error('Error sending WhatsApp confirmation:', waError);
+      }
 
     } else if (status === 'rejected' || status === 'cancelled') {
       // 1. Update reservation status
