@@ -23,6 +23,14 @@ export default async function ClassesPage(props: { searchParams: SearchParams })
   const { data: instructorsData } = await supabase.from('instructors').select('id, full_name')
   const instructorsList = ((instructorsData as any[]) || []).map((i: any) => ({ id: i.id, name: i.full_name }))
 
+  // Calculate local date of yesterday to make sure we don't miss late sessions crossing midnight or timezone offsets
+  const localDate = new Date()
+  const yesterday = new Date(localDate.getTime() - 24 * 60 * 60 * 1000)
+  const yYear = yesterday.getFullYear()
+  const yMonth = String(yesterday.getMonth() + 1).padStart(2, '0')
+  const yDay = String(yesterday.getDate()).padStart(2, '0')
+  const yesterdayString = `${yYear}-${yMonth}-${yDay}`
+
   // Base query for sessions
   let query = supabase
     .from('sessions')
@@ -41,7 +49,7 @@ export default async function ClassesPage(props: { searchParams: SearchParams })
         whatsapp_phone
       )
     `)
-    .gte('session_date', new Date().toISOString().split('T')[0])
+    .gte('session_date', yesterdayString)
 
   if (searchParams?.instructor && typeof searchParams.instructor === 'string') {
     query = query.eq('instructor_id', searchParams.instructor)
@@ -53,11 +61,17 @@ export default async function ClassesPage(props: { searchParams: SearchParams })
 
   const { data: sessionsData, error } = await query.order('session_date', { ascending: true }).order('start_time', { ascending: true })
 
-  const nowStr = new Date().toISOString()
+  const now = Date.now()
   const mappedSessions = ((sessionsData as any[]) || [])
     .filter((session: any) => {
-      const sessionDateTime = new Date(`${session.session_date}T${session.start_time}`)
-      return sessionDateTime.toISOString() > nowStr
+      // Parse local class date and start time manually to ensure it uses the local timezone
+      const [year, month, day] = session.session_date.split('-').map(Number)
+      const [hour, minute] = session.start_time.split(':').map(Number)
+      const sessionDateTime = new Date(year, month - 1, day, hour, minute)
+      
+      // A class expires exactly 2 hours after its start time
+      const expirationTime = sessionDateTime.getTime() + 2 * 60 * 60 * 1000
+      return now <= expirationTime
     })
     .map((session: any) => {
       const instructorName = session.instructor
@@ -116,7 +130,7 @@ export default async function ClassesPage(props: { searchParams: SearchParams })
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
           {mappedSessions.map(session => (
-            <ClassCard key={session.id} {...session} />
+            <ClassCard key={session.id} {...session} referrer="clases" />
           ))}
         </div>
       )}

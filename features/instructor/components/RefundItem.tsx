@@ -49,7 +49,7 @@ export function RefundItem({ refund }: { refund: any }) {
 
       <div className="flex items-center gap-2 text-xs text-foreground/70 mb-4 bg-background/50 p-2 rounded-lg">
         <Calendar className="w-4 h-4 text-[#D6007A]" />
-        <span>Clase: <strong className="font-medium">{session?.theme || 'Meikyo'}</strong> - {dateStr}</span>
+        <span>Clase: <strong className="font-medium">{session?.theme || 'Myku'}</strong> - {dateStr}</span>
       </div>
 
       {!isCompleted && (

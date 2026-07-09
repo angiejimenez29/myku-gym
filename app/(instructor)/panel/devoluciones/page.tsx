@@ -48,24 +48,26 @@ export default async function DevolucionesPage() {
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-6 pb-12 px-5 rounded-b-3xl text-white relative">
-        <Link href="/panel" className="inline-flex items-center gap-1 text-white/90 hover:text-white mb-4 text-sm font-medium transition-colors">
-          <ChevronLeft className="w-4 h-4" />
-          Volver al Panel
-        </Link>
-        
-        <div className="flex items-end gap-3 mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-            <Receipt className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">Devoluciones</h1>
-            <p className="text-white/80 text-sm mt-1">Gestión de reembolsos</p>
+      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-6 pb-6 px-5 text-white relative">
+        <div className="max-w-3xl mx-auto w-full">
+          <Link href="/panel" className="inline-flex items-center gap-1 text-white/90 hover:text-white mb-4 text-sm font-medium transition-colors">
+            <ChevronLeft className="w-4 h-4" />
+            Volver al Panel
+          </Link>
+          
+          <div className="flex items-end gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+              <Receipt className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold">Devoluciones</h1>
+              <p className="text-white/80 text-sm mt-1">Gestión de reembolsos</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <main className="max-w-md mx-auto px-5 -mt-6 space-y-6">
+      <main className="max-w-3xl mx-auto px-4 mt-6 space-y-6">
         <div className="bg-container rounded-3xl p-5 border border-foreground/5 shadow-xl space-y-6">
           <div>
             <h2 className="text-lg font-bold text-foreground mb-4 flex items-center justify-between">

@@ -44,7 +44,7 @@ export function Navbar({ user }: { user?: any }) {
           <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#D6007A] to-[#9B00E8] flex items-center justify-center shadow-md">
              <span className="text-white font-bold text-xs md:text-sm">M</span>
           </div>
-          <span className="text-base md:text-xl font-bold text-foreground tracking-wide">Meikyo Gym</span>
+          <span className="text-base md:text-xl font-bold text-foreground tracking-wide">Myku</span>
         </Link>
         
         {/* Desktop Navigation */}

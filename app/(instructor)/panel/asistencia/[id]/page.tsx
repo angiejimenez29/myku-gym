@@ -58,14 +58,14 @@ export default async function AttendancePage({ params }: { params: Promise<{ id:
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-6 pb-12 px-5 rounded-b-3xl text-white relative">
-        <div className="max-w-md mx-auto">
+      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-6 pb-6 px-5 text-white relative">
+        <div className="max-w-3xl mx-auto w-full">
           <Link href="/panel" className="inline-flex items-center gap-1 text-white/90 hover:text-white mb-4 text-sm font-medium transition-colors">
             <ChevronLeft className="w-4 h-4" />
             Volver al Panel
           </Link>
           
-          <div className="flex justify-between items-end mb-4">
+          <div className="flex justify-between items-end">
             <div>
               <h1 className="text-2xl font-bold">Asistencia en Vivo</h1>
               <p className="text-white/80 text-sm mt-1 capitalize">{dateStr} - {timeStr}</p>
@@ -80,7 +80,7 @@ export default async function AttendancePage({ params }: { params: Promise<{ id:
         </div>
       </div>
 
-      <main className="max-w-md mx-auto px-5 -mt-6">
+      <main className="max-w-3xl mx-auto px-4 mt-6">
         <LiveAttendance 
           sessionId={session.id}
           capacity={session.capacity}

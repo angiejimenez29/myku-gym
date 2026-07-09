@@ -16,8 +16,18 @@ function formatSessionTime(isoString: string) {
   return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
 }
 
-export default async function ClassDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default async function ClassDetailsPage({ 
+  params,
+  searchParams
+}: { 
+  params: Promise<{ id: string }>
+  searchParams: SearchParams
+}) {
   const resolvedParams = await params
+  const resolvedSearchParams = await searchParams
+  const fromPath = resolvedSearchParams.from === 'landing' ? '/' : '/clases'
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -59,7 +69,7 @@ export default async function ClassDetailsPage({ params }: { params: Promise<{ i
 
   return (
     <div className="min-h-screen bg-background flex flex-col pb-24 md:pb-12">
-      <TopBar title="Detalles de la Clase" backHref="/clases" />
+      <TopBar title="Detalles de la Clase" backHref={fromPath} />
 
       <main className="flex-1 w-full max-w-md md:max-w-4xl lg:max-w-5xl mx-auto px-5 mt-6 space-y-6">
         <BookingStepper currentStep={1} />

@@ -14,11 +14,41 @@ interface ManualCheckInModalProps {
 
 export function ManualCheckInModal({ sessionId, spotNumber, isOpen, onClose }: ManualCheckInModalProps) {
   const [isPending, startTransition] = useTransition()
+  const [clientName, setClientName] = useState('')
+  const [clientPhone, setClientPhone] = useState('')
+  const [phoneError, setPhoneError] = useState('')
 
   if (!isOpen) return null
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Solo permitir letras (incluyendo tildes y eñes) y espacios
+    const value = e.target.value
+    const filtered = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g, '')
+    setClientName(filtered)
+  }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    // Solo permitir números
+    const filtered = value.replace(/\D/g, '')
+    const truncated = filtered.slice(0, 9)
+    setClientPhone(truncated)
+
+    if (truncated.length > 0 && !/^9\d{8}$/.test(truncated)) {
+      setPhoneError('El celular debe tener 9 dígitos y empezar con 9.')
+    } else {
+      setPhoneError('')
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    
+    if (!/^9\d{8}$/.test(clientPhone)) {
+      setPhoneError('El celular debe tener 9 dígitos y empezar con 9.')
+      return
+    }
+
     const formData = new FormData(e.currentTarget)
     
     startTransition(async () => {
@@ -56,6 +86,8 @@ export function ManualCheckInModal({ sessionId, spotNumber, isOpen, onClose }: M
               placeholder="Ej. Juan Pérez" 
               required 
               autoFocus
+              value={clientName}
+              onChange={handleNameChange}
               className="bg-background border-foreground/10"
             />
           </div>
@@ -67,8 +99,14 @@ export function ManualCheckInModal({ sessionId, spotNumber, isOpen, onClose }: M
               placeholder="Ej. 999888777" 
               required 
               type="tel"
-              className="bg-background border-foreground/10"
+              value={clientPhone}
+              onChange={handlePhoneChange}
+              maxLength={9}
+              className={`bg-background border-foreground/10 ${phoneError ? 'border-red-500/50 focus:border-red-500' : ''}`}
             />
+            {phoneError && (
+              <p className="text-red-500 text-xs mt-1 font-medium">{phoneError}</p>
+            )}
           </div>
 
           <div className="bg-foreground/5 border border-state-yellow/30 p-3 rounded-xl text-xs text-foreground/80 leading-relaxed mt-2">
@@ -77,7 +115,7 @@ export function ManualCheckInModal({ sessionId, spotNumber, isOpen, onClose }: M
 
           <button 
             type="submit"
-            disabled={isPending}
+            disabled={isPending || !clientName.trim() || !/^9\d{8}$/.test(clientPhone)}
             className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl py-3.5 mt-4 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
           >
             {isPending ? (

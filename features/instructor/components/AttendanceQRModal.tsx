@@ -24,7 +24,7 @@ export function AttendanceQRModal() {
       ctx?.drawImage(img, 0, 0)
       const pngFile = canvas.toDataURL('image/png')
       const downloadLink = document.createElement('a')
-      downloadLink.download = 'meikyo-gym-qr.png'
+      downloadLink.download = 'myku-qr.png'
       downloadLink.href = `${pngFile}`
       downloadLink.click()
     }
@@ -47,7 +47,7 @@ export function AttendanceQRModal() {
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-5 text-white pr-12">
               <h2 className="text-xl font-bold">QR de Asistencia</h2>
-              <p className="text-white/80 text-sm">Clase de Meikyo Gym</p>
+              <p className="text-white/80 text-sm">Clase de Myku</p>
               <button 
                 onClick={() => setIsOpen(false)}
                 className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
@@ -68,7 +68,7 @@ export function AttendanceQRModal() {
                 />
               </div>
               <div className="bg-pink-100 text-pink-600 font-bold text-sm px-4 py-1.5 rounded-full mt-4 tracking-widest">
-                MEIKYO-CHECKIN
+                MYKU-CHECKIN
               </div>
             </div>
 

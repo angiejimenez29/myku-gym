@@ -72,7 +72,7 @@ export default function LoginPage() {
               <div className="w-2.5 h-7 bg-white rounded-full transform -skew-x-[20deg] translate-y-1 opacity-90"></div>
            </div>
         </div>
-        <h1 className="text-2xl font-medium text-[#D6007A] mb-2 tracking-wide">Meikyo Gym</h1>
+        <h1 className="text-2xl font-medium text-[#D6007A] mb-2 tracking-wide">Myku</h1>
         <p className="text-[#84849A] text-[13px] font-medium tracking-wide">Portal de Instructor/Instructora</p>
       </div>
 
