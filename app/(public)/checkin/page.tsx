@@ -20,7 +20,7 @@ export interface Reservation {
   spots: string[]
 }
 
-import { getReservationsForCheckin } from './actions'
+import { getReservationsForCheckin, markAttendanceForReservation } from './actions'
 
 
 // ─── Inline keyframes injected once ─────────────────────────────────────────
@@ -332,10 +332,12 @@ function ConfirmModal({
   reservation,
   onCancel,
   onConfirm,
+  isLoading,
 }: {
   reservation: Reservation
   onCancel: () => void
   onConfirm: () => void
+  isLoading?: boolean
 }) {
   return (
     <div
@@ -412,7 +414,8 @@ function ConfirmModal({
           <button
             id="btn-modal-cancel"
             onClick={onCancel}
-            className="flex-1 py-3 rounded-xl text-sm font-bold transition-all active:scale-95"
+            disabled={isLoading}
+            className="flex-1 py-3 rounded-xl text-sm font-bold transition-all active:scale-95 disabled:opacity-50"
             style={{
               background: 'rgba(255,255,255,0.06)',
               border: '1px solid rgba(255,255,255,0.12)',
@@ -424,13 +427,16 @@ function ConfirmModal({
           <button
             id="btn-modal-confirm"
             onClick={onConfirm}
-            className="flex-1 py-3 rounded-xl text-sm font-bold text-white transition-all active:scale-95"
+            disabled={isLoading}
+            className="flex-1 py-3 rounded-xl text-sm font-bold text-white transition-all active:scale-95 disabled:opacity-50"
             style={{
               background: 'linear-gradient(135deg, #D6007A, #9B00E8)',
               boxShadow: '0 4px 20px #D6007A50',
             }}
           >
-            Sí, marcar<br />asistencia
+            {isLoading ? 'Guardando...' : (
+              <>Sí, marcar<br />asistencia</>
+            )}
           </button>
         </div>
       </div>
@@ -546,6 +552,20 @@ export default function CheckinPage() {
     }
   }
 
+  const handleConfirm = async () => {
+    if (!selectedReservation) return
+    setIsLoading(true)
+    try {
+      await markAttendanceForReservation(selectedReservation.id)
+      setStep('success')
+    } catch (error) {
+      console.error(error)
+      alert('Error al registrar la asistencia. Inténtalo nuevamente.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <>
       {/* Inject global keyframes once */}
@@ -613,7 +633,8 @@ export default function CheckinPage() {
             <ConfirmModal
               reservation={selectedReservation}
               onCancel={() => setStep('reservations')}
-              onConfirm={() => setStep('success')}
+              onConfirm={handleConfirm}
+              isLoading={isLoading}
             />
           )}
 

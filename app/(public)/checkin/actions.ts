@@ -78,3 +78,37 @@ export async function getReservationsForCheckin(phone: string): Promise<CheckinR
     }
   })
 }
+
+export async function markAttendanceForReservation(reservationId: string) {
+  const supabase = createAdminClient()
+
+  // 1. Get spot IDs for this reservation
+  const { data: spots, error: fetchError } = await supabase
+    .from('reservation_spots')
+    .select('spot_id')
+    .eq('reservation_id', reservationId)
+
+  if (fetchError || !spots) {
+    console.error('Error fetching reservation spots:', fetchError)
+    throw new Error('No se pudo encontrar los espacios de la reserva')
+  }
+
+  const spotIds = spots.map(s => s.spot_id)
+
+  if (spotIds.length === 0) {
+    return true // Nothing to update
+  }
+
+  // 2. Update session_spots status to 'present'
+  const { error: updateError } = await supabase
+    .from('session_spots')
+    .update({ status: 'present' })
+    .in('id', spotIds)
+
+  if (updateError) {
+    console.error('Error marking attendance:', updateError)
+    throw new Error('No se pudo registrar la asistencia')
+  }
+
+  return true
+}
