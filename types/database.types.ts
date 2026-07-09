@@ -264,6 +264,39 @@ export type Database = {
           },
         ]
       }
+      streaks: {
+        Row: {
+          client_phone: string
+          current_week_streak: number
+          longest_week_streak: number
+          last_reservation_week: string | null
+          classes_count: number
+          free_classes_earned: number
+          free_class_available: boolean
+          updated_at: string
+        }
+        Insert: {
+          client_phone: string
+          current_week_streak?: number
+          longest_week_streak?: number
+          last_reservation_week?: string | null
+          classes_count?: number
+          free_classes_earned?: number
+          free_class_available?: boolean
+          updated_at?: string
+        }
+        Update: {
+          client_phone?: string
+          current_week_streak?: number
+          longest_week_streak?: number
+          last_reservation_week?: string | null
+          classes_count?: number
+          free_classes_earned?: number
+          free_class_available?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       sessions: {
         Row: {
           capacity: number
