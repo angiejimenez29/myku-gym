@@ -129,34 +129,44 @@ export default async function ConfirmationPage({ params, searchParams }: { param
               </div>
               
               <div className="space-y-3 pt-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-foreground/70">Nombre</span>
-                  <span className="text-foreground font-medium">{clientName}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-foreground/70">Celular</span>
-                  <span className="text-foreground font-medium">{clientPhone}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-foreground/70">Instructor</span>
-                  <span className="text-foreground font-medium">{instructorName}</span>
-                </div>
+                <details className="group [&_summary::-webkit-details-marker]:hidden">
+                  <summary className="flex items-center justify-between text-xs font-semibold text-foreground/80 cursor-pointer py-2 border-b border-foreground/10">
+                    Ver detalles de tu reserva
+                    <span className="transition-transform group-open:rotate-180">
+                      <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6 6-6"></path></svg>
+                    </span>
+                  </summary>
+                  <div className="pt-3 pb-1 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-foreground/70">Nombre</span>
+                      <span className="text-foreground font-medium">{clientName}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-foreground/70">Celular</span>
+                      <span className="text-foreground font-medium">{clientPhone}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-foreground/70">Instructor</span>
+                      <span className="text-foreground font-medium">{instructorName}</span>
+                    </div>
+                    {session.class_type && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-foreground/70 flex items-center gap-1"><Dumbbell className="w-3 h-3"/> Tipo de Clase</span>
+                        <span className="text-foreground font-medium">{session.class_type}</span>
+                      </div>
+                    )}
+                    {session.theme && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-foreground/70">Temática del Día</span>
+                        <span className="text-state-yellow font-medium">{session.theme}</span>
+                      </div>
+                    )}
+                  </div>
+                </details>
                 <div className="flex justify-between text-sm">
                   <span className="text-foreground/70">Día y hora</span>
                   <span className="text-foreground font-medium capitalize">{dateTimeStr}</span>
                 </div>
-                {session.class_type && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-foreground/70 flex items-center gap-1"><Dumbbell className="w-3 h-3"/> Tipo de Clase</span>
-                    <span className="text-foreground font-medium">{session.class_type}</span>
-                  </div>
-                )}
-                {session.theme && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-foreground/70">Temática del Día</span>
-                    <span className="text-state-yellow font-medium">{session.theme}</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>

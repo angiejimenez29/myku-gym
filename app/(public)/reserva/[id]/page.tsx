@@ -80,26 +80,34 @@ export default async function ClassDetailsPage({ params }: { params: Promise<{ i
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-foreground/10 grid grid-cols-2 gap-4">
-                {session.class_type && (
-                  <div>
-                    <p className="text-[10px] text-foreground/70 uppercase tracking-wider flex items-center gap-1 mb-0.5"><Dumbbell className="w-3 h-3"/> Tipo de Clase</p>
-                    <p className="text-foreground text-sm font-medium">{session.class_type}</p>
-                  </div>
-                )}
-                {session.theme && (
-                  <div>
-                    <p className="text-[10px] text-foreground/70 uppercase tracking-wider mb-0.5">Temática del Día</p>
-                    <p className="text-state-yellow text-sm font-medium">{session.theme}</p>
-                  </div>
-                )}
-                {session.special_guest && (
-                  <div className="col-span-2">
-                    <p className="text-[10px] text-foreground/70 uppercase tracking-wider mb-0.5">Invitado Especial</p>
-                    <p className="text-foreground text-sm font-medium">{session.special_guest}</p>
-                  </div>
-                )}
-              </div>
+              <details className="mt-3 group [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex items-center justify-between text-xs font-semibold text-foreground/80 cursor-pointer pt-3 border-t border-foreground/10">
+                  Ver detalles de la clase
+                  <span className="transition-transform group-open:rotate-180">
+                    <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="16"><path d="M6 9l6 6 6-6"></path></svg>
+                  </span>
+                </summary>
+                <div className="pt-3 grid grid-cols-2 gap-3">
+                  {session.class_type && (
+                    <div>
+                      <p className="text-[10px] text-foreground/70 uppercase tracking-wider flex items-center gap-1 mb-0.5"><Dumbbell className="w-3 h-3"/> Tipo</p>
+                      <p className="text-foreground text-sm font-medium">{session.class_type}</p>
+                    </div>
+                  )}
+                  {session.theme && (
+                    <div>
+                      <p className="text-[10px] text-foreground/70 uppercase tracking-wider mb-0.5">Temática</p>
+                      <p className="text-state-yellow text-sm font-medium">{session.theme}</p>
+                    </div>
+                  )}
+                  {session.special_guest && (
+                    <div className="col-span-2">
+                      <p className="text-[10px] text-foreground/70 uppercase tracking-wider mb-0.5">Invitado Especial</p>
+                      <p className="text-foreground text-sm font-medium">{session.special_guest}</p>
+                    </div>
+                  )}
+                </div>
+              </details>
             </div>
 
             {/* Ubicación */}
@@ -129,14 +137,13 @@ export default async function ClassDetailsPage({ params }: { params: Promise<{ i
           <div className="md:col-span-5 space-y-6 md:sticky md:top-40">
             {/* Instructor */}
             <div className="space-y-3">
-              <div className="bg-container p-4 rounded-2xl flex items-center gap-4 border border-foreground/5">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shrink-0">
-                  <span className="text-white font-bold text-lg">{instructorName.substring(0, 2).toUpperCase()}</span>
+              <div className="bg-container p-3 rounded-2xl flex items-center gap-3 border border-foreground/5">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shrink-0">
+                  <span className="text-white font-bold text-sm">{instructorName.substring(0, 2).toUpperCase()}</span>
                 </div>
                 <div>
-                  <p className="text-foreground font-medium">{instructorName}</p>
-                  <p className="text-state-yellow text-xs mt-1">Entrenador Certificado</p>
-                  <p className="text-foreground/70 text-xs mt-1">{instructorExp}+ años de experiencia en fitness</p>
+                  <p className="text-foreground text-sm font-medium">{instructorName}</p>
+                  <p className="text-foreground/70 text-[11px]">{instructorExp}+ años exp.</p>
                 </div>
               </div>
             </div>

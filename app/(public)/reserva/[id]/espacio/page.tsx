@@ -62,15 +62,11 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
       <TopBar title="Selecciona tu Espacio" backHref={`/reserva/${resolvedParams.id}`} />
 
-      <div className="text-center mt-2 mb-6 space-y-1">
-         <p className="text-foreground/80 text-sm capitalize">{dateStr} - {timeStr}</p>
-      </div>
-
       <BookingStepper currentStep={2} />
 
-      <div className="text-center mb-6 px-5">
-         <h2 className="text-foreground font-medium text-lg">Mapa de la Planta del Gimnasio</h2>
-         <p className="text-foreground/80 text-sm mt-1">Toca el número del espacio que deseas reservar</p>
+      <div className="text-center mt-4 mb-4 px-5">
+         <p className="text-foreground/80 text-sm font-medium capitalize mb-1">{dateStr} - {timeStr}</p>
+         <p className="text-foreground/70 text-xs">Toca el número del espacio en el mapa para reservarlo.</p>
       </div>
 
       <SpaceSelectionFlow 

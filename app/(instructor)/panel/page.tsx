@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Clock, User as UserIcon, Plus } from 'lucide-react'
+import { CancelSessionButton } from '@/features/instructor/components/CancelSessionButton'
+import { SessionOptionsMenu } from '@/features/instructor/components/SessionOptionsMenu'
 
 function formatSessionDate(isoString: string) {
   const date = new Date(isoString)
@@ -11,6 +13,18 @@ function formatSessionDate(isoString: string) {
 function formatSessionTime(isoString: string) {
   const date = new Date(isoString)
   return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
+}
+
+function getOccupationTextColor(percentage: number) {
+  if (percentage < 50) return 'text-[#00E676]'
+  if (percentage < 90) return 'text-orange-500'
+  return 'text-pink-500'
+}
+
+function getOccupationBgColor(percentage: number) {
+  if (percentage < 50) return 'bg-[#00E676]'
+  if (percentage < 90) return 'bg-orange-500'
+  return 'bg-pink-500'
 }
 
 export default async function InstructorDashboardPage() {
@@ -103,27 +117,25 @@ export default async function InstructorDashboardPage() {
             <div className="pt-2">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-foreground/70">Ocupación</span>
-                <span className="text-sm font-bold text-foreground">
+                <span className={`text-sm font-bold ${getOccupationTextColor(getOccupation(nextSession).percentage)}`}>
                   {getOccupation(nextSession).reserved}/{getOccupation(nextSession).capacity} Cupos
                 </span>
               </div>
               <div className="w-full h-2 bg-foreground/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-pink-500 to-purple-600 rounded-full"
+                  className={`h-full rounded-full transition-all ${getOccupationBgColor(getOccupation(nextSession).percentage)}`}
                   style={{ width: `${getOccupation(nextSession).percentage}%` }}
                 />
               </div>
             </div>
 
             <div className="space-y-3 pt-4">
-              <Link href={`/panel/asistencia/${nextSession.id}`} className="block w-full">
+              <Link href={`/panel/clase/${nextSession.id}`} className="block w-full">
                 <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-3.5 transition-transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-pink-500/25">
-                  Ver Asistencia en Vivo
+                  Ver Detalles
                 </button>
               </Link>
-              <button className="w-full bg-container text-foreground font-semibold rounded-xl py-3.5 border border-foreground/10 transition-colors hover:bg-foreground/5">
-                Cancelar Clase
-              </button>
+              <CancelSessionButton sessionId={nextSession.id} />
             </div>
           </div>
         ) : (
@@ -138,8 +150,9 @@ export default async function InstructorDashboardPage() {
           
           <div className="space-y-3">
             {futureSessions.map(session => (
-              <div key={session.id} className="bg-container border border-foreground/5 rounded-2xl p-4 flex items-center justify-between hover:border-pink-500/30 transition-colors cursor-pointer">
-                <div>
+              <Link key={session.id} href={`/panel/clase/${session.id}`} className="block">
+                <div className="bg-container border border-foreground/5 rounded-2xl p-4 flex items-center justify-between hover:border-pink-500/30 transition-colors cursor-pointer">
+                  <div>
                   <p className="font-semibold text-foreground capitalize text-sm">
                     {formatSessionDate(`${session.session_date}T${session.start_time}`)}
                   </p>
@@ -147,14 +160,18 @@ export default async function InstructorDashboardPage() {
                     {formatSessionTime(`${session.session_date}T${session.start_time}`)}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-foreground/60 text-xs">Reservados</p>
-                  <p className="font-bold text-pink-500 text-sm">
-                    {getOccupation(session).reserved}/{getOccupation(session).capacity}
-                  </p>
+                <div className="text-right flex items-center gap-3">
+                  <div>
+                    <p className="text-foreground/60 text-xs">Reservados</p>
+                    <p className={`font-bold text-sm ${getOccupationTextColor(getOccupation(session).percentage)}`}>
+                      {getOccupation(session).reserved}/{getOccupation(session).capacity}
+                    </p>
+                  </div>
+                  <SessionOptionsMenu sessionId={session.id} />
                 </div>
               </div>
-            ))}
+            </Link>
+          ))}
             
             {futureSessions.length === 0 && nextSession && (
               <p className="text-foreground/50 text-sm text-center py-4">No hay más sesiones programadas.</p>
