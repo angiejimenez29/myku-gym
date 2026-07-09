@@ -11,9 +11,10 @@ import { Input } from '@/features/shared/components/Input'
 interface NewSessionFormProps {
   initialData?: any
   sessionId?: string
+  defaultWhatsappContact?: string
 }
 
-export function NewSessionForm({ initialData, sessionId }: NewSessionFormProps = {}) {
+export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact }: NewSessionFormProps = {}) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -174,7 +175,7 @@ export function NewSessionForm({ initialData, sessionId }: NewSessionFormProps =
             <Input 
               type="tel" 
               name="whatsapp_contact" 
-              defaultValue={initialData?.whatsapp_contact || ''}
+              defaultValue={initialData?.whatsapp_contact ?? defaultWhatsappContact ?? ''}
               required 
               placeholder="+51 930 154 128"
               className="bg-background border-foreground/10 h-12 rounded-xl px-4 w-full"
