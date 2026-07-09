@@ -42,9 +42,11 @@ export async function getReservationsForCheckin(phone: string): Promise<CheckinR
   }
 
   // 2. Map and format
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (reservations || []).map((res: any) => {
     const session = res.session
-    const spotList = res.spots?.map((s: any) => `#${s.spot?.spot_number}`).filter(Boolean) || []
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const spotList = (res.spots as any[])?.map((s) => `#${s.spot?.spot_number}`).filter(Boolean) || []
     
     // Format date: YYYY-MM-DD -> DD/MM/YYYY
     let formattedDate = session?.session_date || ''
