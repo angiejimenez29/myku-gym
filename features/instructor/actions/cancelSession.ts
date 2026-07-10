@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -89,14 +89,16 @@ export async function cancelSession(sessionId: string) {
     }
   }
 
-  // 2. Insert refunds
+  // 2. Insert refunds using admin client to bypass RLS since instructors don't have insert permissions on refunds
   if (refundsToCreate.length > 0) {
-    const { error: refundError } = await supabase
+    const supabaseAdmin = createAdminClient()
+    const { error: refundError } = await supabaseAdmin
       .from('refunds')
       .insert(refundsToCreate)
     
     if (refundError) {
-      throw new Error('Error al registrar devoluciones')
+      console.error('Supabase refundError:', refundError)
+      throw new Error(`Error al registrar devoluciones: ${refundError.message || JSON.stringify(refundError)}`)
     }
   }
 
