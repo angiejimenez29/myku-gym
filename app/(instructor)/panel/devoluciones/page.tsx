@@ -69,7 +69,7 @@ export default async function DevolucionesPage() {
     }
     acc[key].refunds.push(refund)
     return acc
-  }, {} as Record<string, { session: any, refunds: RefundWithDetails[] }>)
+  }, {} as Record<string, { session: { session_date: string; start_time: string; theme: string | null } | null | undefined, refunds: RefundWithDetails[] }>)
 
   const pendingGroups = Object.values(groupedPendingRefunds).sort((a, b) => {
     if (!a.session) return 1
@@ -80,7 +80,7 @@ export default async function DevolucionesPage() {
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-6 pb-6 px-5 text-white relative">
+      <div className="bg-brand pt-6 pb-6 px-5 text-white relative">
         <div className="max-w-3xl mx-auto w-full">
           <Link href="/panel" className="inline-flex items-center gap-1 text-white/90 hover:text-white mb-4 text-sm font-medium transition-colors">
             <ChevronLeft className="w-4 h-4" />
@@ -105,7 +105,7 @@ export default async function DevolucionesPage() {
             <h2 className="text-lg font-bold text-foreground mb-4 flex items-center justify-between">
               Pendientes
               {pendingRefunds.length > 0 && (
-                <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">{pendingRefunds.length}</span>
+                <span className="bg-status-warning text-white text-xs px-2 py-1 rounded-full">{pendingRefunds.length}</span>
               )}
             </h2>
             <div className="space-y-6">
@@ -141,7 +141,7 @@ export default async function DevolucionesPage() {
             <div className="pt-6 border-t border-foreground/10">
               <h2 className="text-lg font-bold text-foreground mb-4 flex items-center justify-between">
                 Completadas
-                <span className="bg-[#00E676]/20 text-[#00E676] text-xs px-2 py-1 rounded-full">{completedRefunds.length}</span>
+                <span className="bg-status-success/20 text-status-success text-xs px-2 py-1 rounded-full">{completedRefunds.length}</span>
               </h2>
               <div className="space-y-3 opacity-75">
                 {completedRefunds.map(refund => (

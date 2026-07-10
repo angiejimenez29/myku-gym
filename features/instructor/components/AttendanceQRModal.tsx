@@ -45,7 +45,7 @@ export function AttendanceQRModal() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-5">
           <div className="bg-container border border-foreground/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-5 text-white pr-12">
+            <div className="bg-brand p-5 text-white pr-12">
               <h2 className="text-xl font-bold">QR de Asistencia</h2>
               <p className="text-white/80 text-sm">Clase de Myku</p>
               <button 
@@ -67,15 +67,15 @@ export function AttendanceQRModal() {
                   includeMargin={true}
                 />
               </div>
-              <div className="bg-pink-100 text-pink-600 font-bold text-sm px-4 py-1.5 rounded-full mt-4 tracking-widest">
+              <div className="bg-brand-secondary/20 text-brand font-bold text-sm px-4 py-1.5 rounded-full mt-4 tracking-widest">
                 MYKU-CHECKIN
               </div>
             </div>
 
             {/* Footer Instructions */}
             <div className="p-5 bg-container space-y-4">
-              <div className="bg-foreground/5 border border-state-yellow/30 p-4 rounded-xl text-sm text-foreground/80 leading-relaxed">
-                <strong className="text-state-yellow">Instrucciones:</strong> Los alumnos deben escanear este código QR al llegar al gimnasio para registrar su asistencia automáticamente.
+              <div className="bg-foreground/5 border border-brand-secondary/30 p-4 rounded-xl text-sm text-foreground/80 leading-relaxed">
+                <strong className="text-brand-secondary">Instrucciones:</strong> Los alumnos deben escanear este código QR al llegar al gimnasio para registrar su asistencia automáticamente.
               </div>
               
               <button 

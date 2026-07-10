@@ -35,7 +35,7 @@ export function ConfirmCheckInModal({ sessionId, spotNumber, clientName, estadoP
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-5">
       <div className="bg-container border border-foreground/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200">
-        <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-6 text-white relative">
+        <div className="bg-brand p-6 text-white relative">
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
@@ -48,7 +48,7 @@ export function ConfirmCheckInModal({ sessionId, spotNumber, clientName, estadoP
 
         <div className="p-6 space-y-6 flex flex-col items-center">
           <div className="text-center space-y-2 w-full">
-            <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold ${estadoPago === 'aprobado' ? 'bg-[#00E676]/10 text-[#00E676]' : 'bg-orange-500/10 text-orange-500'}`}>
+            <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold ${estadoPago === 'aprobado' ? 'bg-status-success/10 text-status-success' : 'bg-status-warning/10 text-status-warning'}`}>
               {estadoPago === 'aprobado' ? (
                 <>Pago verificado <Check className="w-4 h-4" /></>
               ) : (
@@ -65,7 +65,7 @@ export function ConfirmCheckInModal({ sessionId, spotNumber, clientName, estadoP
             <button 
               onClick={handleConfirm}
               disabled={isPending}
-              className={`w-full font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:pointer-events-none ${isPresent ? 'bg-foreground/10 text-foreground hover:bg-foreground/20' : 'bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:brightness-110'}`}
+              className={`w-full font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:pointer-events-none ${isPresent ? 'bg-foreground/10 text-foreground hover:bg-foreground/20' : 'bg-cta text-white hover:brightness-110'}`}
             >
               {isPending ? (
                 <>

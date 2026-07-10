@@ -17,7 +17,7 @@ export default async function PublicLayout({
       </main>
       
       <footer className="py-12 flex flex-col items-center gap-4 mt-12 bg-background border-t border-foreground/5">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D6007A] to-[#9B00E8] flex items-center justify-center shadow-lg">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand to-brand-secondary flex items-center justify-center shadow-lg">
            <span className="text-white font-bold text-lg">M</span>
         </div>
         <h2 className="text-lg font-bold text-foreground">Myku</h2>

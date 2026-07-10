@@ -4,45 +4,79 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-container: var(--container);
+  --color-border: var(--border);
   
-  --color-state-green: var(--neon-green);
-  --color-state-magenta: var(--magenta);
-  --color-state-yellow: var(--glow-yellow);
-  --color-state-cyan: var(--neon-cyan);
+  --color-brand: var(--brand);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-cta: var(--cta);
+  
+  --color-state-available: var(--state-available);
+  --color-state-occupied: var(--state-occupied);
+  --color-state-selected: var(--state-selected);
+  
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-danger: var(--status-danger);
+  --color-neutral-dark: var(--neutral-dark);
+  --color-neutral-light: var(--neutral-light);
+  
   --color-whatsapp: var(--whatsapp);
   
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  /* Fondos claros globales (Light Mode) */
-  --background: #f8fafc; /* slate-50 */
-  --foreground: #0f172a; /* slate-900 */
+  /* --- LIGHT MODE --- */
+  --background: #f8fafc;
+  --foreground: #373B3E; /* Oscuro/neutro principal */
   
-  /* Contenedores y componentes */
   --container: #ffffff;
+  --border: #BEC8D1; /* Gris azulado claro */
   
-  /* Colores de estado (igual o ajustados para que se vean bien en claro) */
-  --neon-green: #16a34a; /* verde mas oscuro para light mode */
-  --magenta: #d946ef;
-  --glow-yellow: #eab308;
-  --neon-cyan: #0891b2; /* cyan-600 */
-  --whatsapp: #16a34a; /* green-600 */
+  --brand: #137A7F; /* Teal oscuro */
+  --brand-secondary: #86CECB; /* Teal claro (mint) */
+  --cta: #E12885; /* Magenta */
+
+  /* Estados para espacios */
+  --state-available: #ffffff;
+  --state-occupied: #BEC8D1;
+  --state-selected: #137A7F;
+  
+  /* Estados funcionales (Semáforo) y Neutros */
+  --status-success: #00E676;
+  --status-warning: #f97316;
+  --status-danger: #ef4444;
+  --neutral-dark: #373B3E;
+  --neutral-light: #BEC8D1;
+  
+  --whatsapp: #16a34a;
 }
 
 .dark {
-  /* Fondos oscuros globales (Dark Mode) */
-  --background: #0B0914;
-  --foreground: #ffffff;
+  /* --- DARK MODE --- */
+  --background: #373B3E;
+  --foreground: #f8fafc;
   
-  /* Contenedores y componentes */
-  --container: #151226;
+  --container: #474D51;
+  --border: #5C6368;
   
-  /* Colores de estado */
-  --neon-green: #39FF14;
-  --magenta: #FF00FF;
-  --glow-yellow: #FFFF00;
-  --neon-cyan: #00E5FF;
+  --brand: #20b0b8; /* Versión más brillante para dark mode */
+  --brand-secondary: #86CECB;
+  --cta: #E12885;
+
+  /* Estados para espacios */
+  --state-available: #474D51;
+  --state-occupied: #5C6368;
+  --state-selected: #20b0b8;
+  
+  /* Estados funcionales (Semáforo) y Neutros */
+  --status-success: #00E676;
+  --status-warning: #f97316;
+  --status-danger: #ef4444;
+  --neutral-dark: #373B3E;
+  --neutral-light: #BEC8D1;
+  
   --whatsapp: #25D366;
 }
 
@@ -53,15 +87,19 @@ body {
 
 /* Glassmorphism base utility */
 @utility glass {
-  background-color: color-mix(in srgb, var(--container) 60%, transparent);
+  background-color: color-mix(in srgb, var(--container) 80%, transparent);
   backdrop-filter: blur(12px);
-  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  border: 1px solid var(--border);
 }
 
 @layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+
   a:focus-visible, button:focus-visible, input:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--foreground);
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--brand);
     border-radius: 4px;
   }
 }

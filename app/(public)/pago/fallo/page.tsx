@@ -25,7 +25,7 @@ export default async function PagoFalloPage({ searchParams }: { searchParams: Pr
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-5 text-center">
       <div className="bg-container p-8 rounded-3xl border border-foreground/10 shadow-2xl max-w-md w-full space-y-6">
-        <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto text-red-500 mb-2">
+        <div className="w-20 h-20 bg-status-danger/10 rounded-full flex items-center justify-center mx-auto text-status-danger mb-2">
           <XCircle className="w-10 h-10" />
         </div>
         

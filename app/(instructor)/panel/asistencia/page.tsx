@@ -32,15 +32,15 @@ function formatSessionTime(isoString: string) {
 }
 
 function getOccupationTextColor(percentage: number) {
-  if (percentage < 50) return 'text-[#00E676]'
-  if (percentage < 90) return 'text-orange-500'
-  return 'text-pink-500'
+  if (percentage < 50) return 'text-status-success'
+  if (percentage < 90) return 'text-status-warning'
+  return 'text-status-danger'
 }
 
 function getOccupationBgColor(percentage: number) {
-  if (percentage < 50) return 'bg-[#00E676]'
-  if (percentage < 90) return 'bg-orange-500'
-  return 'bg-pink-500'
+  if (percentage < 50) return 'bg-status-success'
+  if (percentage < 90) return 'bg-status-warning'
+  return 'bg-status-danger'
 }
 
 export default async function AsistenciaIndexPage() {
@@ -84,7 +84,7 @@ export default async function AsistenciaIndexPage() {
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-8 pb-8 px-5 text-white">
+      <div className="bg-brand pt-8 pb-8 px-5 text-white">
         <div className="max-w-3xl mx-auto w-full">
           <h1 className="text-2xl font-bold">Monitoreo en Vivo</h1>
           <p className="text-white/80 text-sm mt-1">Selecciona una clase para visualizar</p>
@@ -99,7 +99,7 @@ export default async function AsistenciaIndexPage() {
               return (
                 <div key={session.id} className="bg-container rounded-3xl p-5 border border-foreground/5 shadow-xl space-y-5 flex flex-col justify-between">
                   <div className="space-y-5">
-                    <div className={`flex items-center gap-2 text-sm font-semibold uppercase tracking-wider mb-2 ${isNext ? 'text-pink-500' : 'text-foreground/60'}`}>
+                    <div className={`flex items-center gap-2 text-sm font-semibold uppercase tracking-wider mb-2 ${isNext ? 'text-brand' : 'text-foreground/60'}`}>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                       </svg>
@@ -112,8 +112,8 @@ export default async function AsistenciaIndexPage() {
 
                     <div className="space-y-4 pt-2">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-pink-500/10 flex items-center justify-center shrink-0">
-                          <Clock className="w-5 h-5 text-pink-500" />
+                        <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
+                          <Clock className="w-5 h-5 text-brand" />
                         </div>
                         <div>
                           <p className="text-xs text-foreground/70">Hora</p>
@@ -123,8 +123,8 @@ export default async function AsistenciaIndexPage() {
 
                       {session.special_guest && (
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0">
-                            <UserIcon className="w-5 h-5 text-purple-500" />
+                          <div className="w-10 h-10 rounded-full bg-brand-secondary/10 flex items-center justify-center shrink-0">
+                            <UserIcon className="w-5 h-5 text-brand-secondary" />
                           </div>
                           <div>
                             <p className="text-xs text-foreground/70">Invitada Especial</p>
@@ -152,7 +152,7 @@ export default async function AsistenciaIndexPage() {
 
                   <div className="pt-4">
                     <Link href={`/panel/asistencia/${session.id}`} className="block w-full">
-                      <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-3.5 transition-transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-pink-500/25">
+                      <button className="w-full bg-cta text-white font-semibold rounded-xl py-3.5 transition-transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-cta/25">
                         Ver Asistencia en Vivo
                       </button>
                     </Link>

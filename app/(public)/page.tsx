@@ -128,17 +128,17 @@ export default async function LandingPage() {
     <div className="flex flex-col w-full">
       {/* Hero Section Container (Full width on mobile, max-w on desktop) */}
       <div className="w-full md:max-w-7xl md:mx-auto md:px-8 md:mt-8">
-        <section className="bg-gradient-to-b md:bg-gradient-to-r from-[#D6007A] via-[#9B00E8] to-[#F9A826] rounded-b-[40px] md:rounded-[40px] pt-10 pb-16 px-6 md:px-16 text-center md:text-left relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-2xl">
+        <section className="bg-brand rounded-b-[40px] md:rounded-[40px] pt-10 pb-16 px-6 md:px-16 text-center md:text-left relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-2xl">
 
           {/* Content */}
           <div className="md:w-1/2 flex flex-col items-center md:items-start z-10">
             {/* Placeholder Logo for Mobile (Hidden on Desktop) */}
             <div className="md:hidden w-24 h-24 rounded-full bg-container flex items-center justify-center mb-6 shadow-2xl overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#D6007A] to-transparent opacity-20"></div>
+              <div className="absolute inset-0 bg-brand opacity-20"></div>
               <div className="flex gap-1.5 transform rotate-12 relative z-10">
-                <div className="w-2.5 h-8 bg-[#D6007A] rounded-full transform -skew-x-[20deg]"></div>
-                <div className="w-2.5 h-10 bg-[#D6007A] rounded-full transform -skew-x-[20deg] -translate-y-1"></div>
-                <div className="w-2.5 h-8 bg-[#D6007A] rounded-full transform -skew-x-[20deg]"></div>
+                <div className="w-2.5 h-8 bg-cta rounded-full transform -skew-x-[20deg]"></div>
+                <div className="w-2.5 h-10 bg-cta rounded-full transform -skew-x-[20deg] -translate-y-1"></div>
+                <div className="w-2.5 h-8 bg-cta rounded-full transform -skew-x-[20deg]"></div>
               </div>
             </div>
 
@@ -149,19 +149,19 @@ export default async function LandingPage() {
               Transforma tu cuerpo, eleva tu mente. Entrena con los mejores profesionales en un ambiente exclusivo.
             </p>
 
-            <Link href="/clases" className="hidden md:inline-flex bg-white text-[#9B00E8] font-bold py-4 px-8 rounded-full hover:scale-105 transition-transform shadow-lg">
+            <Link href="/clases" className="hidden md:inline-flex bg-white text-brand font-bold py-4 px-8 rounded-full hover:scale-105 transition-transform shadow-lg">
               Ver Clases Disponibles
             </Link>
           </div>
 
           {/* Desktop Graphic / Logo */}
           <div className="hidden md:flex w-1/2 justify-end z-10">
-            <div className="w-64 h-64 lg:w-80 lg:h-80 rounded-full bg-container/80 backdrop-blur-xl flex items-center justify-center shadow-[0_0_50px_rgba(214,0,122,0.5)] overflow-hidden relative border border-foreground/20">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#D6007A] to-[#F9A826] opacity-30"></div>
+            <div className="w-64 h-64 lg:w-80 lg:h-80 rounded-full bg-container/80 backdrop-blur-xl flex items-center justify-center shadow-[0_0_50px_rgba(19,122,127,0.3)] overflow-hidden relative border border-foreground/20">
+              <div className="absolute inset-0 bg-brand opacity-10"></div>
               <div className="flex gap-4 transform rotate-12 relative z-10">
-                <div className="w-6 h-24 bg-gradient-to-b from-[#D6007A] to-[#F9A826] rounded-full transform -skew-x-[20deg]"></div>
-                <div className="w-6 h-32 bg-gradient-to-b from-[#D6007A] to-[#F9A826] rounded-full transform -skew-x-[20deg] -translate-y-4"></div>
-                <div className="w-6 h-24 bg-gradient-to-b from-[#D6007A] to-[#F9A826] rounded-full transform -skew-x-[20deg]"></div>
+                <div className="w-6 h-24 bg-cta rounded-full transform -skew-x-[20deg]"></div>
+                <div className="w-6 h-32 bg-cta rounded-full transform -skew-x-[20deg] -translate-y-4"></div>
+                <div className="w-6 h-24 bg-cta rounded-full transform -skew-x-[20deg]"></div>
               </div>
             </div>
           </div>
@@ -169,7 +169,7 @@ export default async function LandingPage() {
           {/* Pagination Dots (Mobile Only) */}
           <div className="md:hidden flex justify-center gap-2 mt-2 w-full">
             <div className="w-6 h-1.5 bg-white/40 rounded-full"></div>
-            <div className="w-2 h-1.5 bg-[#F9A826] rounded-full"></div>
+            <div className="w-2 h-1.5 bg-brand-secondary rounded-full"></div>
             <div className="w-6 h-1.5 bg-white/40 rounded-full"></div>
           </div>
         </section>
@@ -244,7 +244,7 @@ export default async function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 bg-container/50 p-6 md:p-10 rounded-[40px] border border-foreground/5">
             <div className="bg-container rounded-3xl p-6 md:p-8 flex flex-col justify-center gap-6 shadow-lg border border-foreground/5">
               <div className="flex items-start gap-4 md:gap-6">
-                <div className="bg-[#D6007A]/10 p-3 md:p-4 rounded-full text-[#D6007A] mt-1 shadow-inner">
+                <div className="bg-brand/10 p-3 md:p-4 rounded-full text-brand mt-1 shadow-inner">
                   <MapPin className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
@@ -255,22 +255,22 @@ export default async function LandingPage() {
               </div>
 
               <a href="tel:+51999999999" className="flex items-start gap-4 md:gap-6 group hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-xl p-1 -m-1">
-                <div className="bg-[#D6007A]/10 p-3 md:p-4 rounded-full text-[#D6007A] mt-1 shadow-inner group-hover:bg-[#D6007A]/20 transition-colors">
+                <div className="bg-brand/10 p-3 md:p-4 rounded-full text-brand mt-1 shadow-inner group-hover:bg-brand/20 transition-colors">
                   <Phone className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm md:text-lg text-foreground font-bold mb-1">Teléfono</div>
-                  <div className="text-[13px] md:text-base text-[#D6007A] font-medium truncate">+51 999 999 999</div>
+                  <div className="text-[13px] md:text-base text-brand font-medium truncate">+51 999 999 999</div>
                 </div>
               </a>
 
               <a href="mailto:info@myku.com" className="flex items-start gap-4 md:gap-6 group hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground rounded-xl p-1 -m-1">
-                <div className="bg-[#D6007A]/10 p-3 md:p-4 rounded-full text-[#D6007A] mt-1 shadow-inner group-hover:bg-[#D6007A]/20 transition-colors">
+                <div className="bg-brand/10 p-3 md:p-4 rounded-full text-brand mt-1 shadow-inner group-hover:bg-brand/20 transition-colors">
                   <Mail className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm md:text-lg text-foreground font-bold mb-1">Email</div>
-                  <div className="text-[13px] md:text-base text-[#D6007A] font-medium truncate">info@myku.com</div>
+                  <div className="text-[13px] md:text-base text-brand font-medium truncate">info@myku.com</div>
                 </div>
               </a>
             </div>

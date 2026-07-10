@@ -15,9 +15,9 @@ export function InstructorCard({ name, experienceYears, bio, whatsapp }: Instruc
   const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
 
   return (
-    <div className="bg-container/80 rounded-3xl p-6 md:p-8 flex flex-col justify-between border border-foreground/10 shadow-xl shadow-black/10 dark:shadow-black/20 hover:border-[#D6007A]/50 transition-colors group h-full">
+    <div className="bg-container/80 rounded-3xl p-6 md:p-8 flex flex-col justify-between border border-foreground/10 shadow-xl shadow-black/10 dark:shadow-black/20 hover:border-brand/50 transition-colors group h-full">
       <div className="flex flex-col items-center text-center gap-4 mb-6">
-        <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-[#D6007A] to-[#F9A826] p-1 shadow-lg group-hover:scale-105 transition-transform">
+        <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-brand to-brand-secondary p-1 shadow-lg group-hover:scale-105 transition-transform">
           <div className="w-full h-full bg-background rounded-full flex items-center justify-center border-2 border-background">
             <span className="text-2xl font-bold text-foreground tracking-widest">{initials}</span>
           </div>

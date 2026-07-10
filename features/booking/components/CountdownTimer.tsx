@@ -37,7 +37,7 @@ export function CountdownTimer({ expiresAt, fallbackUrl }: { expiresAt: string, 
   const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`
 
   return (
-    <div className="flex items-center justify-center gap-2 bg-red-50 text-red-500 border border-red-200 rounded-xl py-3 px-4 mx-auto w-fit mb-6">
+    <div className="flex items-center justify-center gap-2 bg-status-danger/10 text-status-danger border border-status-danger rounded-xl py-3 px-4 mx-auto w-fit mb-6">
       <Clock className="w-5 h-5" />
       <span className="font-semibold text-sm">
         Reserva temporal: paga en <span className="text-lg tabular-nums">{formattedTime}</span> para asegurar tus cupos

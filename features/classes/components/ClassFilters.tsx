@@ -68,10 +68,10 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
           <button
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-full bg-background border border-foreground/10 hover:border-[#D6007A]/50 rounded-xl p-3.5 text-[13px] text-foreground flex items-center justify-between transition-colors shadow-inner"
+            className="w-full bg-background border border-foreground/10 hover:border-brand/50 rounded-xl p-3.5 text-[13px] text-foreground flex items-center justify-between transition-colors shadow-inner"
           >
             <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-[#D6007A]" />
+              <User className="w-4 h-4 text-brand" />
               <span className="font-medium truncate">{selectedInstructorName}</span>
             </div>
             <ChevronDown className={`w-4 h-4 text-foreground/70 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -81,7 +81,7 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
             <div className="absolute z-50 w-full mt-2 bg-background border border-foreground/10 rounded-xl shadow-2xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2">
               <button
                 type="button"
-                className={`w-full text-left px-4 py-3 text-[13px] font-medium transition-colors hover:bg-foreground/5 ${instructorId === '' ? 'text-[#D6007A] bg-[#D6007A]/10' : 'text-foreground'}`}
+                className={`w-full text-left px-4 py-3 text-[13px] font-medium transition-colors hover:bg-foreground/5 ${instructorId === '' ? 'text-brand bg-brand/10' : 'text-foreground'}`}
                 onClick={() => {
                   setInstructorId('')
                   setIsDropdownOpen(false)
@@ -93,7 +93,7 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
                 <button
                   key={inst.id}
                   type="button"
-                  className={`w-full text-left px-4 py-3 text-[13px] font-medium transition-colors hover:bg-foreground/5 ${instructorId === inst.id ? 'text-[#D6007A] bg-[#D6007A]/10' : 'text-foreground'}`}
+                  className={`w-full text-left px-4 py-3 text-[13px] font-medium transition-colors hover:bg-foreground/5 ${instructorId === inst.id ? 'text-brand bg-brand/10' : 'text-foreground'}`}
                   onClick={() => {
                     setInstructorId(inst.id)
                     setIsDropdownOpen(false)
@@ -112,7 +112,7 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
         <label className="text-[11px] text-foreground/70 uppercase tracking-wider font-bold mb-2 block ml-1">Filtrar por Fecha</label>
         <div className="relative flex items-center">
           <div className="absolute left-0 pl-3.5 flex items-center pointer-events-none z-10">
-            <CalendarIcon className="w-4 h-4 text-[#D6007A]" />
+            <CalendarIcon className="w-4 h-4 text-brand" />
           </div>
           <style dangerouslySetInnerHTML={{__html: `
             .custom-datepicker .react-datepicker__input-container input {
@@ -179,7 +179,7 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
             }
             .react-datepicker__day--selected, 
             .react-datepicker__day--keyboard-selected {
-              background-color: #D6007A !important;
+              background-color: #137A7F !important;
               color: white !important;
               border-radius: 0.5rem !important;
             }
@@ -209,7 +209,7 @@ export function ClassFilters({ instructors }: { instructors: { id: string, name:
         </button>
         <button 
           onClick={handleApply}
-          className="flex-1 md:flex-none h-[46px] flex items-center justify-center px-4 bg-gradient-to-r from-[#D6007A] to-[#9B00E8] rounded-xl text-[13px] font-bold text-white shadow-lg hover:opacity-90 transition-opacity whitespace-nowrap"
+          className="flex-1 md:flex-none h-[46px] flex items-center justify-center px-4 bg-gradient-to-r from-brand to-brand-secondary rounded-xl text-[13px] font-bold text-white shadow-lg hover:opacity-90 transition-opacity whitespace-nowrap"
         >
           Aplicar Filtros
         </button>

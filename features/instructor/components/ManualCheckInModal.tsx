@@ -64,7 +64,7 @@ export function ManualCheckInModal({ sessionId, spotNumber, isOpen, onClose }: M
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-5">
       <div className="bg-container border border-foreground/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200">
-        <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-5 text-white pr-12">
+        <div className="bg-brand p-5 text-white pr-12">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5" />
             Check-in Manual
@@ -102,21 +102,21 @@ export function ManualCheckInModal({ sessionId, spotNumber, isOpen, onClose }: M
               value={clientPhone}
               onChange={handlePhoneChange}
               maxLength={9}
-              className={`bg-background border-foreground/10 ${phoneError ? 'border-red-500/50 focus:border-red-500' : ''}`}
+              className={`bg-background border-foreground/10 ${phoneError ? 'border-status-danger/50 focus:border-status-danger' : ''}`}
             />
             {phoneError && (
-              <p className="text-red-500 text-xs mt-1 font-medium">{phoneError}</p>
+              <p className="text-status-danger text-xs mt-1 font-medium">{phoneError}</p>
             )}
           </div>
 
-          <div className="bg-foreground/5 border border-state-yellow/30 p-3 rounded-xl text-xs text-foreground/80 leading-relaxed mt-2">
-            <strong className="text-state-yellow">Nota:</strong> Esto creará la reserva automáticamente con pago en efectivo y registrará la asistencia del alumno en este espacio.
+          <div className="bg-foreground/5 border border-brand-secondary/30 p-3 rounded-xl text-xs text-foreground/80 leading-relaxed mt-2">
+            <strong className="text-brand-secondary">Nota:</strong> Esto creará la reserva automáticamente con pago en efectivo y registrará la asistencia del alumno en este espacio.
           </div>
 
           <button 
             type="submit"
             disabled={isPending || !clientName.trim() || !/^9\d{8}$/.test(clientPhone)}
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl py-3.5 mt-4 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full bg-cta text-white font-bold rounded-xl py-3.5 mt-4 flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none"
           >
             {isPending ? (
               <>

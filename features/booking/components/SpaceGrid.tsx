@@ -30,7 +30,7 @@ export function SpaceGrid({ spots, capacity, selectedSpots, onToggleSpot }: Spac
   return (
     <div className="w-full flex flex-col items-center">
       {/* Instructor / Mirror Area */}
-      <div className="w-full max-w-[320px] bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl py-3 px-4 flex items-center justify-center gap-2 mb-8 shadow-lg shadow-pink-500/20">
+      <div className="w-full max-w-[320px] bg-brand rounded-xl py-3 px-4 flex items-center justify-center gap-2 mb-8 shadow-lg shadow-brand/20">
         <User className="w-5 h-5 text-white" />
         <span className="text-white font-medium tracking-wide">INSTRUCTOR / ESPEJO</span>
       </div>
@@ -47,13 +47,14 @@ export function SpaceGrid({ spots, capacity, selectedSpots, onToggleSpot }: Spac
               disabled={!isAvailable}
               onClick={() => isAvailable && onToggleSpot(spot.spot_number)}
               className={cn(
-                'w-12 h-12 rounded-lg flex items-center justify-center text-sm font-bold transition-all',
-                !isAvailable && 'bg-foreground/10 text-foreground/80 cursor-not-allowed',
-                isAvailable && !isSelected && 'bg-[#00E676] text-black hover:brightness-110',
-                isSelected && 'bg-state-yellow text-black ring-4 ring-state-yellow/30 scale-105'
+                'w-12 h-12 rounded-lg flex flex-row items-center justify-center gap-1 font-bold transition-all border',
+                !isAvailable && 'bg-foreground/5 text-foreground/30 cursor-not-allowed border-foreground/10',
+                isAvailable && !isSelected && 'bg-status-success/10 text-status-success border-status-success/30 hover:bg-status-success/20 hover:border-status-success/50',
+                isSelected && 'bg-cta text-white ring-2 ring-cta scale-105 border-transparent shadow-lg shadow-cta/20'
               )}
             >
-              {spot.spot_number}
+              <User className={cn("w-3.5 h-3.5", isSelected ? 'text-white' : (isAvailable ? 'text-status-success' : 'text-foreground/30'))} />
+              <span className="text-[11px] leading-none">{spot.spot_number}</span>
             </button>
           )
         })}
@@ -62,16 +63,18 @@ export function SpaceGrid({ spots, capacity, selectedSpots, onToggleSpot }: Spac
       {/* Legend */}
       <div className="flex flex-col gap-3 w-full max-w-[320px] text-sm text-foreground/70">
         <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded bg-[#00E676]"></div>
-          <span>Espacio disponible</span>
+          <div className="w-5 h-5 rounded bg-status-success/10 border border-status-success/30"></div>
+          <span>Disponible</span>
         </div>
         <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded bg-foreground/10 border border-foreground/5"></div>
-          <span>Espacio ocupado</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded bg-state-yellow"></div>
+          <div className="w-5 h-5 rounded bg-cta shadow-sm shadow-cta/20"></div>
           <span>Tu selección</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="w-5 h-5 rounded bg-foreground/5 border border-foreground/10 flex items-center justify-center">
+            <User className="w-3 h-3 text-foreground/30" />
+          </div>
+          <span>Ocupado</span>
         </div>
       </div>
     </div>
