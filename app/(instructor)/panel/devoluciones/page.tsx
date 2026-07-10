@@ -1,8 +1,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronLeft, Receipt } from 'lucide-react'
+import { Receipt, ChevronLeft } from 'lucide-react'
 import { RefundItem } from '@/features/instructor/components/RefundItem'
+import type { Database } from '@/types/database.types'
+
+type RefundWithDetails = Database['public']['Tables']['refunds']['Row'] & {
+  reservations: {
+    client_name: string;
+    client_phone: string;
+    sessions: {
+      session_date: string;
+      start_time: string;
+      theme: string | null;
+    } | null;
+  } | null;
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +29,7 @@ export default async function DevolucionesPage() {
 
   // Fetch refunds
   const { data: refunds, error } = await supabase
-    .from('refunds' as any)
+    .from('refunds')
     .select(`
       id,
       amount,
@@ -41,7 +54,7 @@ export default async function DevolucionesPage() {
     console.error('Error fetching refunds:', error)
   }
 
-  const refundsData = (refunds as any[]) || []
+  const refundsData = (refunds as unknown as RefundWithDetails[]) || []
   const pendingRefunds = refundsData.filter(r => r.status === 'pending')
   const completedRefunds = refundsData.filter(r => r.status === 'completed')
 

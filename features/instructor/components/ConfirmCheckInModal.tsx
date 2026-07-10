@@ -26,7 +26,7 @@ export function ConfirmCheckInModal({ sessionId, spotNumber, clientName, estadoP
       try {
         await toggleAttendance(sessionId, spotNumber)
         onClose()
-      } catch (e) {
+      } catch {
         alert('Ocurrió un error al actualizar la asistencia')
       }
     })

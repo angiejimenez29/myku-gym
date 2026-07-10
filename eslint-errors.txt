@@ -1,0 +1,200 @@
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(instructor)\panel\asistencia\[id]\page.tsx
+  4:23  warning  'QrCode' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(instructor)\panel\asistencia\page.tsx
+  66:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  68:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  70:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(instructor)\panel\clase\[id]\page.tsx
+  37:10  warning  'getOccupationBgColor' is defined but never used  @typescript-eslint/no-unused-vars
+  84:48  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  86:39  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  88:46  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(instructor)\panel\devoluciones\page.tsx
+  19:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(instructor)\panel\page.tsx
+  70:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  75:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  77:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(public)\clases\page.tsx
+    2:10  warning  'InstructorProfile' is defined but never used            @typescript-eslint/no-unused-vars
+   37:48  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   37:70  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   70:31  warning  'error' is assigned a value but never used               @typescript-eslint/no-unused-vars
+   73:44  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   74:23  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   84:20  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   90:44  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+  109:43  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+  116:7   warning  'featuredInstructor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(public)\instructores\page.tsx
+  25:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(public)\page.tsx
+    3:10  warning  'InstructorProfile' is defined but never used            @typescript-eslint/no-unused-vars
+   71:47  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   72:23  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   82:20  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+   88:44  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+  117:43  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+  124:7   warning  'featuredInstructor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  225:38  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+  225:69  error    Unexpected any. Specify a different type                 @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(public)\reserva\[id]\confirmacion\page.tsx
+   6:10  warning  'TopBar' is defined but never used                   @typescript-eslint/no-unused-vars
+  14:9   warning  'resolvedParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  57:39  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  60:9   warning  'isMultiple' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  62:43  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(public)\reserva\[id]\espacio\page.tsx
+  34:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  46:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  50:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(public)\reserva\[id]\page.tsx
+   7:43  warning  'UserIcon' is defined but never used      @typescript-eslint/no-unused-vars
+  47:27  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:40  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\(public)\reserva\[id]\pago\page.tsx
+  58:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\api\reservas\[id]\pagar\route.ts
+  53:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  90:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\app\api\webhooks\mercadopago\route.ts
+   40:7   error  'newClassesCount' is never reassigned. Use 'const' instead  prefer-const
+  106:12  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+  205:46  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+  214:49  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+  231:28  error  A `require()` style import is forbidden                     @typescript-eslint/no-require-imports
+  279:19  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\components\Navbar.tsx
+  10:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\components\ThemeToggle.tsx
+  12:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\bdlcc\Downloads\meyko-gym\components\ThemeToggle.tsx:12:5
+  10 |
+  11 |   React.useEffect(() => {
+> 12 |     setMounted(true);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  13 |   }, []);
+  14 |
+  15 |   if (!mounted) {  react-hooks/set-state-in-effect
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\auth\actions\login.ts
+  6:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\booking\actions\createPendingReservation.ts
+   74:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  122:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\booking\actions\createReservation.ts
+  17:9   warning  'totalAmount' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  40:30  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  54:42  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  68:75  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\booking\components\MercadoPagoButton.tsx
+  21:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\booking\components\PaymentStatusPoller.tsx
+  19:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\booking\components\SpaceSelectionFlow.tsx
+  17:9   warning  'router' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  27:22  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\booking\components\SpaceSelectionFlow.tsx:27:22
+  25 |       const savedName = localStorage.getItem('meykogym_client_name')
+  26 |       const savedPhone = localStorage.getItem('meykogym_client_phone')
+> 27 |       if (savedName) setName(savedName)
+     |                      ^^^^^^^ Avoid calling setState() directly within an effect
+  28 |       if (savedPhone) setPhone(savedPhone)
+  29 |     } catch (e) {
+  30 |       // ignore localStorage errors (e.g., in incognito mode)  react-hooks/set-state-in-effect
+  29:14  warning  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  58:16  warning  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  70:23  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\classes\components\ClassFilters.tsx
+   4:10  warning  'useCallback' is defined but never used            @typescript-eslint/no-unused-vars
+  36:9   error    'params' is never reassigned. Use 'const' instead  prefer-const
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\classes\components\HowItWorks.tsx
+  1:10  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\classes\components\InstructorProfile.tsx
+  18:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\actions\completeRefund.ts
+  15:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\actions\createSession.ts
+  59:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\actions\manualCheckIn.ts
+  21:15  error  'spot' is never reassigned. Use 'const' instead       prefer-const
+  21:28  error  'spotError' is never reassigned. Use 'const' instead  prefer-const
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\components\CancelSessionButton.tsx
+  24:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\components\ConfirmCheckInModal.tsx
+  29:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\components\LiveAttendance.tsx
+   6:10  warning  'toggleAttendance' is defined but never used          @typescript-eslint/no-unused-vars
+  41:21  warning  'startTransition' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\components\ManualCheckInModal.tsx
+   4:10  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+  58:16  warning  'e' is defined but never used     @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\components\NewSessionForm.tsx
+   6:80  warning  'ChevronLeft' is defined but never used   @typescript-eslint/no-unused-vars
+  12:17  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  68:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructor\components\RefundItem.tsx
+   7:50  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  16:16  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\features\instructors\components\InstructorCard.tsx
+  1:10  warning  'User' is defined but never used   @typescript-eslint/no-unused-vars
+  2:8   warning  'Image' is defined but never used  @typescript-eslint/no-unused-vars
+  3:8   warning  'Link' is defined but never used   @typescript-eslint/no-unused-vars
+
+C:\Users\bdlcc\Downloads\meyko-gym\lib\supabase\middleware.ts
+  9:9  warning  'supabase' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 94 problems (64 errors, 30 warnings)
+  4 errors and 0 warnings potentially fixable with the `--fix` option.
+

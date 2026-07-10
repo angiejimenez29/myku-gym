@@ -3,8 +3,21 @@
 import { useState, useTransition } from 'react'
 import { CheckCircle2, Phone, Calendar, User as UserIcon } from 'lucide-react'
 import { completeRefund } from '../actions/completeRefund'
+import type { Database } from '@/types/database.types'
 
-export function RefundItem({ refund }: { refund: any }) {
+type RefundWithDetails = Database['public']['Tables']['refunds']['Row'] & {
+  reservations: {
+    client_name: string;
+    client_phone: string;
+    sessions: {
+      session_date: string;
+      start_time: string;
+      theme: string | null;
+    } | null;
+  } | null;
+}
+
+export function RefundItem({ refund }: { refund: RefundWithDetails }) {
   const [isPending, startTransition] = useTransition()
   const [isSuccess, setIsSuccess] = useState(false)
 
@@ -13,7 +26,7 @@ export function RefundItem({ refund }: { refund: any }) {
       try {
         await completeRefund(refund.id)
         setIsSuccess(true)
-      } catch (e) {
+      } catch {
         alert('Error al procesar la devolución.')
       }
     })

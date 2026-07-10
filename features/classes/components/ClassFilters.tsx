@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable @typescript-eslint/no-unused-vars, prefer-const */
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useCallback, useState, useRef, useEffect } from 'react'

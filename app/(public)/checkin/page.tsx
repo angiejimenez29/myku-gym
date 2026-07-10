@@ -18,6 +18,7 @@ export interface Reservation {
   time: string
   theme: string
   spots: string[]
+  isCheckedIn?: boolean
 }
 
 import { getReservationsForCheckin, markAttendanceForReservation } from './actions'
@@ -273,27 +274,40 @@ function ReservationCard({
         </span>
       </div>
 
-      {/* CTA */}
-      <button
-        id={`btn-mark-attendance-${r.id}`}
-        onClick={() => onMark(r)}
-        className="w-full py-3 rounded-xl text-sm font-bold transition-all active:scale-95 mt-1"
-        style={{
-          background: 'transparent',
-          border: '1.5px solid #9B00E8',
-          color: '#D6007A',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#9B00E815'
-          e.currentTarget.style.boxShadow = '0 0 14px #9B00E835'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'transparent'
-          e.currentTarget.style.boxShadow = 'none'
-        }}
-      >
-        Marcar Asistencia
-      </button>
+      {/* CTA or Status */}
+      {!r.isCheckedIn ? (
+        <button
+          id={`btn-mark-attendance-${r.id}`}
+          onClick={() => onMark(r)}
+          className="w-full py-3 rounded-xl text-sm font-bold transition-all active:scale-95 mt-1"
+          style={{
+            background: 'transparent',
+            border: '1.5px solid #9B00E8',
+            color: '#D6007A',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#9B00E815'
+            e.currentTarget.style.boxShadow = '0 0 14px #9B00E835'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.boxShadow = 'none'
+          }}
+        >
+          Marcar Asistencia
+        </button>
+      ) : (
+        <div 
+          className="w-full py-2.5 rounded-xl text-xs font-bold mt-1 flex items-center justify-center gap-1.5"
+          style={{
+            background: 'rgba(214, 0, 122, 0.1)',
+            border: '1px solid rgba(214, 0, 122, 0.2)',
+            color: '#D6007A'
+          }}
+        >
+          <span>Asistencia registrada</span>
+        </div>
+      )}
     </div>
   )
 }
@@ -305,6 +319,9 @@ function ScreenReservations({
   reservations: Reservation[]
   onMark: (r: Reservation) => void
 }) {
+  const pending = reservations.filter(r => !r.isCheckedIn)
+  const checkedIn = reservations.filter(r => r.isCheckedIn)
+
   return (
     <div className="flex flex-col flex-1">
       <LogoBadge />
@@ -316,10 +333,37 @@ function ScreenReservations({
         Selecciona la clase a la que vas a asistir hoy.
       </p>
 
-      <div className="flex flex-col gap-4 flex-1 overflow-y-auto pb-2">
-        {reservations.map((r) => (
-          <ReservationCard key={r.id} reservation={r} onMark={onMark} />
-        ))}
+      <div className="flex flex-col gap-6 flex-1 overflow-y-auto pb-2">
+        {/* PENDING SECTION */}
+        {pending.length > 0 && (
+          <div className="flex flex-col gap-4">
+            <h2 className="text-sm font-semibold text-white/90">Pendientes</h2>
+            {pending.map((r) => (
+              <ReservationCard key={r.id} reservation={r} onMark={onMark} />
+            ))}
+          </div>
+        )}
+
+        {/* SEPARATOR */}
+        {pending.length > 0 && checkedIn.length > 0 && (
+          <div className="w-full h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
+        )}
+
+        {/* CHECKED IN SECTION */}
+        {checkedIn.length > 0 && (
+          <div className="flex flex-col gap-4 opacity-75">
+            <h2 className="text-sm font-semibold text-white/70">Asistencia Registrada</h2>
+            {checkedIn.map((r) => (
+              <ReservationCard key={r.id} reservation={r} onMark={onMark} />
+            ))}
+          </div>
+        )}
+        
+        {reservations.length === 0 && (
+          <div className="text-center mt-10 text-white/50 text-sm">
+            No tienes reservas próximas confirmadas.
+          </div>
+        )}
       </div>
     </div>
   )

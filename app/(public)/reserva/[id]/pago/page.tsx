@@ -1,4 +1,17 @@
 import { createAdminClient } from '@/lib/supabase/server'
+
+
+type ReservationSession = {
+  session_date: string
+  start_time: string
+  theme: string | null
+  price: number
+  class_type: string
+  instructor: { full_name: string | null } | { full_name: string | null }[] | null
+}
+
+type ReservationSpot = { session_spots: { spot_number: number } | null }
+
 import { notFound, redirect } from 'next/navigation'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { TopBar } from '@/features/shared/components/TopBar'
@@ -7,8 +20,9 @@ import { MercadoPagoButton } from '@/features/booking/components/MercadoPagoButt
 import { CountdownTimer } from '@/features/booking/components/CountdownTimer'
 
 function formatSessionDateTimeStr(isoDate: string, isoTime: string) {
-  const date = new Date(`${isoDate}T${isoTime}`)
-  return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
+  const hasTimezone = isoDate.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoDate) || isoTime.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoTime)
+  const date = new Date(hasTimezone ? `${isoDate}T${isoTime}` : `${isoDate}T${isoTime}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'America/Lima' }).format(date)
 }
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
@@ -55,14 +69,14 @@ export default async function PaymentPage({ params, searchParams }: { params: Pr
     redirect(`/reserva/${resolvedParams.id}/espacio`)
   }
 
-  const session = reservation.sessions as any
+  const session = reservation.sessions as unknown as ReservationSession
   const dateTimeStr = formatSessionDateTimeStr(session.session_date, session.start_time)
   const instructorName = session.instructor 
     ? (Array.isArray(session.instructor) ? session.instructor[0]?.full_name : session.instructor.full_name)
     : 'Instructor'
 
   const rs = Array.isArray(reservation.reservation_spots) ? reservation.reservation_spots : (reservation.reservation_spots ? [reservation.reservation_spots] : [])
-  const spotsArray = rs.map((r: any) => r.session_spots?.spot_number).sort((a: number, b: number) => a - b)
+  const spotsArray = (rs as unknown as ReservationSpot[]).map((r) => r.session_spots?.spot_number).sort((a, b) => (a || 0) - (b || 0))
   const totalAmount = Number(reservation.total_amount)
 
   return (

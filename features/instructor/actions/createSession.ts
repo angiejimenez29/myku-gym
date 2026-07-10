@@ -25,7 +25,7 @@ export async function createSession(formData: FormData) {
     throw new Error('Campos obligatorios faltantes')
   }
 
-  const { data: newSession, error: sessionError } = await supabase
+  const { error: sessionError } = await supabase
     .from('sessions')
     .insert({
       instructor_id: user.id,
@@ -47,21 +47,7 @@ export async function createSession(formData: FormData) {
     throw new Error('Error al crear la sesión en la base de datos')
   }
 
-  // Create session spots
-  const spots = Array.from({ length: capacity }, (_, i) => ({
-    session_id: newSession.id,
-    spot_number: i + 1,
-    status: 'available'
-  }))
 
-  const { error: spotsError } = await supabase
-    .from('session_spots')
-    .insert(spots as any) // cast to any to avoid ts errors
-
-  if (spotsError) {
-    console.error('Error creating spots:', spotsError)
-    throw new Error('Error al generar los espacios de la sesión')
-  }
 
   revalidatePath('/panel')
   revalidatePath('/clases')

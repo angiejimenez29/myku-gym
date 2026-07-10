@@ -8,6 +8,7 @@ export interface CheckinReservation {
   time: string
   theme: string
   spots: string[]
+  isCheckedIn: boolean
 }
 
 export async function getReservationsForCheckin(phone: string): Promise<CheckinReservation[]> {
@@ -29,7 +30,8 @@ export async function getReservationsForCheckin(phone: string): Promise<CheckinR
       ),
       spots:reservation_spots (
         spot:session_spots (
-          spot_number
+          spot_number,
+          status
         )
       )
     `)
@@ -47,6 +49,9 @@ export async function getReservationsForCheckin(phone: string): Promise<CheckinR
     const session = res.session
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const spotList = (res.spots as any[])?.map((s) => `#${s.spot?.spot_number}`).filter(Boolean) || []
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const isCheckedIn = (res.spots as any[])?.some((s) => s.spot?.status === 'present') || false
     
     // Format date: YYYY-MM-DD -> DD/MM/YYYY
     let formattedDate = session?.session_date || ''
@@ -75,6 +80,7 @@ export async function getReservationsForCheckin(phone: string): Promise<CheckinR
       time: formattedTime,
       theme,
       spots: spotList,
+      isCheckedIn,
     }
   })
 }

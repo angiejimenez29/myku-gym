@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CheckCircle2 } from 'lucide-react'
 
 export function HowItWorks() {

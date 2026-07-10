@@ -3,15 +3,15 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { Check, Dumbbell } from 'lucide-react'
-import { TopBar } from '@/features/shared/components/TopBar'
+
 
 function formatSessionDateTimeStr(isoDate: string, isoTime: string) {
   const date = new Date(`${isoDate}T${isoTime}`)
   return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
 }
 
-export default async function ConfirmationPage({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ reservaId?: string, name?: string, phone?: string, spots?: string }> }) {
-  const resolvedParams = await params
+export default async function ConfirmationPage({ searchParams }: { searchParams: Promise<{ reservaId?: string, name?: string, phone?: string, spots?: string }> }) {
+
   const resolvedSearchParams = await searchParams
   
   if (!resolvedSearchParams.reservaId) {
@@ -54,12 +54,12 @@ export default async function ConfirmationPage({ params, searchParams }: { param
   const clientPhone = reservation.client_phone || '--'
   
   const rs = Array.isArray(reservation.reservation_spots) ? reservation.reservation_spots : (reservation.reservation_spots ? [reservation.reservation_spots] : [])
-  const spotNumbersArray = rs.map((r: any) => r.session_spots?.spot_number).filter(Boolean).sort((a: number, b: number) => a - b)
+  const spotNumbersArray = (rs as unknown as { session_spots: { spot_number: number } | null }[]).map((r) => r.session_spots?.spot_number).filter((s): s is number => typeof s === 'number').sort((a, b) => a - b)
   
   const spotsString = spotNumbersArray.length > 0 ? spotNumbersArray.map((s: number) => `#${s}`).join(', ') : '--'
-  const isMultiple = spotNumbersArray.length > 1
 
-  const session = reservation.sessions as any
+
+  const session = reservation.sessions as unknown as { session_date: string, start_time: string, theme: string | null, price: number, class_type: string, instructor: { full_name: string | null } | { full_name: string | null }[] | null }
 
   const instructorName = session?.instructor 
     ? (Array.isArray(session.instructor) ? session.instructor[0]?.full_name : session.instructor.full_name)

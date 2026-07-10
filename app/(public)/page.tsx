@@ -1,6 +1,18 @@
 import Link from 'next/link'
+
+type SessionData = {
+  id: string
+  session_date: string
+  start_time: string
+  theme: string | null
+  class_type: string
+  capacity: number
+  price: number
+  created_at: string | null
+  session_spots: { id: string, status: string }[] | null
+  instructor: { full_name: string | null, whatsapp_phone: string | null } | { full_name: string | null, whatsapp_phone: string | null }[] | null
+}
 import { ClassCard } from '@/features/classes/components/ClassCard'
-import { InstructorProfile } from '@/features/classes/components/InstructorProfile'
 import { HowItWorks } from '@/features/classes/components/HowItWorks'
 import { MapPin, Phone, Mail, ChevronRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
@@ -68,8 +80,8 @@ export default async function LandingPage() {
     .limit(4)
 
   const limaNow = getCurrentLimaTime()
-  const processedSessions = ((sessionsData as any[]) || [])
-    .filter((session: any) => {
+  const processedSessions = ((sessionsData as unknown as SessionData[]) || [])
+    .filter((session) => {
       // Parse local class date and start time manually to ensure it uses the local timezone (local server timezone representation)
       const [year, month, day] = session.session_date.split('-').map(Number)
       const [hour, minute] = session.start_time.split(':').map(Number)
@@ -79,13 +91,13 @@ export default async function LandingPage() {
       const expirationTime = sessionDateTime.getTime() + 1 * 60 * 60 * 1000
       return limaNow.getTime() <= expirationTime
     })
-    .map((session: any) => {
-      const instructorName = session.instructor
+    .map((session) => {
+      const instructorName = (session.instructor
         ? (Array.isArray(session.instructor) ? session.instructor[0]?.full_name : session.instructor.full_name)
-        : 'Instructor'
+        : 'Instructor') || 'Instructor'
 
       const availableSpots = session.session_spots
-        ? session.session_spots.filter((s: any) => s.status === 'available').length
+        ? session.session_spots.filter((s) => s.status === 'available').length
         : session.capacity
 
       return {
@@ -111,24 +123,6 @@ export default async function LandingPage() {
 
   const mappedSessions = processedSessions.slice(0, 3)
 
-  // Destacar al instructor de la clase más próxima
-  let featuredInstructor = null
-  if (sessionsData && sessionsData.length > 0) {
-    const firstSession = (sessionsData as any[])[0]
-    const instructorObj = firstSession.instructor
-      ? (Array.isArray(firstSession.instructor) ? firstSession.instructor[0] : firstSession.instructor)
-      : null
-
-    if (instructorObj && instructorObj.full_name) {
-      const mockYears = (instructorObj.full_name.length % 5) + 5 || 5
-      featuredInstructor = {
-        name: instructorObj.full_name,
-        phone: instructorObj.whatsapp_phone || '51999999999',
-        experienceYears: mockYears,
-        bio: `¡Hola! Soy ${instructorObj.full_name}, un apasionado del fitness con un enfoque en entrenamiento funcional y rutinas de alta intensidad. Mi objetivo es ayudarte a superar tus límites físicos y mentales. Con ${mockYears} años de experiencia, te garantizo que cada clase será un nuevo desafío para alcanzar tu mejor versión.`,
-      }
-    }
-  }
 
   return (
     <div className="flex flex-col w-full">
@@ -222,13 +216,13 @@ export default async function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {((topInstructorsData as any[]) || []).map((instructor: any) => (
+            {((topInstructorsData as {id: string, full_name: string | null, years_experience: number | null, bio: string | null, whatsapp_phone: string | null}[]) || []).map((instructor) => (
               <InstructorCard
                 key={instructor.id}
-                name={instructor.full_name}
-                experienceYears={instructor.years_experience}
-                bio={instructor.bio}
-                whatsapp={instructor.whatsapp_phone}
+                name={instructor.full_name || 'Instructor'}
+                experienceYears={instructor.years_experience || 0}
+                bio={instructor.bio || ''}
+                whatsapp={instructor.whatsapp_phone || ''}
               />
             ))}
           </div>

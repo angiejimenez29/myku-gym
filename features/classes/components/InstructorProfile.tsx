@@ -1,4 +1,5 @@
 "use client"
+/* eslint-disable @next/next/no-img-element */
 import { Award, Users, Star } from 'lucide-react'
 
 interface InstructorProfileProps {

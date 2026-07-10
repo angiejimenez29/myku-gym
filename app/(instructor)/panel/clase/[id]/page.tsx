@@ -5,6 +5,11 @@ import { ChevronLeft, Calendar, Clock, Tag, Music, User as UserIcon, Coins, User
 import { CancelSessionButton } from '@/features/instructor/components/CancelSessionButton'
 import { SessionOptionsMenu } from '@/features/instructor/components/SessionOptionsMenu'
 import { getLimaDateString } from '@/lib/utils'
+import type { Database } from '@/types/database.types'
+
+type SessionWithSpots = Database['public']['Tables']['sessions']['Row'] & {
+  session_spots: { status: string }[] | null;
+}
 
 function formatSessionDate(isoString: string) {
   const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
@@ -32,12 +37,6 @@ function getOccupationTextColor(percentage: number) {
   if (percentage < 50) return 'text-[#00E676]'
   if (percentage < 90) return 'text-orange-500'
   return 'text-pink-500'
-}
-
-function getOccupationBgColor(percentage: number) {
-  if (percentage < 50) return 'bg-[#00E676]'
-  if (percentage < 90) return 'bg-orange-500'
-  return 'bg-pink-500'
 }
 
 export default async function ClassDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -81,11 +80,11 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
     console.error('Error fetching sessions:', sessionsError)
   }
 
-  const upcomingSessions = (sessions || []) as any[]
+  const upcomingSessions = (sessions || []) as SessionWithSpots[]
 
-  const getOccupation = (sessionItem: any) => {
+  const getOccupation = (sessionItem: SessionWithSpots) => {
     const reservedSpots = sessionItem.session_spots
-      ? sessionItem.session_spots.filter((s: any) => s.status !== 'available').length
+      ? sessionItem.session_spots.filter((s) => s.status !== 'available').length
       : 0
     return {
       reserved: reservedSpots,

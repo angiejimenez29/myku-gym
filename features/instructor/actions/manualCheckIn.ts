@@ -18,7 +18,7 @@ export async function manualCheckIn(sessionId: string, spotNumber: number, formD
   }
 
   // 1. Ensure the spot exists
-  let { data: spot, error: spotError } = await supabase
+  const { data: spot, error: spotError } = await supabase
     .from('session_spots')
     .select('id, status')
     .eq('session_id', sessionId)

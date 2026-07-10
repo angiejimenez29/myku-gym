@@ -4,6 +4,8 @@ import { createAdminClient } from '@/lib/supabase/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database.types';
 
+import twilio from 'twilio';
+
 // ─── Streak helper ─────────────────────────────────────────────────────────────
 /**
  * Returns the ISO Monday of the week that contains `dateStr` (YYYY-MM-DD).
@@ -37,7 +39,7 @@ async function upsertStreak(
 
   // ── Streak calculation ──────────────────────────────────────────────────────
   let newWeekStreak = 1
-  let newClassesCount = (existing?.classes_count ?? 0) + 1
+  const newClassesCount = (existing?.classes_count ?? 0) + 1
 
   if (existing?.last_reservation_week) {
     const lastWeek = existing.last_reservation_week // YYYY-MM-DD
@@ -103,7 +105,7 @@ function buildWhatsAppMessage(
   clientName: string,
   clientPhone: string,
   streak: Awaited<ReturnType<typeof upsertStreak>>,
-  session: any,
+  session: { class_type: string; theme: string | null; session_date: string; start_time: string },
   spotNumbers: string
 ): string {
   const classesUntilFree = 6 - (streak.classes_count % 6)
@@ -157,6 +159,18 @@ export async function POST(req: NextRequest) {
     const supabase = createAdminClient();
 
     if (status === 'approved') {
+      // 0. Check idempotency: If already confirmed, ignore to prevent duplicate WhatsApps
+      const { data: currentRes } = await supabase
+        .from('reservations')
+        .select('estado_pago')
+        .eq('id', reservationId)
+        .single();
+
+      if (currentRes?.estado_pago === 'aprobado') {
+        console.log(`Payment for reservation ${reservationId} already processed. Ignored.`);
+        return NextResponse.json({ success: true, message: 'Already processed' });
+      }
+
       // 1. Update reservation status
       await supabase
         .from('reservations')
@@ -190,7 +204,7 @@ export async function POST(req: NextRequest) {
           .single();
 
         if (resData && resData.session) {
-          const session = resData.session as any;
+          const session = resData.session as { class_type: string; theme: string | null; session_date: string; start_time: string };
           
           // Upsert streak
           const streak = await upsertStreak(
@@ -199,7 +213,7 @@ export async function POST(req: NextRequest) {
             session.session_date
           );
 
-          const spotNumbers = (resData.spots as any[])?.map(s => s.spot?.spot_number).filter(Boolean).join(', ');
+          const spotNumbers = (resData.spots as { spot: { spot_number: number } | null }[])?.map(s => s.spot?.spot_number).filter(Boolean).join(', ');
           
           // Build message
           const messageBody = buildWhatsAppMessage(
@@ -216,7 +230,6 @@ export async function POST(req: NextRequest) {
           const fromNumber = process.env.TWILIO_WHATSAPP_NUMBER;
           
           if (accountSid && authToken && fromNumber) {
-            const twilio = require('twilio');
             const twilioClient = twilio(accountSid, authToken);
 
             let phone = resData.client_phone.replace(/\D/g, '');
@@ -264,8 +277,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('MercadoPago Webhook Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
   }
 }
