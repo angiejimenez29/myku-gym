@@ -12,7 +12,7 @@ export async function completeRefund(refundId: string) {
 
   // We have RLS policies on refunds ensuring instructor can only update their own refunds
   const { error } = await supabase
-    .from('refunds' as any)
+    .from('refunds')
     .update({ status: 'completed', completed_at: new Date().toISOString() })
     .eq('id', refundId)
 

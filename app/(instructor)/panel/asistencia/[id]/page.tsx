@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronLeft, QrCode } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { LiveAttendance, SpotData } from '@/features/instructor/components/LiveAttendance'
 import { AttendanceQRModal } from '@/features/instructor/components/AttendanceQRModal'
 

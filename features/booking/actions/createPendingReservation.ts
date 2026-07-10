@@ -1,7 +1,21 @@
 'use server'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { createAdminClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
+
+// ─── Inline streak upsert (mirror of the webhook helper, server-action context) ─
+/**
+ * Returns the ISO Monday of the week containing `dateStr` (YYYY-MM-DD).
+ */
+function getWeekStart(dateStr: string): string {
+  const d = new Date(`${dateStr}T12:00:00Z`)
+  const day = d.getUTCDay()
+  const diff = day === 0 ? -6 : 1 - day
+  d.setUTCDate(d.getUTCDate() + diff)
+  return d.toISOString().slice(0, 10)
+}
 
 export async function createPendingReservation(formData: FormData) {
   const supabase = createAdminClient()
@@ -39,7 +53,7 @@ export async function createPendingReservation(formData: FormData) {
         .from('reservation_spots')
         .select('reservation_id')
         .eq('spot_id', spot.id);
-        
+
       if (resSpots && resSpots.length > 0) {
         for (const rs of resSpots) {
           const { data: res } = await supabase
@@ -47,13 +61,11 @@ export async function createPendingReservation(formData: FormData) {
             .select('estado_pago, expira_en')
             .eq('id', rs.reservation_id)
             .single();
-            
+
           if (res && res.estado_pago === 'pendiente' && res.expira_en && new Date(res.expira_en) < new Date()) {
-            // Delete the expired reservation, which cascades to reservation_spots
-            // and we need to free the spot manually because refund_reservation does it, but we can just delete it
             await supabase.from('reservations').delete().eq('id', rs.reservation_id);
             await supabase.from('session_spots').update({ status: 'available' }).eq('id', spot.id);
-            spot.status = 'available'; // update local reference
+            spot.status = 'available';
           }
         }
       }
@@ -62,15 +74,30 @@ export async function createPendingReservation(formData: FormData) {
 
   const unavailableSpots = spotsData.filter((s: any) => s.status !== 'available');
   if (unavailableSpots.length > 0) {
-     throw new Error('Lo sentimos, uno o más espacios ya fueron reservados.');
+    throw new Error('Lo sentimos, uno o más espacios ya fueron reservados.');
   }
 
-  // 3. Get price and total
-  const { data: sessionData } = await supabase.from('sessions').select('price').eq('id', sessionId).single();
-  const price = sessionData?.price || 0;
-  const totalAmount = price * spotNumbers.length;
+  // 3. Check if this client has a free class available
+  const { data: streakRow } = await supabase
+    .from('streaks')
+    .select('free_class_available')
+    .eq('client_phone', clientPhone)
+    .maybeSingle()
 
-  // 4. Insert pending reservation
+  const hasFreeClass = streakRow?.free_class_available === true
+
+  // 4. Get session price and calculate total
+  const { data: sessionData } = await supabase
+    .from('sessions')
+    .select('price, session_date')
+    .eq('id', sessionId)
+    .single()
+
+  const basePrice = sessionData?.price ?? 0
+  // Apply free-class benefit: price = 0 for all spots in this booking
+  const totalAmount = hasFreeClass ? 0 : basePrice * spotNumbers.length
+
+  // 5. Insert pending reservation
   const expiraEn = new Date(Date.now() + 10 * 60000).toISOString(); // 10 minutes from now
 
   const { data: reservation, error: resError } = await supabase
@@ -81,7 +108,7 @@ export async function createPendingReservation(formData: FormData) {
       client_phone: clientPhone,
       total_amount: totalAmount,
       status: 'pending',
-      estado_pago: 'pendiente',
+      estado_pago: hasFreeClass ? 'aprobado' : 'pendiente',
       expira_en: expiraEn
     })
     .select('id')
@@ -92,7 +119,7 @@ export async function createPendingReservation(formData: FormData) {
     throw new Error('Failed to create reservation')
   }
 
-  // 5. Insert reservation spots
+  // 6. Insert reservation spots
   const reservationSpotsToInsert = spotsData.map((s: any) => ({
     reservation_id: reservation.id,
     spot_id: s.id
@@ -107,6 +134,69 @@ export async function createPendingReservation(formData: FormData) {
     throw new Error('Lo sentimos, hubo un problema al reservar los espacios.');
   }
 
-  // Redirect to payment page
-  redirect(`/reserva/${sessionId}/pago?reservaId=${reservation.id}`);
+  // 7. If free class: confirm spots immediately, consume the benefit, and update streak
+  if (hasFreeClass && sessionData?.session_date) {
+    // Mark spots as reserved (bypass payment flow)
+    for (const spot of spotsData) {
+      await supabase
+        .from('session_spots')
+        .update({ status: 'reserved' })
+        .eq('id', spot.id)
+    }
+
+    // Confirm the reservation
+    await supabase
+      .from('reservations')
+      .update({ status: 'confirmed' })
+      .eq('id', reservation.id)
+
+    // Consume the free-class flag
+    await supabase
+      .from('streaks')
+      .update({ free_class_available: false, updated_at: new Date().toISOString() })
+      .eq('client_phone', clientPhone)
+
+    // Update streak count for this free-class booking
+    const { data: currentStreak } = await supabase
+      .from('streaks')
+      .select('classes_count, current_week_streak, longest_week_streak, last_reservation_week, free_classes_earned')
+      .eq('client_phone', clientPhone)
+      .maybeSingle()
+
+    if (currentStreak && sessionData.session_date) {
+      const weekStart = getWeekStart(sessionData.session_date)
+      const newCount = currentStreak.classes_count + 1
+      let newStreak = 1
+
+      if (currentStreak.last_reservation_week) {
+        if (currentStreak.last_reservation_week === weekStart) {
+          newStreak = currentStreak.current_week_streak
+        } else {
+          const lastDate = new Date(`${currentStreak.last_reservation_week}T12:00:00Z`)
+          const currDate = new Date(`${weekStart}T12:00:00Z`)
+          const weeksDiff = Math.round(
+            (currDate.getTime() - lastDate.getTime()) / (7 * 24 * 60 * 60 * 1000)
+          )
+          newStreak = weeksDiff === 1 ? currentStreak.current_week_streak + 1 : 1
+        }
+      }
+
+      const newLongest = Math.max(currentStreak.longest_week_streak, newStreak)
+
+      await supabase.from('streaks').update({
+        classes_count: newCount,
+        current_week_streak: newStreak,
+        longest_week_streak: newLongest,
+        last_reservation_week: weekStart,
+        updated_at: new Date().toISOString(),
+      }).eq('client_phone', clientPhone)
+    }
+
+    revalidatePath(`/reserva/${sessionId}`)
+    // Redirect directly to confirmation (no payment needed)
+    redirect(`/reserva/${sessionId}/confirmacion?reservaId=${reservation.id}&name=${encodeURIComponent(clientName)}&phone=${encodeURIComponent(clientPhone)}&spots=${spotsRaw}&freeClass=true`)
+  }
+
+  // Normal flow → redirect to payment page
+  redirect(`/reserva/${sessionId}/pago?reservaId=${reservation.id}`)
 }

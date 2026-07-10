@@ -1,7 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Clock, User as UserIcon, Plus } from 'lucide-react'
+import { Plus, User as UserIcon, Clock } from 'lucide-react'
+import type { Database } from '@/types/database.types'
+
+type SessionWithSpots = Database['public']['Tables']['sessions']['Row'] & {
+  session_spots: { status: string }[] | null;
+}
 import { CancelSessionButton } from '@/features/instructor/components/CancelSessionButton'
 import { SessionOptionsMenu } from '@/features/instructor/components/SessionOptionsMenu'
 import { getLimaDateString } from '@/lib/utils'
@@ -67,14 +72,14 @@ export default async function InstructorDashboardPage() {
     console.error('Error fetching sessions:', error)
   }
 
-  const upcomingSessions = (sessions || []) as any[]
+  const upcomingSessions = (sessions || []) as SessionWithSpots[]
   
   const nextSession = upcomingSessions.length > 0 ? upcomingSessions[0] : null
   const futureSessions = upcomingSessions.slice(1)
 
-  const getOccupation = (session: any) => {
+  const getOccupation = (session: SessionWithSpots) => {
     const reservedSpots = session.session_spots
-      ? session.session_spots.filter((s: any) => s.status !== 'available').length
+      ? session.session_spots.filter((s) => s.status !== 'available').length
       : 0
     return {
       reserved: reservedSpots,

@@ -1,8 +1,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronLeft, Receipt } from 'lucide-react'
+import { Receipt, ChevronLeft } from 'lucide-react'
 import { RefundItem } from '@/features/instructor/components/RefundItem'
+import type { Database } from '@/types/database.types'
+
+type RefundWithDetails = Database['public']['Tables']['refunds']['Row'] & {
+  reservations: {
+    client_name: string;
+    client_phone: string;
+    sessions: {
+      session_date: string;
+      start_time: string;
+      theme: string | null;
+    } | null;
+  } | null;
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +29,7 @@ export default async function DevolucionesPage() {
 
   // Fetch refunds
   const { data: refunds, error } = await supabase
-    .from('refunds' as any)
+    .from('refunds')
     .select(`
       id,
       amount,
@@ -41,9 +54,28 @@ export default async function DevolucionesPage() {
     console.error('Error fetching refunds:', error)
   }
 
-  const refundsData = (refunds as any[]) || []
+  const refundsData = (refunds as unknown as RefundWithDetails[]) || []
   const pendingRefunds = refundsData.filter(r => r.status === 'pending')
   const completedRefunds = refundsData.filter(r => r.status === 'completed')
+
+  const groupedPendingRefunds = pendingRefunds.reduce((acc, refund) => {
+    const session = refund.reservations?.sessions
+    const key = session ? `${session.session_date}_${session.start_time}_${session.theme || 'Myku'}` : 'unknown'
+    if (!acc[key]) {
+      acc[key] = {
+        session,
+        refunds: []
+      }
+    }
+    acc[key].refunds.push(refund)
+    return acc
+  }, {} as Record<string, { session: any, refunds: RefundWithDetails[] }>)
+
+  const pendingGroups = Object.values(groupedPendingRefunds).sort((a, b) => {
+    if (!a.session) return 1
+    if (!b.session) return -1
+    return new Date(`${a.session.session_date}T${a.session.start_time}`).getTime() - new Date(`${b.session.session_date}T${b.session.start_time}`).getTime()
+  })
 
   return (
     <div className="min-h-screen bg-background relative pb-24">
@@ -76,11 +108,27 @@ export default async function DevolucionesPage() {
                 <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">{pendingRefunds.length}</span>
               )}
             </h2>
-            <div className="space-y-3">
-              {pendingRefunds.length > 0 ? (
-                pendingRefunds.map(refund => (
-                  <RefundItem key={refund.id} refund={refund} />
-                ))
+            <div className="space-y-6">
+              {pendingGroups.length > 0 ? (
+                pendingGroups.map((group, idx) => {
+                  const session = group.session
+                  const dateStr = session ? new Date(`${session.session_date}T${session.start_time}`).toLocaleString('es-PE', {
+                    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true
+                  }) : 'Fecha desconocida'
+                  
+                  return (
+                    <div key={idx} className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm text-foreground/70 bg-foreground/5 p-3 rounded-xl border border-foreground/5">
+                        <span>Clase: <strong className="font-bold text-foreground">{session?.theme || 'Myku'}</strong> - {dateStr}</span>
+                      </div>
+                      <div className="space-y-3 pl-2 border-l-2 border-foreground/10 ml-2">
+                        {group.refunds.map(refund => (
+                          <RefundItem key={refund.id} refund={refund} hideSessionInfo={true} />
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })
               ) : (
                 <div className="text-center py-6 text-foreground/50 text-sm">
                   No hay devoluciones pendientes.

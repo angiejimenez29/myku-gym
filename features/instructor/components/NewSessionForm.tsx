@@ -3,13 +3,15 @@
 import { useTransition, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, Clock, User as UserIcon, Palette, DollarSign, Phone, Users, ChevronLeft, Loader2, Dumbbell, AlertCircle, X } from 'lucide-react'
+import { Calendar, Clock, User as UserIcon, Palette, DollarSign, Phone, Users, Loader2, Dumbbell, AlertCircle, X } from 'lucide-react'
+import { unstable_rethrow } from 'next/navigation'
 import { createSession } from '@/features/instructor/actions/createSession'
 import { updateSession } from '@/features/instructor/actions/updateSession'
 import { Input } from '@/features/shared/components/Input'
+import type { Database } from '@/types/database.types'
 
 interface NewSessionFormProps {
-  initialData?: any
+  initialData?: Database['public']['Tables']['sessions']['Row']
   sessionId?: string
   defaultWhatsappContact?: string
 }
@@ -66,8 +68,9 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
         } else {
           await createSession(formData)
         }
-      } catch (err: any) {
-        setError(err.message || (sessionId ? 'Error al actualizar la clase' : 'Error al crear la clase'))
+      } catch (err: unknown) {
+        unstable_rethrow(err)
+        setError(err instanceof Error ? err.message : (sessionId ? 'Error al actualizar la clase' : 'Error al crear la clase'))
         setIsConfirmModalOpen(false)
       }
     })

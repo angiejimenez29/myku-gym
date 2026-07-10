@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { User, CheckCircle2, X, Loader2 } from 'lucide-react'
+import { CheckCircle2, X, Loader2 } from 'lucide-react'
 import { manualCheckIn } from '../actions/manualCheckIn'
 import { Input } from '@/features/shared/components/Input'
 
@@ -55,7 +55,7 @@ export function ManualCheckInModal({ sessionId, spotNumber, isOpen, onClose }: M
       try {
         await manualCheckIn(sessionId, spotNumber, formData)
         onClose()
-      } catch (e) {
+      } catch {
         alert('Ocurrió un error al registrar el check-in manual.')
       }
     })

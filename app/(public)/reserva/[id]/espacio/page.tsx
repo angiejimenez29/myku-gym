@@ -1,4 +1,32 @@
 import { createAdminClient } from '@/lib/supabase/server'
+
+type SessionSpot = {
+  id: string
+  spot_number: number
+  status: 'available' | 'reserved' | 'present'
+  reservation_spots: {
+    reservation_id: string
+    reservations: {
+      estado_pago: string
+      expira_en: string | null
+    } | null
+  }[] | {
+    reservation_id: string
+    reservations: {
+      estado_pago: string
+      expira_en: string | null
+    } | null
+  } | null
+}
+
+type SessionData = {
+  id: string
+  session_date: string
+  start_time: string
+  capacity: number
+  session_spots: SessionSpot[] | null
+}
+
 import { notFound } from 'next/navigation'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { TopBar } from '@/features/shared/components/TopBar'
@@ -6,12 +34,22 @@ import { SpaceSelectionFlow } from '@/features/booking/components/SpaceSelection
 
 function formatSessionDate(isoString: string) {
   const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'long' }).format(date)
+  return new Intl.DateTimeFormat('es-PE', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long',
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 function formatSessionTime(isoString: string) {
   const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
+  return new Intl.DateTimeFormat('es-PE', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true,
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 export default async function SpaceSelectionPage({ params }: { params: Promise<{ id: string }> }) {
@@ -31,7 +69,7 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
     .eq('id', resolvedParams.id)
     .single()
 
-  const session = data as any
+  const session = data as unknown as SessionData
 
   if (error || !session) {
     notFound()
@@ -43,11 +81,11 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
   let spots = session.session_spots || []
   
   // Passive release of expired spots
-  spots = spots.map((spot: any) => {
+  spots = spots.map((spot) => {
     if (spot.status !== 'available') {
       const resSpots = spot.reservation_spots;
       const resSpotsArray = Array.isArray(resSpots) ? resSpots : (resSpots ? [resSpots] : []);
-      const hasExpired = resSpotsArray.some((rs: any) => {
+      const hasExpired = resSpotsArray.some((rs) => {
         const res = rs.reservations;
         return res && res.estado_pago === 'pendiente' && res.expira_en && new Date(res.expira_en) < new Date();
       });

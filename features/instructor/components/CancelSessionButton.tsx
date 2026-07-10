@@ -21,8 +21,8 @@ export function CancelSessionButton({ sessionId, variant = 'full' }: CancelSessi
       const data = await getCancelImpact(sessionId)
       setImpact(data)
       setIsOpen(true)
-    } catch (e: any) {
-      alert(e.message || 'Error al calcular impacto')
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : 'Error al calcular impacto')
     } finally {
       setIsFetching(false)
     }
@@ -32,8 +32,8 @@ export function CancelSessionButton({ sessionId, variant = 'full' }: CancelSessi
     startTransition(async () => {
       try {
         await cancelSession(sessionId)
-      } catch (e: any) {
-        alert(e.message || 'Ocurrió un error al cancelar la clase')
+      } catch (e: unknown) {
+        alert(e instanceof Error ? e.message : 'Ocurrió un error al cancelar la clase')
       }
     })
   }

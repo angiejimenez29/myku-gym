@@ -2,7 +2,12 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Clock, User as UserIcon } from 'lucide-react'
+import type { Database } from '@/types/database.types'
 import { getLimaDateString } from '@/lib/utils'
+
+type SessionWithSpots = Database['public']['Tables']['sessions']['Row'] & {
+  session_spots: { status: string }[] | null;
+}
 
 function formatSessionDate(isoString: string) {
   const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
@@ -63,11 +68,11 @@ export default async function AsistenciaIndexPage() {
     console.error('Error fetching sessions:', error)
   }
 
-  const upcomingSessions = (sessions || []) as any[]
+  const upcomingSessions = (sessions || []) as SessionWithSpots[]
 
-  const getOccupation = (session: any) => {
+  const getOccupation = (session: SessionWithSpots) => {
     const reservedSpots = session.session_spots
-      ? session.session_spots.filter((s: any) => s.status !== 'available').length
+      ? session.session_spots.filter((s) => s.status !== 'available').length
       : 0
     return {
       reserved: reservedSpots,

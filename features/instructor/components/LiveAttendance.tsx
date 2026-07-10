@@ -1,9 +1,8 @@
 "use client"
 
-import { useTransition, useState } from 'react'
+import { useState, useTransition } from 'react'
 import { cn } from '@/lib/utils'
 import { User, CheckCircle2, Users, MinusCircle } from 'lucide-react'
-import { toggleAttendance } from '../actions/toggleAttendance'
 import { ManualCheckInModal } from './ManualCheckInModal'
 import { ConfirmCheckInModal } from './ConfirmCheckInModal'
 
@@ -38,7 +37,7 @@ interface LiveAttendanceProps {
 }
 
 export function LiveAttendance({ sessionId, capacity, spots }: LiveAttendanceProps) {
-  const [isPending, startTransition] = useTransition()
+  const [isPending] = useTransition()
   const [selectedFreeSpot, setSelectedFreeSpot] = useState<number | null>(null)
   const [selectedReservedSpot, setSelectedReservedSpot] = useState<number | null>(null)
 

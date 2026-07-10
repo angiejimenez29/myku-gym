@@ -4,16 +4,42 @@ import Link from 'next/link'
 import { BookingStepper } from '@/features/booking/components/BookingStepper'
 import { LocationMap } from '@/features/booking/components/LocationMap'
 import { TopBar } from '@/features/shared/components/TopBar'
-import { Calendar, Clock, MapPin, User as UserIcon, Dumbbell } from 'lucide-react'
+import { Calendar, Clock, MapPin, Dumbbell } from 'lucide-react'
+import type { Database } from '@/types/database.types'
+
+type SessionData = Database['public']['Tables']['sessions']['Row'] & {
+  instructor: {
+    full_name: string | null
+    profile_image_url: string | null
+    years_experience: number | null
+  } | {
+    full_name: string | null
+    profile_image_url: string | null
+    years_experience: number | null
+  }[] | null
+  session_spots: { status: string }[] | null
+}
 
 function formatSessionDate(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { weekday: 'long', day: 'numeric', month: 'long' }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long',
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 function formatSessionTime(isoString: string) {
-  const date = new Date(isoString)
-  return new Intl.DateTimeFormat('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true }).format(date)
+  const hasTimezone = isoString.includes('Z') || /[-+]\d{2}:?\d{2}$/.test(isoString)
+  const date = new Date(hasTimezone ? isoString : `${isoString}-05:00`)
+  return new Intl.DateTimeFormat('es-PE', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true,
+    timeZone: 'America/Lima'
+  }).format(date)
 }
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
@@ -44,7 +70,7 @@ export default async function ClassDetailsPage({
     .eq('id', resolvedParams.id)
     .single()
 
-  const session = data as any
+  const session = data as unknown as SessionData
 
   if (error || !session) {
     notFound()
@@ -53,16 +79,16 @@ export default async function ClassDetailsPage({
   const dateStr = formatSessionDate(`${session.session_date}T${session.start_time}`)
   const timeStr = formatSessionTime(`${session.session_date}T${session.start_time}`)
 
-  const instructorName = session.instructor 
+  const instructorName = (session.instructor 
     ? (Array.isArray(session.instructor) ? session.instructor[0]?.full_name : session.instructor.full_name)
-    : 'Instructor'
+    : 'Instructor') || 'Instructor'
   
   const instructorExp = session.instructor
     ? (Array.isArray(session.instructor) ? session.instructor[0]?.years_experience : session.instructor.years_experience)
     : 5
 
   const availableSpots = session.session_spots
-    ? session.session_spots.filter((s: any) => s.status === 'available').length
+    ? session.session_spots.filter((s) => s.status === 'available').length
     : session.capacity
 
   const progressPercentage = ((session.capacity - availableSpots) / session.capacity) * 100
