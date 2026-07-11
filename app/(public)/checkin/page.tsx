@@ -9,6 +9,7 @@ import {
   Search,
   X,
   Users,
+  Flame,
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -21,8 +22,8 @@ export interface Reservation {
   isCheckedIn?: boolean
 }
 
-import { getReservationsForCheckin, markAttendanceForReservation } from './actions'
-
+import { getReservationsForCheckin, markAttendanceForReservation, getStreakForCheckin } from './actions'
+import Link from 'next/link'
 
 // ─── Inline keyframes injected once ─────────────────────────────────────────
 const KEYFRAMES = `
@@ -314,13 +315,38 @@ function ReservationCard({
 
 function ScreenReservations({
   reservations,
+  streak,
   onMark,
 }: {
   reservations: Reservation[]
+  streak: any
   onMark: (r: Reservation) => void
 }) {
   const pending = reservations.filter(r => !r.isCheckedIn)
   const checkedIn = reservations.filter(r => r.isCheckedIn)
+
+  // Calculate urgency
+  let isUrgent = false
+  if (streak?.last_reservation_week) {
+    const lastWeekDate = new Date(`${streak.last_reservation_week}T12:00:00Z`)
+    const weekAfterLast = new Date(lastWeekDate.getTime() + 7 * 24 * 60 * 60 * 1000)
+    
+    const today = new Date()
+    today.setHours(12, 0, 0, 0)
+    const todayDay = today.getDay()
+    
+    const diff = todayDay === 0 ? -6 : 1 - todayDay
+    const thisMonday = new Date(today)
+    thisMonday.setDate(today.getDate() + diff)
+    
+    if (thisMonday.toISOString().slice(0, 10) === weekAfterLast.toISOString().slice(0, 10)) {
+      if (todayDay === 5 || todayDay === 6 || todayDay === 0) {
+        isUrgent = true
+      }
+    }
+  }
+
+  const spotsToFreeClass = streak ? (6 - (streak.classes_count % 6)) : 6
 
   return (
     <div className="flex flex-col flex-1">
@@ -330,8 +356,55 @@ function ScreenReservations({
         Tus próximas<br />reservas
       </h1>
       <p className="text-xs mb-6" style={{ color: 'rgba(255,255,255,0.38)' }}>
-        Selecciona la clase a la que vas a asistir hoy.
+        {pending.length > 0 
+          ? "Selecciona la clase a la que vas a asistir hoy."
+          : checkedIn.length > 0
+            ? "No tienes clases programadas por ahora. Aquí está tu historial reciente."
+            : "Explora nuestras sesiones y asegura tu lugar."}
       </p>
+
+      {/* STREAK UI */}
+      {streak && streak.current_week_streak > 0 && (
+        <div 
+          className="mb-8 rounded-2xl p-5 flex flex-col gap-3 relative overflow-hidden border"
+          style={{ 
+            background: isUrgent ? 'rgba(245, 158, 11, 0.05)' : 'rgba(19, 122, 127, 0.05)',
+            borderColor: isUrgent ? 'rgba(245, 158, 11, 0.3)' : 'rgba(19, 122, 127, 0.3)',
+          }}
+        >
+          <div className="flex items-center gap-3 relative z-10">
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isUrgent ? 'bg-status-warning/20 text-status-warning' : 'bg-brand/20 text-brand'}`}>
+              <Flame size={24} className={isUrgent ? 'opacity-50' : 'animate-[sparkle-pulse_2s_ease-in-out_infinite]'} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white mb-0.5">{streak.current_week_streak} semanas seguidas</p>
+              {isUrgent ? (
+                <p className="text-xs text-status-warning font-semibold max-w-[200px] leading-tight">
+                  🔥 ¡No dejes que tu racha se enfríe! Reserva antes de que termine la semana.
+                </p>
+              ) : (
+                <p className="text-xs font-medium text-white/60">
+                  {streak.free_class_available ? (
+                    <span className="text-cta">🎉 ¡Tienes una clase gratis disponible!</span>
+                  ) : (
+                    <span>{streak.classes_count % 6} de 6 clases — faltan {spotsToFreeClass} para tu clase gratis</span>
+                  )}
+                </p>
+              )}
+            </div>
+          </div>
+          
+          {isUrgent && (
+            <Link 
+              href="/clases"
+              className="mt-2 w-full py-2.5 rounded-xl text-xs font-bold text-center transition-all active:scale-95 text-white"
+              style={{ background: 'var(--status-warning)' }}
+            >
+              Reservar ahora
+            </Link>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-col gap-6 flex-1 overflow-y-auto pb-2">
         {/* PENDING SECTION */}
@@ -360,8 +433,23 @@ function ScreenReservations({
         )}
         
         {reservations.length === 0 && (
-          <div className="text-center mt-10 text-white/50 text-sm">
-            No tienes reservas próximas confirmadas.
+          <div className="text-center mt-6 flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-white/5">
+            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 text-brand">
+              <Calendar size={28} />
+            </div>
+            <p className="text-sm text-white font-semibold mb-2">Aún no tienes clases reservadas.</p>
+            <p className="text-xs text-white/50 mb-6 leading-relaxed">
+              ¡Elige tu próxima sesión y sigue moviéndote! Tenemos nuevas rutinas esperándote.
+            </p>
+            <Link 
+              href="/clases"
+              className="w-full py-3.5 rounded-xl font-bold text-white text-sm transition-all active:scale-95"
+              style={{
+                background: 'linear-gradient(135deg, #137A7F, #86CECB)',
+              }}
+            >
+              Ver clases disponibles
+            </Link>
           </div>
         )}
       </div>
@@ -581,13 +669,18 @@ export default function CheckinPage() {
     useState<Reservation | null>(null)
   
   const [reservations, setReservations] = useState<Reservation[]>([])
+  const [streak, setStreak] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSearch = async () => {
     setIsLoading(true)
     try {
-      const data = await getReservationsForCheckin(phone)
+      const [data, streakData] = await Promise.all([
+        getReservationsForCheckin(phone),
+        getStreakForCheckin(phone)
+      ])
       setReservations(data)
+      setStreak(streakData)
       setStep('reservations')
     } catch (error) {
       console.error(error)
@@ -654,6 +747,7 @@ export default function CheckinPage() {
             {(step === 'reservations' || step === 'confirm') && (
               <ScreenReservations
                 reservations={reservations}
+                streak={streak}
                 onMark={(r) => {
                   setSelectedReservation(r)
                   setStep('confirm')

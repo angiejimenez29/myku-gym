@@ -121,3 +121,20 @@ export async function markAttendanceForReservation(reservationId: string) {
 
   return true
 }
+
+export async function getStreakForCheckin(phone: string) {
+  const supabase = createAdminClient()
+  const cleanPhone = phone.replace(/\D/g, '')
+
+  const { data, error } = await supabase
+    .from('streaks')
+    .select('current_week_streak, classes_count, free_class_available, last_reservation_week')
+    .eq('client_phone', cleanPhone)
+    .single()
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error fetching streak:', error)
+  }
+
+  return data || null
+}
