@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 type SessionSpot = {
   id: string
@@ -54,7 +54,7 @@ function formatSessionTime(isoString: string) {
 
 export default async function SpaceSelectionPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params
-  const supabase = createAdminClient()
+  const supabase = await createClient()
 
   const { data, error } = await supabase
     .from('sessions')
@@ -100,18 +100,20 @@ export default async function SpaceSelectionPage({ params }: { params: Promise<{
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
       <TopBar title="Selecciona tu Espacio" backHref={`/reserva/${resolvedParams.id}`} />
 
-      <BookingStepper currentStep={2} />
+      <main className="flex-1 w-full max-w-md md:max-w-4xl lg:max-w-5xl mx-auto px-5 mt-6 space-y-6">
+        <BookingStepper currentStep={2} />
 
-      <div className="text-center mt-4 mb-4 px-5">
-         <p className="text-foreground/80 text-sm font-medium capitalize mb-1">{dateStr} - {timeStr}</p>
-         <p className="text-foreground/70 text-xs">Toca el número del espacio en el mapa para reservarlo.</p>
-      </div>
+        <div className="text-center">
+           <p className="text-foreground/80 text-sm font-medium capitalize mb-1">{dateStr} - {timeStr}</p>
+           <p className="text-foreground/70 text-xs">Toca el número del espacio en el mapa para reservarlo.</p>
+        </div>
 
-      <SpaceSelectionFlow 
-        sessionId={session.id} 
-        capacity={session.capacity} 
-        spots={spots} 
-      />
+        <SpaceSelectionFlow 
+          sessionId={session.id} 
+          capacity={session.capacity} 
+          spots={spots} 
+        />
+      </main>
     </div>
   )
 }

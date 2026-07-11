@@ -116,7 +116,7 @@ export default async function ClassDetailsPage({
                 </div>
               </div>
 
-              <details className="mt-3 group [&_summary::-webkit-details-marker]:hidden">
+              <details open className="mt-3 group [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex items-center justify-between text-xs font-semibold text-foreground/80 cursor-pointer pt-3 border-t border-brand/10">
                   Ver detalles de la clase
                   <span className="transition-transform group-open:rotate-180">
@@ -133,7 +133,7 @@ export default async function ClassDetailsPage({
                   {session.theme && (
                     <div>
                       <p className="text-[10px] text-foreground/70 uppercase tracking-wider mb-0.5">Temática</p>
-                      <p className="text-brand-secondary text-sm font-medium">{session.theme}</p>
+                      <p className="text-brand-text text-sm font-medium">{session.theme}</p>
                     </div>
                   )}
                   {session.special_guest && (
@@ -148,7 +148,7 @@ export default async function ClassDetailsPage({
 
             {/* Ubicación */}
             <div>
-              <details className="group bg-container rounded-2xl border border-border [&_summary::-webkit-details-marker]:hidden overflow-hidden">
+              <details open className="group bg-container rounded-2xl border border-border [&_summary::-webkit-details-marker]:hidden overflow-hidden">
                 <summary className="flex items-center justify-between p-4 cursor-pointer font-semibold text-foreground">
                   <div className="flex items-center gap-3">
                     <MapPin className="w-5 h-5 text-brand shrink-0" />
@@ -189,7 +189,7 @@ export default async function ClassDetailsPage({
               <h3 className="text-foreground font-semibold text-lg">Resumen de Reserva</h3>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-foreground/70">Cupos disponibles</span>
-                <span className="text-brand-secondary font-bold">{availableSpots} de {session.capacity}</span>
+                <span className="text-brand-text font-bold">{availableSpots} de {session.capacity}</span>
               </div>
               <div className="w-full h-2 bg-border/40 rounded-full overflow-hidden">
                 <div 
@@ -225,7 +225,7 @@ export default async function ClassDetailsPage({
             </div>
             <div className="flex flex-col items-end">
               <span className="text-foreground/70 text-xs">Cupos</span>
-              <span className="text-brand-secondary font-bold text-sm">{availableSpots} de {session.capacity} libres</span>
+              <span className="text-brand-text font-bold text-sm">{availableSpots} de {session.capacity} libres</span>
             </div>
           </div>
           

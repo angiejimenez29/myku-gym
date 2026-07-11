@@ -62,7 +62,7 @@ export default async function AdminDashboardPage() {
             <p className="text-foreground/70 text-sm mt-1">Monitoreo en tiempo real de Myku Gym</p>
           </div>
           <div className="bg-container border border-foreground/5 rounded-2xl px-4 py-2 flex items-center gap-2 self-start md:self-auto shadow-sm">
-            <span className="w-2.5 h-2.5 rounded-full bg-status-success animate-pulse"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-xs font-semibold text-foreground/80">Sistema Activo</span>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default async function AdminDashboardPage() {
               <div className="w-12 h-12 rounded-2xl bg-cta/10 flex items-center justify-center border border-cta/20">
                 <DollarSign className="w-6 h-6 text-cta" />
               </div>
-              <span className="text-[11px] font-bold text-status-success bg-status-success/10 px-2.5 py-1 rounded-full flex items-center gap-1">
+              <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full flex items-center gap-1">
                 <ArrowUpRight className="w-3.5 h-3.5" /> +12.5%
               </span>
             </div>
@@ -112,7 +112,7 @@ export default async function AdminDashboardPage() {
               <div className="w-12 h-12 rounded-2xl bg-brand-secondary/15 flex items-center justify-center border border-brand-secondary/20">
                 <Users className="w-6 h-6 text-brand-secondary" />
               </div>
-              <span className="text-[11px] font-bold text-status-success bg-status-success/10 px-2.5 py-1 rounded-full">
+              <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">
                 Hoy
               </span>
             </div>

@@ -92,7 +92,7 @@ export default async function AdminClasesPage() {
                     <div className="flex items-center justify-between">
                       <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full ${
                         session.status === 'published' 
-                          ? 'bg-status-success/10 text-status-success' 
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
                           : 'bg-foreground/10 text-foreground/70'
                       }`}>
                         {session.status === 'published' ? 'Publicada' : 'Borrador'}
@@ -130,7 +130,7 @@ export default async function AdminClasesPage() {
                     <div className="w-full h-1.5 bg-foreground/10 rounded-full overflow-hidden">
                       <div 
                         className={`h-full rounded-full transition-all ${
-                          percentage < 50 ? 'bg-status-success' : percentage < 90 ? 'bg-status-warning' : 'bg-cta'
+                          percentage < 50 ? 'bg-emerald-500' : percentage < 90 ? 'bg-status-warning' : 'bg-cta'
                         }`}
                         style={{ width: `${percentage}%` }}
                       />
