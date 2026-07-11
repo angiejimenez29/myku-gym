@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useTransition } from 'react'
-import { CheckCircle2, Phone, Calendar, User as UserIcon } from 'lucide-react'
+import { CheckCircle2, Phone, Calendar, User as UserIcon, Loader2 } from 'lucide-react'
 import { completeRefundAdmin } from '../actions/completeRefundAdmin'
 import type { Database } from '@/types/database.types'
 
@@ -22,6 +22,7 @@ export function AdminRefundItem({ refund, hideSessionInfo = false }: { refund: R
   const [isSuccess, setIsSuccess] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const reservation = refund.reservations
   const clientName = reservation?.client_name || 'Usuario desconocido'
@@ -35,15 +36,21 @@ export function AdminRefundItem({ refund, hideSessionInfo = false }: { refund: R
   }
 
   const handleComplete = () => {
-    setShowConfirmModal(false)
+    setError(null)
     startTransition(async () => {
       try {
         await completeRefundAdmin(refund.id)
         setIsSuccess(true)
-      } catch {
-        alert('Error al procesar la devolución.')
+        setShowConfirmModal(false)
+      } catch (err: any) {
+        setError(err.message || 'Error al procesar la devolución.')
       }
     })
+  }
+
+  const handleCloseConfirm = () => {
+    setShowConfirmModal(false)
+    setError(null)
   }
 
   const isCompleted = refund.status === 'completed' || isSuccess
@@ -108,24 +115,40 @@ export function AdminRefundItem({ refund, hideSessionInfo = false }: { refund: R
       </div>
 
       {showConfirmModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-container rounded-3xl p-6 w-full max-w-sm border border-foreground/10 shadow-2xl text-foreground">
             <h3 className="text-lg font-bold mb-3 font-heading">Confirmar Devolución</h3>
             <p className="text-foreground/80 text-sm mb-6">
               ¿Confirmas que ya realizaste el pago de <strong className="text-foreground">S/{Number(refund.amount).toFixed(2)}</strong> a <strong className="text-foreground">{clientName}</strong> ({clientPhone})?
             </p>
+
+            {error && (
+              <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-3 rounded-xl text-xs font-semibold mb-4">
+                {error}
+              </div>
+            )}
+
             <div className="flex gap-3">
               <button 
-                onClick={() => setShowConfirmModal(false)}
-                className="flex-1 py-3 rounded-xl font-bold bg-foreground/5 text-foreground/80 hover:bg-foreground/10 transition-colors"
+                onClick={handleCloseConfirm}
+                disabled={isPending}
+                className="flex-1 py-3 rounded-xl font-bold bg-foreground/5 text-foreground/80 hover:bg-foreground/10 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Cancelar
               </button>
               <button 
                 onClick={handleComplete}
-                className="flex-1 py-3 rounded-xl font-bold bg-brand text-white hover:bg-brand/90 hover:scale-[1.01] transition-transform cursor-pointer"
+                disabled={isPending}
+                className="flex-1 py-3 rounded-xl font-bold bg-brand text-white hover:bg-brand/90 hover:scale-[1.01] transition-transform cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5 text-sm"
               >
-                Sí, confirmar
+                {isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Procesando...
+                  </>
+                ) : (
+                  'Sí, confirmar'
+                )}
               </button>
             </div>
           </div>
