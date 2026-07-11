@@ -26,7 +26,6 @@ export function Navbar({ user }: { user?: any }) {
     { href: '/panel', label: 'Panel de Control', icon: LayoutDashboard },
     { href: '/panel/nueva-sesion', label: 'Crear Clase', icon: PlusCircle },
     { href: '/panel/asistencia', label: 'Monitoreo en Vivo', icon: Activity },
-    { href: '/panel/devoluciones', label: 'Gestión de Devoluciones', icon: Undo2 },
   ]
 
   const desktopNavLinks = user ? instructorNavLinks : publicNavLinks
