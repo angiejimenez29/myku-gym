@@ -1,6 +1,6 @@
 "use server"
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
 export async function completeRefundAdmin(refundId: string) {
@@ -21,8 +21,9 @@ export async function completeRefundAdmin(refundId: string) {
     throw new Error('No autorizado: Se requiere rol de administrador')
   }
 
-  // Update refund status
-  const { error } = await supabase
+  // Update refund status using admin client to bypass RLS (needed for the trigger to write to reservations and session_spots)
+  const supabaseAdmin = createAdminClient()
+  const { error } = await supabaseAdmin
     .from('refunds')
     .update({ status: 'completed', completed_at: new Date().toISOString() })
     .eq('id', refundId)

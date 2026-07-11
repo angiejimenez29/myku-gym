@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { getLimaDateString } from '@/lib/utils'
+import { getLimaDateString, getCurrentLimaTime } from '@/lib/utils'
 import { DollarSign, Users, TrendingUp, ArrowUpRight, Dumbbell } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -15,41 +15,42 @@ export default async function AdminDashboardPage() {
     .eq('status', 'published')
     .gte('session_date', todayStr)
 
-  // 2. Fetch Students enrolled today
-  const { data: todaySessions } = await supabase
-    .from('sessions')
-    .select('id')
-    .eq('session_date', todayStr)
+  // 2. Fetch Students enrolled today (confirmed reservations for today's sessions, not refunded)
+  const { data: todayReservations } = await supabase
+    .from('reservations')
+    .select(`
+      id,
+      sessions!inner (
+        session_date
+      )
+    `)
+    .eq('status', 'confirmed')
+    .is('refunded_at', null)
+    .eq('sessions.session_date', todayStr)
 
-  let enrolledTodayCount = 0
-  if (todaySessions && todaySessions.length > 0) {
-    const sessionIds = todaySessions.map(s => s.id)
-    const { data: reservations } = await supabase
-      .from('reservations')
-      .select('id')
-      .in('session_id', sessionIds)
-      .not('status', 'eq', 'cancelled')
+  const enrolledTodayCount = todayReservations?.length || 0
 
-    enrolledTodayCount = reservations?.length || 0
-  }
+  // 3. Fetch monthly revenue (confirmed reservations created this month, not refunded)
+  const nowLima = getCurrentLimaTime()
+  const year = nowLima.getFullYear()
+  const month = String(nowLima.getMonth() + 1).padStart(2, '0')
+  const startOfMonthStr = `${year}-${month}-01T00:00:00-05:00`
 
-  // 3. Fetch monthly revenue (payments created/approved this month)
-  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
-  const { data: payments } = await supabase
-    .from('payments')
-    .select('amount')
-    .eq('status', 'paid')
-    .gte('created_at', startOfMonth)
+  const { data: monthlyReservations } = await supabase
+    .from('reservations')
+    .select('total_amount')
+    .eq('status', 'confirmed')
+    .is('refunded_at', null)
+    .gte('reserved_at', startOfMonthStr)
 
-  let monthlyRevenue = 0
-  if (payments) {
-    monthlyRevenue = payments.reduce((acc, p) => acc + Number(p.amount), 0)
-  }
+  const monthlyRevenue = monthlyReservations
+    ? monthlyReservations.reduce((acc, r) => acc + Number(r.total_amount), 0)
+    : 0
 
-  // Fallbacks for simulated/demo metrics if data is sparse
-  const displayRevenue = monthlyRevenue > 0 ? monthlyRevenue : 3240.00
-  const displayClasses = activeClassesCount !== null && activeClassesCount > 0 ? activeClassesCount : 14
-  const displayEnrolled = enrolledTodayCount > 0 ? enrolledTodayCount : 18
+  // Display the actual database values directly
+  const displayRevenue = monthlyRevenue
+  const displayClasses = activeClassesCount ?? 0
+  const displayEnrolled = enrolledTodayCount
 
   return (
     <div className="min-h-screen bg-background py-8 px-5 md:px-10 text-foreground">
