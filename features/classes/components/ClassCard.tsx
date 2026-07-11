@@ -19,8 +19,8 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
   const occupancyPercentage = Math.round(((totalSpots - availableSpots) / totalSpots) * 100)
   
   // Choose colors based on availability
-  const statusColorClass = isSoldOut ? 'text-status-danger' : (availableSpots <= 5 ? 'text-status-warning' : 'text-state-green')
-  const barColorClass = isSoldOut ? 'bg-status-danger' : (availableSpots <= 5 ? 'bg-status-warning' : 'bg-state-green')
+  const statusColorClass = isSoldOut ? 'text-status-danger' : (availableSpots <= 5 ? 'text-status-warning' : 'text-status-success')
+  const barColorClass = isSoldOut ? 'bg-status-danger' : (availableSpots <= 5 ? 'bg-status-warning' : 'bg-status-success')
 
   const referrerQuery = referrer ? `?from=${referrer}` : ''
   const href = `/reserva/${id}${referrerQuery}`

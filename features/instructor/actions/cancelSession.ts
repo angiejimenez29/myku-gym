@@ -3,6 +3,7 @@
 import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import twilio from 'twilio'
 
 export async function getCancelImpact(sessionId: string) {
   const supabase = await createClient()
@@ -48,7 +49,7 @@ export async function cancelSession(sessionId: string) {
 
   const { data: session, error: sessionError } = await supabase
     .from('sessions')
-    .select('instructor_id')
+    .select('instructor_id, class_type, theme, session_date, start_time')
     .eq('id', sessionId)
     .single()
 
@@ -63,6 +64,8 @@ export async function cancelSession(sessionId: string) {
       reservation_spots (
         reservation_id,
         reservations (
+          client_name,
+          client_phone,
           estado_pago,
           total_amount
         )
@@ -101,8 +104,47 @@ export async function cancelSession(sessionId: string) {
       throw new Error(`Error al registrar devoluciones: ${refundError.message || JSON.stringify(refundError)}`)
     }
   }
+  // 3. Send WhatsApp Notifications
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const fromNumber = process.env.TWILIO_WHATSAPP_NUMBER;
+  
+  if (accountSid && authToken && fromNumber) {
+    const twilioClient = twilio(accountSid, authToken);
+    // Use a Set to avoid sending duplicate messages if they booked multiple spots
+    const notifiedPhones = new Set<string>();
 
-  // 3. Update session status to 'cancelled'
+    for (const spot of spots || []) {
+      const res = spot.reservation_spots?.reservations;
+      if (res && res.client_phone && !notifiedPhones.has(res.client_phone)) {
+        notifiedPhones.add(res.client_phone);
+        
+        let phone = res.client_phone.replace(/\D/g, '');
+        if (phone.startsWith('51')) {
+          phone = phone.substring(2);
+        }
+
+        const className = `${session.class_type}${session.theme ? ` - ${session.theme}` : ''}`;
+        let messageBody = `¡Hola ${res.client_name}!\n\nLamentamos informarte que la clase de *${className}* del ${session.session_date} a las ${session.start_time.substring(0,5)} ha sido cancelada por el instructor.`;
+        
+        if (res.estado_pago === 'aprobado') {
+          messageBody += `\n\nEl instructor se pondrá en contacto contigo pronto para coordinar la devolución completa de tu pago.`;
+        }
+
+        try {
+          await twilioClient.messages.create({
+            body: messageBody,
+            from: fromNumber.startsWith('whatsapp:') ? fromNumber : `whatsapp:${fromNumber}`,
+            to: `whatsapp:+51${phone}`
+          });
+        } catch (error) {
+          console.error(`Failed to send cancellation WA to ${phone}:`, error);
+        }
+      }
+    }
+  }
+
+  // 4. Update session status to 'cancelled'
   const { error: updateError } = await supabase
     .from('sessions')
     .update({ status: 'cancelled' })
