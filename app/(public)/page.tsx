@@ -67,6 +67,7 @@ export default async function LandingPage() {
       )
     `)
     .gte('session_date', yesterdayString)
+    .neq('status', 'cancelled')
     .order('session_date', { ascending: true })
     .order('start_time', { ascending: true })
     .limit(15)
