@@ -26,7 +26,8 @@ export async function getReservationsForCheckin(phone: string): Promise<CheckinR
         session_date,
         start_time,
         theme,
-        class_type
+        class_type,
+        status
       ),
       spots:reservation_spots (
         spot:session_spots (
@@ -45,7 +46,9 @@ export async function getReservationsForCheckin(phone: string): Promise<CheckinR
 
   // 2. Map and format
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (reservations || []).map((res: any) => {
+  return (reservations || [])
+    .filter((res: any) => res.session?.status !== 'cancelled')
+    .map((res: any) => {
     const session = res.session
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const spotList = (res.spots as any[])?.map((s) => `#${s.spot?.spot_number}`).filter(Boolean) || []
