@@ -94,7 +94,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
             <div className="bg-brand-secondary/10 border border-brand-secondary/20 rounded-2xl p-6 flex gap-4 text-sm text-foreground/80 leading-relaxed shadow-inner">
               <div className="text-2xl mt-0.5">ℹ️</div>
               <div>
-                <h4 className="text-brand-secondary font-bold text-base mb-1">Información Importante</h4>
+                <h4 className="text-brand-text font-bold text-base mb-1">Información Importante</h4>
                 <p>
                   Llega 10 minutos antes de la clase para prepararte. Escanea el código QR que encontrarás en la entrada del gimnasio para realizar un check-in automático de tu espacio.
                 </p>
@@ -110,7 +110,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
                   <p className="text-foreground/75 text-xs">Recibirás un mensaje de confirmación con el ticket digital de tu reserva.</p>
                 </div>
                 <div className="bg-background p-4 rounded-xl border border-foreground/5 space-y-2">
-                  <span className="text-brand-secondary font-bold text-sm">2. Check-in</span>
+                  <span className="text-brand-text font-bold text-sm">2. Check-in</span>
                   <p className="text-foreground/75 text-xs">Al llegar al gimnasio, muestra tu código en recepción o escanéalo para registrar tu asistencia.</p>
                 </div>
               </div>
@@ -125,7 +125,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
               
               <div className="flex flex-col items-center justify-center p-6 bg-foreground/5 rounded-2xl border border-foreground/10 space-y-2">
                 <span className="text-xs text-foreground/80 uppercase tracking-widest font-semibold">Espacios Reservados</span>
-                <span className="text-brand-secondary font-bold text-2xl">{spotsString}</span>
+                <span className="text-brand-text font-bold text-2xl">{spotsString}</span>
               </div>
               
               <div className="space-y-3 pt-2">
@@ -158,7 +158,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
                     {session.theme && (
                       <div className="flex justify-between text-sm">
                         <span className="text-foreground/70">Temática del Día</span>
-                        <span className="text-brand-secondary font-medium">{session.theme}</span>
+                        <span className="text-brand-text font-medium">{session.theme}</span>
                       </div>
                     )}
                   </div>

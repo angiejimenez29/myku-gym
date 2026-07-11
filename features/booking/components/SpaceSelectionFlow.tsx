@@ -75,7 +75,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
   }
 
   return (
-    <div className="flex-1 w-full max-w-md md:max-w-4xl lg:max-w-5xl mx-auto px-5 pb-32">
+    <div className="w-full pb-24">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
         {/* Left column: Grid */}
         <div className="md:col-span-7">
@@ -110,7 +110,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                          key={s} 
                          onClick={() => handleToggleSpot(s)} 
                          title="Deseleccionar espacio"
-                         className="flex items-center gap-1 bg-brand-secondary/10 border border-brand-secondary/50 text-brand-secondary text-xl font-bold px-3 py-1 rounded-lg hover:bg-brand-secondary hover:text-black transition-colors"
+                         className="flex items-center gap-1 bg-cta text-white text-xl font-bold px-3 py-1 rounded-lg hover:bg-cta/90 transition-colors"
                        >
                          #{s} <X className="w-4 h-4 ml-1 opacity-70" />
                        </button>
@@ -192,7 +192,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                      key={s} 
                      onClick={() => handleToggleSpot(s)} 
                      title="Deseleccionar espacio"
-                     className="flex items-center gap-1 bg-brand-secondary/10 border border-brand-secondary/50 text-brand-secondary text-xl font-bold px-3 py-1 rounded-lg hover:bg-brand-secondary hover:text-black transition-colors"
+                     className="flex items-center gap-1 bg-cta text-white text-xl font-bold px-3 py-1 rounded-lg hover:bg-cta/90 transition-colors"
                    >
                      #{s} <X className="w-4 h-4 ml-1 opacity-70" />
                    </button>

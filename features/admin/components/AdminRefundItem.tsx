@@ -54,7 +54,7 @@ export function AdminRefundItem({ refund, hideSessionInfo = false }: { refund: R
 
   return (
     <>
-      <div className={`p-4 rounded-2xl border ${isCompleted ? 'border-status-success/30 bg-status-success/5' : 'border-status-warning/30 bg-status-warning/5'} transition-colors relative`}>
+      <div className={`p-4 rounded-2xl border ${isCompleted ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-status-warning/30 bg-status-warning/5'} transition-colors relative`}>
         <div className="flex justify-between items-start mb-3">
           <div>
             <h3 className="font-bold text-foreground capitalize flex items-center gap-2 font-heading">
@@ -71,14 +71,14 @@ export function AdminRefundItem({ refund, hideSessionInfo = false }: { refund: R
                   onClick={handleCopy}
                   className="text-xs bg-foreground/5 hover:bg-foreground/10 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors text-foreground/80"
                 >
-                  {copied ? <span className="text-status-success">Copiado ✓</span> : <span>Copiar</span>}
+                  {copied ? <span className="text-emerald-600 dark:text-emerald-400">Copiado ✓</span> : <span>Copiar</span>}
                 </button>
               )}
             </div>
           </div>
           <div className="text-right">
             <span className="font-bold text-lg text-foreground">S/ {Number(refund.amount).toFixed(2)}</span>
-            <p className={`text-xs font-semibold uppercase tracking-wide ${isCompleted ? 'text-status-success' : 'text-status-warning'}`}>
+            <p className={`text-xs font-semibold uppercase tracking-wide ${isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-status-warning'}`}>
               {isCompleted ? 'Completada' : 'Pendiente'}
             </p>
           </div>

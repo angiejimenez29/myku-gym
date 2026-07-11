@@ -134,7 +134,7 @@ export default async function AdminDevolucionesPage() {
             <div className="pt-8 border-t border-foreground/5">
               <h2 className="text-lg font-bold mb-4 flex items-center gap-2 font-heading">
                 Completadas
-                <span className="bg-status-success/10 text-status-success" >
+                <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs px-2.5 py-0.5 rounded-full font-bold">
                   {completedRefunds.length}
                 </span>
               </h2>

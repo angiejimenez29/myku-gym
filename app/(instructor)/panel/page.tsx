@@ -34,13 +34,13 @@ function formatSessionTime(isoString: string) {
 }
 
 function getOccupationTextColor(percentage: number) {
-  if (percentage < 50) return 'text-status-success'
+  if (percentage < 50) return 'text-emerald-600 dark:text-emerald-400'
   if (percentage < 90) return 'text-status-warning'
   return 'text-status-danger'
 }
 
 function getOccupationBgColor(percentage: number) {
-  if (percentage < 50) return 'bg-status-success'
+  if (percentage < 50) return 'bg-emerald-500'
   if (percentage < 90) return 'bg-status-warning'
   return 'bg-status-danger'
 }

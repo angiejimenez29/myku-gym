@@ -47,13 +47,13 @@ export function SpaceGrid({ spots, capacity, selectedSpots, onToggleSpot }: Spac
               disabled={!isAvailable}
               onClick={() => isAvailable && onToggleSpot(spot.spot_number)}
               className={cn(
-                'w-12 h-12 rounded-lg flex flex-row items-center justify-center gap-1 font-bold transition-all border',
+                'w-12 h-12 rounded-lg flex flex-row items-center justify-center gap-1 font-bold transition-all border cursor-pointer',
                 !isAvailable && 'bg-foreground/5 text-foreground/30 cursor-not-allowed border-foreground/10',
-                isAvailable && !isSelected && 'bg-status-success/10 text-status-success border-status-success/30 hover:bg-status-success/20 hover:border-status-success/50',
+                isAvailable && !isSelected && 'bg-teal-50/50 text-brand-text border-teal-300 hover:bg-teal-100/70 hover:border-teal-400 dark:bg-transparent dark:text-emerald-400 dark:border-emerald-500 dark:hover:bg-emerald-500/20 dark:hover:border-emerald-600',
                 isSelected && 'bg-cta text-white ring-2 ring-cta scale-105 border-transparent shadow-lg shadow-cta/20'
               )}
             >
-              <User className={cn("w-3.5 h-3.5", isSelected ? 'text-white' : (isAvailable ? 'text-status-success' : 'text-foreground/30'))} />
+              <User className={cn("w-3.5 h-3.5", isSelected ? 'text-white' : (isAvailable ? 'text-brand-text dark:text-emerald-400' : 'text-foreground/30'))} />
               <span className="text-[11px] leading-none">{spot.spot_number}</span>
             </button>
           )
@@ -63,7 +63,7 @@ export function SpaceGrid({ spots, capacity, selectedSpots, onToggleSpot }: Spac
       {/* Legend */}
       <div className="flex flex-col gap-3 w-full max-w-[320px] text-sm text-foreground/70">
         <div className="flex items-center gap-3">
-          <div className="w-5 h-5 rounded bg-status-success/10 border border-status-success/30"></div>
+          <div className="w-5 h-5 rounded bg-teal-50/50 border border-teal-300 dark:bg-transparent dark:border-emerald-500"></div>
           <span>Disponible</span>
         </div>
         <div className="flex items-center gap-3">
