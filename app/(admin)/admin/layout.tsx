@@ -21,7 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0A0A0C] text-[#F4F4F5] font-sans">
+    <div className="min-h-screen flex flex-col bg-background text-foreground font-sans">
       <AdminNavbar user={user} />
       <main className="flex-1 flex flex-col w-full">
         {children}
