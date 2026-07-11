@@ -4,12 +4,14 @@ import { useState } from 'react'
 import { QrCode, X, Download } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 
-export function AttendanceQRModal() {
+export function AttendanceQRModal({ sessionId }: { sessionId?: string }) {
   const [isOpen, setIsOpen] = useState(false)
   
   // The global check-in URL for the gym
   // We use window.location.origin to get the current domain
-  const checkInUrl = typeof window !== 'undefined' ? `${window.location.origin}/checkin` : 'https://meykogym.com/checkin'
+  const checkInUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/checkin${sessionId ? `?sessionId=${sessionId}` : ''}` 
+    : 'https://meykogym.com/checkin'
 
   const handleDownload = () => {
     const svg = document.getElementById('attendance-qr')

@@ -89,7 +89,7 @@ export default async function AttendancePage({ params }: { params: Promise<{ id:
           </div>
 
           <div className="mt-6 md:mt-8">
-            <AttendanceQRModal />
+            <AttendanceQRModal sessionId={session.id} />
           </div>
         </div>
       </div>

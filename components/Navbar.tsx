@@ -4,13 +4,15 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, LogIn, Calendar, Users, Home, LayoutDashboard, LogOut, PlusCircle, Activity, Undo2 } from 'lucide-react'
+import { Menu, X, LogIn, Calendar, Users, Home, LayoutDashboard, LogOut, PlusCircle, Activity, Undo2, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { EditProfileModal } from '@/features/instructor/components/EditProfileModal'
 
 export function Navbar({ user }: { user?: any }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
   const pathname = usePathname()
 
   const router = useRouter()
@@ -74,7 +76,18 @@ export function Navbar({ user }: { user?: any }) {
               </button>
               
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-container border border-foreground/10 rounded-xl shadow-xl py-2 flex flex-col z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-container border border-foreground/10 rounded-xl shadow-xl py-2 flex flex-col z-50 text-foreground">
+                  <button 
+                    onClick={() => {
+                      setIsDropdownOpen(false)
+                      setIsEditProfileOpen(true)
+                    }}
+                    className="px-4 py-2.5 text-sm font-medium text-foreground hover:bg-foreground/5 transition-colors flex items-center gap-2 w-full text-left cursor-pointer"
+                  >
+                    <User className="w-4 h-4 text-foreground/50" />
+                    Editar perfil
+                  </button>
+                  
                   <button 
                     onClick={async () => {
                       setIsDropdownOpen(false)
@@ -82,7 +95,7 @@ export function Navbar({ user }: { user?: any }) {
                       router.push('/')
                       router.refresh()
                     }} 
-                    className="px-4 py-2.5 text-sm font-medium text-status-danger hover:bg-foreground/5 transition-colors flex items-center gap-2"
+                    className="px-4 py-2.5 text-sm font-medium text-status-danger hover:bg-foreground/5 transition-colors flex items-center gap-2 w-full text-left cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
                     Cerrar Sesión
@@ -163,10 +176,19 @@ export function Navbar({ user }: { user?: any }) {
               <Link
                 href="/panel"
                 onClick={() => setIsSidebarOpen(false)}
-                className="w-full bg-brand text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-brand/80 transition-colors"
+                className="w-full bg-brand text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-brand/80 transition-colors animate-transform"
               >
                 <LayoutDashboard className="w-5 h-5" /> Panel de Instructor
               </Link>
+              <button
+                onClick={() => {
+                  setIsSidebarOpen(false)
+                  setIsEditProfileOpen(true)
+                }}
+                className="w-full bg-foreground/5 hover:bg-foreground/10 text-foreground font-bold py-4 rounded-2xl flex justify-center items-center gap-2 transition-colors border border-foreground/10 cursor-pointer"
+              >
+                <User className="w-5 h-5 text-foreground/50" /> Editar Perfil
+              </button>
               <button
                 onClick={async () => {
                   setIsSidebarOpen(false)
@@ -190,6 +212,12 @@ export function Navbar({ user }: { user?: any }) {
           )}
         </div>
       </div>
+
+      <EditProfileModal 
+        isOpen={isEditProfileOpen} 
+        onClose={() => setIsEditProfileOpen(false)} 
+        user={user} 
+      />
     </>
   )
 }
