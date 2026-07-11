@@ -19,8 +19,8 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
   const occupancyPercentage = Math.round(((totalSpots - availableSpots) / totalSpots) * 100)
   
   // Choose colors based on availability
-  const statusColorClass = isSoldOut ? 'text-red-500' : (availableSpots <= 5 ? 'text-orange-400' : 'text-state-green')
-  const barColorClass = isSoldOut ? 'bg-red-500' : (availableSpots <= 5 ? 'bg-orange-400' : 'bg-state-green')
+  const statusColorClass = isSoldOut ? 'text-status-danger' : (availableSpots <= 5 ? 'text-status-warning' : 'text-status-success')
+  const barColorClass = isSoldOut ? 'bg-status-danger' : (availableSpots <= 5 ? 'bg-status-warning' : 'bg-status-success')
 
   const referrerQuery = referrer ? `?from=${referrer}` : ''
   const href = `/reserva/${id}${referrerQuery}`
@@ -29,7 +29,7 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
     <div className={`rounded-[24px] overflow-hidden flex flex-col border border-foreground/10 bg-container shadow-xl shadow-black/10 dark:shadow-black/40 transition-transform ${isSoldOut ? 'opacity-80' : 'hover:scale-[1.02]'} group`}>
       
       {/* Header Gradient */}
-      <div className="bg-gradient-to-r from-[#D6007A] to-[#9B00E8] p-4 text-white relative">
+      <div className="bg-brand p-4 text-white relative">
         <div className="flex justify-between items-start">
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-2 text-[13px] font-semibold">
@@ -53,7 +53,7 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
         
         <div className="flex flex-col gap-3 bg-foreground/5 rounded-2xl p-3 border border-foreground/5">
           <div className="flex items-center gap-3">
-            <div className="bg-[#D6007A]/20 p-2 rounded-full text-[#D6007A] shrink-0">
+            <div className="bg-brand-secondary/20 p-2 rounded-full text-brand shrink-0">
               <User className="w-4 h-4" />
             </div>
             <div className="flex flex-col min-w-0">
@@ -67,7 +67,7 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
           {classType && (
             <>
               <div className="flex items-center gap-3">
-                <div className="bg-[#9B00E8]/20 p-2 rounded-full text-[#9B00E8] shrink-0">
+                <div className="bg-cta/10 p-2 rounded-full text-cta shrink-0">
                   <Dumbbell className="w-4 h-4" />
                 </div>
                 <div className="flex flex-col min-w-0">
@@ -81,7 +81,7 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
           )}
           
           <div className="flex items-center gap-3">
-            <div className="bg-state-cyan/20 p-2 rounded-full text-state-cyan shrink-0">
+            <div className="bg-brand-secondary/20 p-2 rounded-full text-brand shrink-0">
               <Sparkles className="w-4 h-4" />
             </div>
             <div className="flex flex-col min-w-0">
@@ -101,7 +101,7 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
             
             {/* Inline Urgency Badge */}
             {availableSpots > 0 && availableSpots <= 5 ? (
-              <div className="bg-gradient-to-r from-[#F9A826] to-[#FF5E00] text-white text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg shadow-md border border-white/20">
+              <div className="bg-gradient-to-r from-status-warning to-status-danger text-white text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg shadow-md border border-white/20">
                 ¡Últimos {availableSpots} cupos!
               </div>
             ) : (
@@ -126,7 +126,7 @@ export function ClassCard({ id, date, time, instructorName, theme, classType, to
               ¡Cupos llenos!
             </button>
           ) : (
-            <button className="w-full mt-2 bg-foreground/5 border border-foreground/10 text-foreground font-bold py-3 rounded-xl flex justify-center items-center gap-2 text-sm group-hover:bg-[#D6007A] group-hover:border-[#D6007A] group-hover:text-white transition-colors">
+            <button className="w-full mt-2 bg-foreground/5 border border-foreground/10 text-foreground font-bold py-3 rounded-xl flex justify-center items-center gap-2 text-sm group-hover:bg-brand group-hover:border-brand group-hover:text-white transition-colors">
               Reservar Espacio <ChevronRight className="w-4 h-4" />
             </button>
           )}

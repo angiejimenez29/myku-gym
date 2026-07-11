@@ -23,7 +23,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Soft center glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#D6007A]/10 blur-[100px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-brand/10 blur-[100px] rounded-full pointer-events-none"></div>
       
       {/* Contenedor central ajustado al ancho de los inputs en el diseño */}
       <div className="z-10 w-full max-w-[340px] px-2 relative -mt-10">

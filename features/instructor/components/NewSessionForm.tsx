@@ -80,7 +80,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
     <>
       <form onSubmit={handleSubmit} className="bg-container rounded-3xl p-6 border border-foreground/5 shadow-xl mt-6 relative z-10">
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-sm font-medium mb-6">
+          <div className="bg-status-danger/10 border border-status-danger/20 text-status-danger p-4 rounded-xl text-sm font-medium mb-6">
             {error}
           </div>
         )}
@@ -88,7 +88,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <Calendar className="w-4 h-4 text-pink-500" /> Fecha <span className="text-red-500">*</span>
+              <Calendar className="w-4 h-4 text-brand" /> Fecha <span className="text-status-danger">*</span>
             </label>
             <Input 
               type="date" 
@@ -101,7 +101,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
 
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <Clock className="w-4 h-4 text-pink-500" /> Hora <span className="text-red-500">*</span>
+              <Clock className="w-4 h-4 text-brand" /> Hora <span className="text-status-danger">*</span>
             </label>
             <Input 
               type="time" 
@@ -114,7 +114,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
 
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <UserIcon className="w-4 h-4 text-pink-500" /> Invitado Especial <span className="text-foreground/40 text-xs font-normal">(Opcional)</span>
+              <UserIcon className="w-4 h-4 text-brand" /> Invitado Especial <span className="text-foreground/40 text-xs font-normal">(Opcional)</span>
             </label>
             <Input 
               type="text" 
@@ -127,7 +127,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
 
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <Palette className="w-4 h-4 text-pink-500" /> Temática del Día <span className="text-foreground/40 text-xs font-normal">(Opcional)</span>
+              <Palette className="w-4 h-4 text-brand" /> Temática del Día <span className="text-foreground/40 text-xs font-normal">(Opcional)</span>
             </label>
             <Input 
               type="text" 
@@ -140,7 +140,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
 
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <Dumbbell className="w-4 h-4 text-pink-500" /> Tipo de Clase <span className="text-red-500">*</span>
+              <Dumbbell className="w-4 h-4 text-brand" /> Tipo de Clase <span className="text-status-danger">*</span>
             </label>
             <Input 
               type="text" 
@@ -154,7 +154,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
 
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <DollarSign className="w-4 h-4 text-pink-500" /> Costo (S/.) <span className="text-red-500">*</span>
+              <DollarSign className="w-4 h-4 text-brand" /> Costo (S/.) <span className="text-status-danger">*</span>
             </label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 font-medium">S/.</span>
@@ -173,7 +173,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
 
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <Phone className="w-4 h-4 text-pink-500" /> Número Vinculado <span className="text-red-500">*</span>
+              <Phone className="w-4 h-4 text-brand" /> Número Vinculado <span className="text-status-danger">*</span>
             </label>
             <Input 
               type="tel" 
@@ -187,7 +187,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
 
           <div className="space-y-1">
             <label className="text-foreground/80 text-sm font-medium flex items-center gap-2 mb-1">
-              <Users className="w-4 h-4 text-pink-500" /> Cupos Disponibles <span className="text-red-500">*</span>
+              <Users className="w-4 h-4 text-brand" /> Cupos Disponibles <span className="text-status-danger">*</span>
             </label>
             <Input 
               type="number" 
@@ -204,7 +204,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
             <button 
               type="submit" 
               disabled={isPending}
-              className="w-full bg-[#D6007A] text-white font-bold h-14 rounded-xl flex justify-center items-center gap-2 hover:bg-[#D6007A]/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-[#D6007A]/20"
+              className="w-full bg-cta text-white font-bold h-14 rounded-xl flex justify-center items-center gap-2 hover:bg-cta/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-lg shadow-cta/20"
             >
               {isPending ? (
                 <><Loader2 className="w-5 h-5 animate-spin" /> {sessionId ? 'Guardando...' : 'Publicando...'}</>
@@ -223,7 +223,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
         </div>
 
         <p className="text-center text-xs text-foreground/40 mt-6">
-          Los campos marcados con <span className="text-red-500">*</span> son obligatorios
+          Los campos marcados con <span className="text-status-danger">*</span> son obligatorios
         </p>
       </form>
 
@@ -231,8 +231,8 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-5 animate-in fade-in zoom-in duration-200">
           <div className="bg-container border border-foreground/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl relative">
             <div className="p-6 pb-0 flex justify-between items-start">
-              <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center">
-                <AlertCircle className="w-6 h-6 text-orange-500" />
+              <div className="w-12 h-12 rounded-full bg-status-warning/10 flex items-center justify-center">
+                <AlertCircle className="w-6 h-6 text-status-warning" />
               </div>
               <button 
                 onClick={() => setIsConfirmModalOpen(false)}
@@ -255,7 +255,7 @@ export function NewSessionForm({ initialData, sessionId, defaultWhatsappContact 
                 <button 
                   onClick={() => pendingFormData && executeAction(pendingFormData)}
                   disabled={isPending}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full bg-status-warning hover:bg-status-warning text-white font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:pointer-events-none"
                 >
                   {isPending ? (
                     <><Loader2 className="w-5 h-5 animate-spin" /> Guardando...</>

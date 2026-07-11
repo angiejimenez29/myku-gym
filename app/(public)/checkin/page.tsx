@@ -45,8 +45,8 @@ const KEYFRAMES = `
     to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes glow-ring {
-    0%, 100% { box-shadow: 0 0 40px #D6007A70, 0 0 80px #9B00E830; }
-    50%       { box-shadow: 0 0 70px #D6007AB0, 0 0 140px #9B00E860; }
+    0%, 100% { box-shadow: 0 0 40px rgba(19, 122, 127, 0.7), 0 0 80px rgba(134, 206, 203, 0.3); }
+    50%       { box-shadow: 0 0 70px #137A7FB0, 0 0 140px #86CECB60; }
   }
 `
 
@@ -84,8 +84,8 @@ function Sparkles() {
         >
           <defs>
             <linearGradient id={`sg${i}`} x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#D6007A" />
-              <stop offset="100%" stopColor="#9B00E8" />
+              <stop offset="0%" stopColor="#137A7F" />
+              <stop offset="100%" stopColor="#86CECB" />
             </linearGradient>
           </defs>
           <path
@@ -104,7 +104,7 @@ function LogoBadge() {
     <div className="flex items-center gap-2 mb-8">
       <div
         className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg"
-        style={{ background: 'linear-gradient(135deg, #D6007A, #9B00E8)' }}
+        style={{ background: 'linear-gradient(135deg, #137A7F, #86CECB)' }}
       >
         <span className="text-white font-extrabold text-sm">M</span>
       </div>
@@ -135,11 +135,11 @@ function ScreenPhone({
       <div
         className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-xl"
         style={{
-          background: 'linear-gradient(135deg, #D6007A22, #9B00E822)',
-          border: '1px solid #9B00E850',
+          background: 'linear-gradient(135deg, #137A7F22, #86CECB22)',
+          border: '1px solid #86CECB50',
         }}
       >
-        <Phone size={28} style={{ color: '#D6007A' }} />
+        <Phone size={28} className="text-brand" />
       </div>
 
       <h1 className="text-[26px] font-extrabold text-white leading-tight mb-3">
@@ -155,7 +155,7 @@ function ScreenPhone({
       </label>
       <div className="relative mb-4">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-          <Phone size={15} style={{ color: '#9B00E8' }} />
+          <Phone size={15} className="text-brand-secondary" />
         </span>
         <input
           id="phone-input"
@@ -168,16 +168,16 @@ function ScreenPhone({
           placeholder="Ej. 930154128"
           className="w-full pl-10 pr-4 py-4 rounded-2xl text-white font-medium text-base outline-none transition-shadow"
           style={{
-            background: '#1a1530',
-            border: '1px solid #9B00E840',
-            caretColor: '#D6007A',
+            background: 'var(--background)',
+            border: '1px solid #86CECB40',
+            caretColor: 'var(--brand)',
           }}
           onFocus={(e) => {
-            e.currentTarget.style.border = '1px solid #9B00E8'
-            e.currentTarget.style.boxShadow = '0 0 0 3px #9B00E820'
+            e.currentTarget.style.border = '1px solid #86CECB'
+            e.currentTarget.style.boxShadow = '0 0 0 3px #86CECB20'
           }}
           onBlur={(e) => {
-            e.currentTarget.style.border = '1px solid #9B00E840'
+            e.currentTarget.style.border = '1px solid #86CECB40'
             e.currentTarget.style.boxShadow = 'none'
           }}
         />
@@ -189,9 +189,9 @@ function ScreenPhone({
         disabled={phone.trim().length < 7 || isLoading}
         className="w-full py-4 rounded-2xl font-bold text-white text-base transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
         style={{
-          background: 'linear-gradient(135deg, #D6007A, #9B00E8)',
+          background: 'linear-gradient(135deg, #137A7F, #86CECB)',
           boxShadow:
-            phone.trim().length >= 7 ? '0 4px 24px #D6007A55' : 'none',
+            phone.trim().length >= 7 ? '0 4px 24px #137A7F55' : 'none',
         }}
       >
         <span className="flex items-center justify-center gap-2">
@@ -224,20 +224,20 @@ function ReservationCard({
       className="rounded-2xl p-4 flex flex-col gap-3"
       style={{
         background: 'rgba(21,18,38,0.9)',
-        border: '1px solid #9B00E845',
+        border: '1px solid #86CECB45',
         backdropFilter: 'blur(10px)',
       }}
     >
       {/* Date & time row */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
-          <Calendar size={13} style={{ color: '#9B00E8' }} />
+          <Calendar size={13} className="text-brand-secondary" />
           <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.82)' }}>
             {r.date}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Clock size={13} style={{ color: '#C084FC' }} />
+          <Clock size={13} className="text-brand-secondary" />
           <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.82)' }}>
             {r.time}
           </span>
@@ -249,9 +249,9 @@ function ReservationCard({
         <span
           className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block"
           style={{
-            background: '#9B00E818',
-            color: '#C084FC',
-            border: '1px solid #9B00E850',
+            background: '#86CECB18',
+            color: 'var(--brand-secondary)',
+            border: '1px solid #86CECB50',
           }}
         >
           Temática: {r.theme}
@@ -260,12 +260,12 @@ function ReservationCard({
 
       {/* Spots */}
       <div className="flex items-center gap-1.5">
-        <Users size={12} style={{ color: '#D6007A' }} className="shrink-0" />
+        <Users size={12} className="text-brand shrink-0" />
         <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
           Lugares:{' '}
           {r.spots.map((s, i) => (
             <span key={s}>
-              <span style={{ color: '#D6007A' }} className="font-bold">
+              <span className="text-brand font-bold">
                 {s}
               </span>
               {i < r.spots.length - 1 && ', '}
@@ -282,12 +282,12 @@ function ReservationCard({
           className="w-full py-3 rounded-xl text-sm font-bold transition-all active:scale-95 mt-1"
           style={{
             background: 'transparent',
-            border: '1.5px solid #9B00E8',
-            color: '#D6007A',
+            border: '1.5px solid #86CECB',
+            color: 'var(--brand)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#9B00E815'
-            e.currentTarget.style.boxShadow = '0 0 14px #9B00E835'
+            e.currentTarget.style.background = '#86CECB15'
+            e.currentTarget.style.boxShadow = '0 0 14px #86CECB35'
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = 'transparent'
@@ -302,7 +302,7 @@ function ReservationCard({
           style={{
             background: 'rgba(214, 0, 122, 0.1)',
             border: '1px solid rgba(214, 0, 122, 0.2)',
-            color: '#D6007A'
+            color: 'var(--brand)'
           }}
         >
           <span>Asistencia registrada</span>
@@ -394,9 +394,9 @@ function ConfirmModal({
       <div
         className="w-full rounded-3xl p-6 flex flex-col gap-4 relative"
         style={{
-          background: '#16112A',
-          border: '1px solid #9B00E865',
-          boxShadow: '0 8px 48px #9B00E845',
+          background: 'var(--background)',
+          border: '1px solid #86CECB65',
+          boxShadow: '0 8px 48px #86CECB45',
         }}
       >
         {/* Dismiss X */}
@@ -420,11 +420,11 @@ function ConfirmModal({
         <div
           className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto"
           style={{
-            background: 'linear-gradient(135deg, #D6007A1A, #9B00E81A)',
-            border: '1px solid #9B00E855',
+            background: 'linear-gradient(135deg, #137A7F1A, #86CECB1A)',
+            border: '1px solid rgba(134, 206, 203, 0.55)',
           }}
         >
-          <AlertCircle size={28} style={{ color: '#C084FC' }} />
+          <AlertCircle size={28} className="text-brand-secondary" />
         </div>
 
         <h2
@@ -437,9 +437,9 @@ function ConfirmModal({
         {/* Mini summary card */}
         <div
           className="rounded-xl p-3 text-center"
-          style={{ background: 'rgba(11,9,20,0.55)', border: '1px solid #9B00E830' }}
+          style={{ background: 'rgba(11,9,20,0.55)', border: '1px solid rgba(134, 206, 203, 0.3)' }}
         >
-          <p className="font-semibold text-sm" style={{ color: '#D6007A' }}>
+          <p className="font-semibold text-sm text-brand">
             {reservation.date} · {reservation.time}
           </p>
           <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>
@@ -474,8 +474,8 @@ function ConfirmModal({
             disabled={isLoading}
             className="flex-1 py-3 rounded-xl text-sm font-bold text-white transition-all active:scale-95 disabled:opacity-50"
             style={{
-              background: 'linear-gradient(135deg, #D6007A, #9B00E8)',
-              boxShadow: '0 4px 20px #D6007A50',
+              background: 'linear-gradient(135deg, #137A7F, #86CECB)',
+              boxShadow: '0 4px 20px rgba(19, 122, 127, 0.5)',
             }}
           >
             {isLoading ? 'Guardando...' : (
@@ -500,7 +500,7 @@ function ScreenSuccess({ onRestart }: { onRestart: () => void }) {
       <div
         className="relative w-32 h-32 rounded-full flex items-center justify-center mb-8 z-10"
         style={{
-          background: 'linear-gradient(135deg, #D6007A, #9B00E8)',
+          background: 'linear-gradient(135deg, #137A7F, #86CECB)',
           animation: 'circle-pop 0.6s cubic-bezier(0.34,1.56,0.64,1) both, glow-ring 2s ease-in-out 1s infinite',
         }}
       >
@@ -508,7 +508,7 @@ function ScreenSuccess({ onRestart }: { onRestart: () => void }) {
         <div
           className="absolute -inset-3 rounded-full opacity-25 pointer-events-none"
           style={{
-            background: 'linear-gradient(135deg, #D6007A, #9B00E8)',
+            background: 'linear-gradient(135deg, #137A7F, #86CECB)',
             filter: 'blur(14px)',
           }}
           aria-hidden="true"
@@ -548,7 +548,7 @@ function ScreenSuccess({ onRestart }: { onRestart: () => void }) {
         }}
       >
         Tus sitios ya están registrados.{' '}
-        <span style={{ color: '#D6007A' }} className="font-semibold">
+        <span className="text-brand font-semibold">
           ¡A darlo todo en la rutina full fuego!
         </span>
       </p>
@@ -558,8 +558,8 @@ function ScreenSuccess({ onRestart }: { onRestart: () => void }) {
         onClick={onRestart}
         className="mt-10 px-8 py-4 rounded-full font-bold text-white text-base transition-all active:scale-95 z-10"
         style={{
-          background: 'linear-gradient(135deg, #D6007A, #9B00E8)',
-          boxShadow: '0 4px 28px #D6007A60',
+          background: 'linear-gradient(135deg, #137A7F, #86CECB)',
+          boxShadow: '0 4px 28px rgba(19, 122, 127, 0.6)',
           animation: 'fade-up 0.45s ease 1.25s both',
         }}
       >
@@ -618,13 +618,13 @@ export default function CheckinPage() {
       {/* Full-screen dark wrapper */}
       <div
         className="min-h-screen flex items-start justify-center"
-        style={{ background: '#0B0914' }}
+        style={{ background: 'var(--background)' }}
       >
         {/* Mobile-width container */}
         <div
           className="relative w-full max-w-sm min-h-screen flex flex-col"
           style={{
-            background: 'linear-gradient(165deg, #100d20 0%, #0B0914 100%)',
+            background: 'var(--background)',
           }}
         >
           {/* Ambient radial gradient top */}
@@ -633,7 +633,7 @@ export default function CheckinPage() {
             aria-hidden="true"
             style={{
               background:
-                'radial-gradient(ellipse 80% 55% at 50% 0%, #9B00E81C 0%, transparent 100%)',
+                'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(134, 206, 203, 0.11) 0%, transparent 100%)',
             }}
           />
 

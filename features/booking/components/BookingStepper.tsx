@@ -20,7 +20,7 @@ export function BookingStepper({ currentStep }: BookingStepperProps) {
             <div
               className={cn(
                 'w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors z-10 shrink-0',
-                isCompleted ? 'bg-state-yellow text-black' : isActive ? 'bg-pink-500 text-white' : 'bg-foreground/5 text-foreground/80'
+                isCompleted ? 'bg-brand-secondary text-foreground' : isActive ? 'bg-brand text-white' : 'bg-foreground/5 text-foreground/80'
               )}
             >
               {isCompleted ? <Check className="w-4 h-4" /> : step}
@@ -31,7 +31,7 @@ export function BookingStepper({ currentStep }: BookingStepperProps) {
               <div
                 className={cn(
                   'h-1 flex-1 mx-2 transition-colors rounded-full',
-                  step < currentStep ? 'bg-state-yellow' : 'bg-foreground/10'
+                  step < currentStep ? 'bg-brand-secondary' : 'bg-foreground/10'
                 )}
               />
             )}

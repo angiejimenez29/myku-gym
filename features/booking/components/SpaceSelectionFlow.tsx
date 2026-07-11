@@ -100,7 +100,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
               <div className="space-y-4">
                 <h3 className="text-foreground font-semibold text-lg">Resumen de Selección</h3>
                 
-                <div className="bg-background border border-state-yellow/30 rounded-xl p-4 flex flex-col items-center justify-center">
+                <div className="bg-background border border-brand-secondary/30 rounded-xl p-4 flex flex-col items-center justify-center">
                   <span className="text-foreground/80 text-xs">
                     {selectedSpots.length === 1 ? 'Espacio seleccionado' : 'Espacios seleccionados'}
                   </span>
@@ -110,7 +110,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                          key={s} 
                          onClick={() => handleToggleSpot(s)} 
                          title="Deseleccionar espacio"
-                         className="flex items-center gap-1 bg-state-yellow/10 border border-state-yellow/50 text-state-yellow text-xl font-bold px-3 py-1 rounded-lg hover:bg-state-yellow hover:text-black transition-colors"
+                         className="flex items-center gap-1 bg-brand-secondary/10 border border-brand-secondary/50 text-brand-secondary text-xl font-bold px-3 py-1 rounded-lg hover:bg-brand-secondary hover:text-black transition-colors"
                        >
                          #{s} <X className="w-4 h-4 ml-1 opacity-70" />
                        </button>
@@ -127,13 +127,13 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                       autoComplete="name"
                       onChange={e => setName(e.target.value)}
                       placeholder="Ej. Luz Maria Begonias"
-                      className={`bg-background text-foreground transition-colors ${name.length > 0 && !isNameValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
+                      className={`bg-background text-foreground transition-colors ${name.length > 0 && !isNameValid ? 'border-status-danger/50 focus:border-status-danger' : 'border-foreground/10'}`}
                     />
                     {name.length > 0 && !isNameFormatValid && (
-                       <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El nombre solo debe contener letras y espacios.</span>
+                       <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">El nombre solo debe contener letras y espacios.</span>
                     )}
                     {name.length > 0 && isNameFormatValid && !isNameComplete && (
-                       <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">Ingresa tu nombre y apellido.</span>
+                       <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">Ingresa tu nombre y apellido.</span>
                     )}
                   </div>
                   <div>
@@ -147,13 +147,13 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                       placeholder="Ej. 956632585"
                       maxLength={9}
                       type="tel"
-                      className={`bg-background text-foreground transition-colors ${phone.length > 0 && !isPhoneValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
+                      className={`bg-background text-foreground transition-colors ${phone.length > 0 && !isPhoneValid ? 'border-status-danger/50 focus:border-status-danger' : 'border-foreground/10'}`}
                     />
                     {phone.length > 0 && !isPhoneFormatValid && (
-                       <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe empezar con 9 y tener 9 dígitos numéricos.</span>
+                       <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">El número debe empezar con 9 y tener 9 dígitos numéricos.</span>
                     )}
                     {phone.length > 0 && isPhoneFormatValid && phone.length < 9 && (
-                       <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe tener 9 dígitos.</span>
+                       <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">El número debe tener 9 dígitos.</span>
                     )}
                   </div>
                 </div>
@@ -161,7 +161,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                 <button 
                   disabled={!isNameValid || !isPhoneValid || selectedSpots.length === 0 || isPending}
                   onClick={handleContinue}
-                  className="w-full mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-2"
+                  className="w-full mt-4 bg-cta text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-2"
                 >
                   {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
                   Continuar al Pago
@@ -182,7 +182,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
         className={`md:hidden fixed bottom-0 left-0 w-full bg-container/95 backdrop-blur-xl border-t border-foreground/10 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)] p-5 px-6 pb-8 z-50 transition-transform duration-300 ${selectedSpots.length > 0 ? 'translate-y-0' : 'translate-y-full'}`}
       >
         <div className="max-w-md mx-auto space-y-4">
-          <div className="bg-background border border-state-yellow/30 rounded-xl p-3 flex flex-col items-center justify-center mb-4">
+          <div className="bg-background border border-brand-secondary/30 rounded-xl p-3 flex flex-col items-center justify-center mb-4">
              <span className="text-foreground/80 text-xs">
                 {selectedSpots.length === 1 ? 'Espacio seleccionado' : 'Espacios seleccionados'}
              </span>
@@ -192,7 +192,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                      key={s} 
                      onClick={() => handleToggleSpot(s)} 
                      title="Deseleccionar espacio"
-                     className="flex items-center gap-1 bg-state-yellow/10 border border-state-yellow/50 text-state-yellow text-xl font-bold px-3 py-1 rounded-lg hover:bg-state-yellow hover:text-black transition-colors"
+                     className="flex items-center gap-1 bg-brand-secondary/10 border border-brand-secondary/50 text-brand-secondary text-xl font-bold px-3 py-1 rounded-lg hover:bg-brand-secondary hover:text-black transition-colors"
                    >
                      #{s} <X className="w-4 h-4 ml-1 opacity-70" />
                    </button>
@@ -209,13 +209,13 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                 autoComplete="name"
                 onChange={e => setName(e.target.value)}
                 placeholder="Ej. Luz Maria Begonias"
-                className={`bg-background text-foreground transition-colors ${name.length > 0 && !isNameValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
+                className={`bg-background text-foreground transition-colors ${name.length > 0 && !isNameValid ? 'border-status-danger/50 focus:border-status-danger' : 'border-foreground/10'}`}
               />
               {name.length > 0 && !isNameFormatValid && (
-                 <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El nombre solo debe contener letras y espacios.</span>
+                 <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">El nombre solo debe contener letras y espacios.</span>
               )}
               {name.length > 0 && isNameFormatValid && !isNameComplete && (
-                 <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">Ingresa tu nombre y apellido.</span>
+                 <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">Ingresa tu nombre y apellido.</span>
               )}
             </div>
             <div>
@@ -229,13 +229,13 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
                 placeholder="Ej. 956632585"
                 maxLength={9}
                 type="tel"
-                className={`bg-background text-foreground transition-colors ${phone.length > 0 && !isPhoneValid ? 'border-red-400/50 focus:border-red-400' : 'border-foreground/10'}`}
+                className={`bg-background text-foreground transition-colors ${phone.length > 0 && !isPhoneValid ? 'border-status-danger/50 focus:border-status-danger' : 'border-foreground/10'}`}
               />
               {phone.length > 0 && !isPhoneFormatValid && (
-                 <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe empezar con 9 y tener 9 dígitos numéricos.</span>
+                 <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">El número debe empezar con 9 y tener 9 dígitos numéricos.</span>
               )}
               {phone.length > 0 && isPhoneFormatValid && phone.length < 9 && (
-                 <span className="text-red-400 text-xs font-medium ml-1 mt-1 block">El número debe tener 9 dígitos.</span>
+                 <span className="text-status-danger text-xs font-medium ml-1 mt-1 block">El número debe tener 9 dígitos.</span>
               )}
             </div>
           </div>
@@ -243,7 +243,7 @@ export function SpaceSelectionFlow({ sessionId, spots, capacity }: SpaceSelectio
           <button 
             disabled={!isNameValid || !isPhoneValid || selectedSpots.length === 0 || isPending}
             onClick={handleContinue}
-            className="w-full mt-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-2"
+            className="w-full mt-4 bg-cta text-white font-semibold rounded-xl py-4 transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none flex justify-center items-center gap-2"
           >
             {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
             Continuar al Pago

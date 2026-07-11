@@ -24,7 +24,7 @@ export default async function NuevaSesionPage() {
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-8 pb-8 px-5 text-white relative">
+      <div className="bg-brand pt-8 pb-8 px-5 text-white relative">
         <div className="max-w-3xl mx-auto w-full">
           <Link href="/panel" className="inline-flex items-center gap-1 text-white/90 hover:text-white mb-6 text-sm font-medium transition-colors">
             <ChevronLeft className="w-4 h-4" />

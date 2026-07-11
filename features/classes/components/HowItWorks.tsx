@@ -18,7 +18,7 @@ export function HowItWorks() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {steps.map((step, index) => (
           <div key={index} className="flex flex-col items-center text-center p-8 rounded-3xl bg-foreground/5 border border-foreground/10">
-            <div className="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 mb-6 font-bold text-2xl">
+            <div className="w-14 h-14 rounded-full bg-brand/10 flex items-center justify-center text-brand mb-6 font-bold text-2xl">
               {index + 1}
             </div>
             <h3 className="text-xl font-bold text-foreground mb-3">{step.title}</h3>

@@ -42,7 +42,7 @@ export function Navbar({ user }: { user?: any }) {
       {/* Desktop Header */}
       <header className="w-full bg-background py-4 px-5 md:px-10 flex items-center justify-between sticky top-0 z-50 border-b border-foreground/5 shadow-md">
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#D6007A] to-[#9B00E8] flex items-center justify-center shadow-md">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-brand to-brand-secondary flex items-center justify-center shadow-md">
              <span className="text-white font-bold text-xs md:text-sm">M</span>
           </div>
           <span className="text-base md:text-xl font-bold text-foreground tracking-wide">Myku</span>
@@ -55,7 +55,7 @@ export function Navbar({ user }: { user?: any }) {
               key={link.href + link.label} 
               href={link.href} 
               className={`text-sm font-semibold transition-colors ${
-                isActive(link.href) ? 'text-foreground border-b-2 border-[#D6007A] pb-1' : 'text-foreground/70 hover:text-foreground'
+                isActive(link.href) ? 'text-foreground border-b-2 border-brand pb-1' : 'text-foreground/70 hover:text-foreground'
               }`}
             >
               {link.label}
@@ -68,7 +68,7 @@ export function Navbar({ user }: { user?: any }) {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="text-sm font-bold bg-foreground/5 hover:bg-foreground/10 text-foreground px-4 py-2 rounded-full transition-colors flex items-center gap-2"
               >
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#D6007A] to-[#9B00E8] text-white flex items-center justify-center text-xs">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-brand to-brand-secondary text-white flex items-center justify-center text-xs">
                   {user.email?.charAt(0).toUpperCase() || 'I'}
                 </div>
                 Mi Portal
@@ -83,7 +83,7 @@ export function Navbar({ user }: { user?: any }) {
                       router.push('/')
                       router.refresh()
                     }} 
-                    className="px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-foreground/5 transition-colors flex items-center gap-2"
+                    className="px-4 py-2.5 text-sm font-medium text-status-danger hover:bg-foreground/5 transition-colors flex items-center gap-2"
                   >
                     <LogOut className="w-4 h-4" />
                     Cerrar Sesión
@@ -94,7 +94,7 @@ export function Navbar({ user }: { user?: any }) {
           ) : (
             <Link 
               href="/login" 
-              className="text-sm font-bold bg-[#D6007A] hover:bg-[#D6007A]/80 text-white px-5 py-2 rounded-full transition-colors shadow-lg flex items-center gap-2"
+              className="text-sm font-bold bg-brand hover:bg-brand/80 text-white px-5 py-2 rounded-full transition-colors shadow-lg flex items-center gap-2"
             >
               <LogIn className="w-4 h-4" /> Iniciar Sesión
             </Link>
@@ -147,7 +147,7 @@ export function Navbar({ user }: { user?: any }) {
                 onClick={() => setIsSidebarOpen(false)}
                 className={`flex items-center gap-3 p-4 rounded-2xl font-bold transition-colors ${
                   isActive(link.href) 
-                    ? 'bg-[#D6007A]/10 text-[#D6007A]' 
+                    ? 'bg-brand/10 text-brand' 
                     : 'text-foreground/70 hover:bg-foreground/5 hover:text-foreground'
                 }`}
               >
@@ -164,7 +164,7 @@ export function Navbar({ user }: { user?: any }) {
               <Link
                 href="/panel"
                 onClick={() => setIsSidebarOpen(false)}
-                className="w-full bg-[#D6007A] text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-[#D6007A]/80 transition-colors"
+                className="w-full bg-brand text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-brand/80 transition-colors"
               >
                 <LayoutDashboard className="w-5 h-5" /> Panel de Instructor
               </Link>
@@ -175,7 +175,7 @@ export function Navbar({ user }: { user?: any }) {
                   router.push('/')
                   router.refresh()
                 }}
-                className="w-full bg-red-500/10 text-red-500 font-bold py-4 rounded-2xl flex justify-center items-center gap-2 hover:bg-red-500 hover:text-white transition-colors"
+                className="w-full bg-status-danger/10 text-status-danger font-bold py-4 rounded-2xl flex justify-center items-center gap-2 hover:bg-status-danger hover:text-white transition-colors"
               >
                 <LogOut className="w-5 h-5" /> Cerrar Sesión
               </button>
@@ -184,7 +184,7 @@ export function Navbar({ user }: { user?: any }) {
             <Link
               href="/login"
               onClick={() => setIsSidebarOpen(false)}
-              className="w-full bg-[#D6007A] text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-[#D6007A]/80 transition-colors"
+              className="w-full bg-brand text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 shadow-lg hover:bg-brand/80 transition-colors"
             >
               <LogIn className="w-5 h-5" /> Iniciar Sesión
             </Link>

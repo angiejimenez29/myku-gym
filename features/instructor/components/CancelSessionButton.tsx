@@ -44,7 +44,7 @@ export function CancelSessionButton({ sessionId, variant = 'full' }: CancelSessi
         <button 
           onClick={handleOpenClick}
           disabled={isFetching}
-          className="w-full bg-container text-pink-500 font-semibold rounded-xl py-3.5 border border-pink-500/20 transition-colors hover:bg-pink-500/10 disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full bg-container text-status-danger font-semibold rounded-xl py-3.5 border border-status-danger/20 transition-colors hover:bg-status-danger/10 disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isFetching && <Loader2 className="w-4 h-4 animate-spin" />}
           Cancelar Clase
@@ -53,7 +53,7 @@ export function CancelSessionButton({ sessionId, variant = 'full' }: CancelSessi
         <button 
           onClick={handleOpenClick}
           disabled={isFetching}
-          className="w-full text-left px-4 py-3 text-red-500 hover:bg-red-500/10 transition-colors text-sm font-medium flex items-center justify-between"
+          className="w-full text-left px-4 py-3 text-status-danger hover:bg-status-danger/10 transition-colors text-sm font-medium flex items-center justify-between"
         >
           Cancelar Clase
           {isFetching && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -64,8 +64,8 @@ export function CancelSessionButton({ sessionId, variant = 'full' }: CancelSessi
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-5 animate-in fade-in zoom-in duration-200">
           <div className="bg-container border border-foreground/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl relative">
             <div className="p-6 pb-0 flex justify-between items-start">
-              <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center">
-                <AlertCircle className="w-6 h-6 text-red-500" />
+              <div className="w-12 h-12 rounded-full bg-status-danger/10 flex items-center justify-center">
+                <AlertCircle className="w-6 h-6 text-status-danger" />
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
@@ -84,14 +84,14 @@ export function CancelSessionButton({ sessionId, variant = 'full' }: CancelSessi
                 </p>
               </div>
 
-              <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-4 space-y-3">
+              <div className="bg-status-danger/5 border border-status-danger/10 rounded-2xl p-4 space-y-3">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-foreground/70">Reservas afectadas:</span>
                   <span className="font-bold text-foreground">{impact.impactedReservations}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-foreground/70">Monto a reembolsar:</span>
-                  <span className="font-bold text-red-500">S/ {impact.totalRefundAmount.toFixed(2)}</span>
+                  <span className="font-bold text-status-danger">S/ {impact.totalRefundAmount.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -99,7 +99,7 @@ export function CancelSessionButton({ sessionId, variant = 'full' }: CancelSessi
                 <button 
                   onClick={handleConfirm}
                   disabled={isPending}
-                  className="w-full bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                  className="w-full bg-status-danger hover:bg-status-danger text-white font-bold rounded-xl py-3.5 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:pointer-events-none"
                 >
                   {isPending ? (
                     <>

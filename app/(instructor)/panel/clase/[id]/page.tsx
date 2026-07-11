@@ -34,9 +34,9 @@ function formatSessionTime(isoString: string) {
 }
 
 function getOccupationTextColor(percentage: number) {
-  if (percentage < 50) return 'text-[#00E676]'
-  if (percentage < 90) return 'text-orange-500'
-  return 'text-pink-500'
+  if (percentage < 50) return 'text-status-success'
+  if (percentage < 90) return 'text-status-warning'
+  return 'text-status-danger'
 }
 
 export default async function ClassDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -101,7 +101,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
   return (
     <div className="min-h-screen bg-background relative pb-24">
       {/* Top Gradient Header */}
-      <div className="bg-gradient-to-r from-pink-500 to-purple-600 pt-6 pb-6 px-5 text-white relative">
+      <div className="bg-brand pt-6 pb-6 px-5 text-white relative">
         <div className="max-w-md md:max-w-6xl mx-auto">
           <Link href="/panel" className="inline-flex items-center gap-1 text-white/90 hover:text-white mb-4 text-sm font-medium transition-colors">
             <ChevronLeft className="w-4 h-4" />
@@ -114,7 +114,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
               <p className="text-white/80 text-sm mt-1">Revisa y administra tu sesión</p>
             </div>
             {isCancelled && (
-              <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cancelada</span>
+              <span className="bg-status-danger text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Cancelada</span>
             )}
           </div>
         </div>
@@ -151,8 +151,8 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
                 {/* Detalles de clase */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-pink-500/10 flex items-center justify-center shrink-0">
-                      <Tag className="w-5 h-5 text-pink-500" />
+                    <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
+                      <Tag className="w-5 h-5 text-brand" />
                     </div>
                     <div>
                       <p className="text-xs text-foreground/50 font-semibold uppercase">Tipo de Clase</p>
@@ -162,8 +162,8 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
 
                   {session.theme && (
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0">
-                        <Music className="w-5 h-5 text-purple-500" />
+                      <div className="w-10 h-10 rounded-full bg-brand-secondary/10 flex items-center justify-center shrink-0">
+                        <Music className="w-5 h-5 text-brand-secondary" />
                       </div>
                       <div>
                         <p className="text-xs text-foreground/50 font-semibold uppercase">Temática</p>
@@ -185,8 +185,8 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
                   )}
                   
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#00E676]/10 flex items-center justify-center shrink-0">
-                      <Coins className="w-5 h-5 text-[#00E676]" />
+                    <div className="w-10 h-10 rounded-full bg-status-success/10 flex items-center justify-center shrink-0">
+                      <Coins className="w-5 h-5 text-status-success" />
                     </div>
                     <div>
                       <p className="text-xs text-foreground/50 font-semibold uppercase">Costo</p>
@@ -224,7 +224,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
                 
                 {!isCancelled && (
                   <Link href={`/panel/asistencia/${session.id}`} className="block w-full">
-                    <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-xl py-3.5 transition-transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-pink-500/25">
+                    <button className="w-full bg-cta text-white font-semibold rounded-xl py-3.5 transition-transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-cta/25">
                       Ver Asistencia en Vivo
                     </button>
                   </Link>
@@ -250,8 +250,8 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
                   <Link key={sessionItem.id} href={`/panel/clase/${sessionItem.id}`} className="block">
                     <div className={`bg-container border rounded-2xl p-4 flex items-center justify-between transition-colors cursor-pointer ${
                       isActive 
-                        ? 'border-pink-500 bg-pink-500/5' 
-                        : 'border-foreground/5 hover:border-pink-500/30'
+                        ? 'border-brand bg-brand/5' 
+                        : 'border-foreground/5 hover:border-brand/30'
                     }`}>
                       <div>
                         <div className="flex items-center">
@@ -259,7 +259,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ id: st
                             {formatSessionDate(`${sessionItem.session_date}T${sessionItem.start_time}`)}
                           </p>
                           {isActive && (
-                            <span className="text-[10px] bg-pink-500 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ml-2">
+                            <span className="text-[10px] bg-brand text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ml-2">
                               Actual
                             </span>
                           )}

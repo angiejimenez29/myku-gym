@@ -15,7 +15,7 @@ export function InstructorProfile({ name, bio, experienceYears, whatsapp }: Inst
        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
          {/* Glow behind image */}
          <div className="relative mb-4 md:mb-0 flex-shrink-0">
-            <div className="absolute inset-0 bg-[#D6007A] rounded-full blur-xl opacity-40 md:opacity-60"></div>
+            <div className="absolute inset-0 bg-brand rounded-full blur-xl opacity-40 md:opacity-60"></div>
             <img 
                src="/placeholder-instructor.jpg" 
                alt={name} 
@@ -36,7 +36,7 @@ export function InstructorProfile({ name, bio, experienceYears, whatsapp }: Inst
            
            <div className="grid grid-cols-3 gap-6 md:gap-12 w-full max-w-sm md:max-w-none mb-8 md:mb-10">
               <div className="flex flex-col items-center md:items-start gap-2">
-                 <div className="bg-[#D6007A]/10 p-3 md:p-4 rounded-full text-[#D6007A]">
+                 <div className="bg-brand/10 p-3 md:p-4 rounded-full text-brand">
                    <Award className="w-5 h-5 md:w-6 md:h-6" />
                  </div>
                   <div className="flex flex-col items-center md:items-start mt-1">
@@ -54,7 +54,7 @@ export function InstructorProfile({ name, bio, experienceYears, whatsapp }: Inst
                  </div>
               </div>
               <div className="flex flex-col items-center md:items-start gap-2">
-                 <div className="bg-[#D6007A]/10 p-3 md:p-4 rounded-full text-[#D6007A]">
+                 <div className="bg-brand/10 p-3 md:p-4 rounded-full text-brand">
                    <Star className="w-5 h-5 md:w-6 md:h-6" />
                  </div>
                   <div className="flex flex-col items-center md:items-start mt-1">
