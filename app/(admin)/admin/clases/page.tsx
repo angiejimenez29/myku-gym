@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { Calendar, Clock, User, Users, Dumbbell } from 'lucide-react'
+import { Calendar, Clock, User, Dumbbell } from 'lucide-react'
 import type { Database } from '@/types/database.types'
 
 type SessionWithSpotsAndInstructor = Database['public']['Tables']['sessions']['Row'] & {
@@ -67,13 +67,13 @@ export default async function AdminClasesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0C] py-8 px-5 md:px-10 text-white">
+    <div className="min-h-screen bg-background py-8 px-5 md:px-10 text-foreground">
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Clases Globales</h1>
-          <p className="text-zinc-400 text-sm mt-1">Agenda general de todos los entrenadores</p>
+          <h1 className="text-3xl font-extrabold tracking-tight font-heading">Clases Globales</h1>
+          <p className="text-foreground/70 text-sm mt-1">Agenda general de todos los entrenadores</p>
         </div>
 
         {/* Sessions list */}
@@ -86,51 +86,51 @@ export default async function AdminClasesPage() {
               return (
                 <div 
                   key={session.id}
-                  className="bg-[#121218] border border-white/5 rounded-3xl p-6 hover:border-purple-500/20 transition-all duration-300 flex flex-col justify-between"
+                  className="bg-container border border-foreground/5 rounded-3xl p-6 hover:border-brand/20 transition-all duration-300 flex flex-col justify-between shadow-md"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full ${
                         session.status === 'published' 
-                          ? 'bg-[#00E676]/10 text-[#00E676]' 
-                          : 'bg-zinc-800 text-zinc-400'
+                          ? 'bg-status-success/10 text-status-success' 
+                          : 'bg-foreground/10 text-foreground/70'
                       }`}>
                         {session.status === 'published' ? 'Publicada' : 'Borrador'}
                       </span>
-                      <span className="text-sm font-bold text-[#D6007A]">
+                      <span className="text-sm font-bold text-cta">
                         S/ {Number(session.price).toFixed(2)}
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="text-xl font-bold capitalize text-white line-clamp-1">{session.theme || 'Clase Myku'}</h3>
-                      <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1.5">
-                        <User className="w-3.5 h-3.5 text-zinc-500" />
-                        Instructor: <span className="text-white font-medium">{session.instructors?.full_name || 'Sin asignar'}</span>
+                      <h3 className="text-xl font-bold capitalize line-clamp-1 font-heading">{session.theme || 'Clase Myku'}</h3>
+                      <p className="text-xs text-foreground/70 mt-1 flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-foreground/50" />
+                        Instructor: <span className="text-foreground font-medium">{session.instructors?.full_name || 'Sin asignar'}</span>
                       </p>
                     </div>
 
-                    <div className="space-y-2 pt-2 text-sm text-zinc-400">
+                    <div className="space-y-2 pt-2 text-sm text-foreground/70">
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-zinc-500" />
+                        <Calendar className="w-4 h-4 text-foreground/50" />
                         <span className="capitalize">{formatSessionDate(dateTimeStr)}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-zinc-500" />
+                        <Clock className="w-4 h-4 text-foreground/50" />
                         <span>{formatSessionTime(dateTimeStr)}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-white/5 space-y-2">
-                    <div className="flex items-center justify-between text-xs text-zinc-400">
+                  <div className="mt-6 pt-4 border-t border-foreground/5 space-y-2">
+                    <div className="flex items-center justify-between text-xs text-foreground/70">
                       <span>Cupos reservados</span>
-                      <span className="font-bold text-white">{reserved} / {capacity}</span>
+                      <span className="font-bold text-foreground">{reserved} / {capacity}</span>
                     </div>
-                    <div className="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-foreground/10 rounded-full overflow-hidden">
                       <div 
                         className={`h-full rounded-full transition-all ${
-                          percentage < 50 ? 'bg-[#00E676]' : percentage < 90 ? 'bg-orange-500' : 'bg-[#D6007A]'
+                          percentage < 50 ? 'bg-status-success' : percentage < 90 ? 'bg-status-warning' : 'bg-cta'
                         }`}
                         style={{ width: `${percentage}%` }}
                       />
@@ -142,10 +142,10 @@ export default async function AdminClasesPage() {
             })}
           </div>
         ) : (
-          <div className="bg-[#121218] border border-white/5 rounded-3xl p-12 text-center">
-            <Dumbbell className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-white">No hay clases programadas</h3>
-            <p className="text-zinc-400 text-sm mt-1">Cuando los instructores programen clases, aparecerán aquí.</p>
+          <div className="bg-container border border-foreground/5 rounded-3xl p-12 text-center shadow-md">
+            <Dumbbell className="w-12 h-12 text-foreground/30 mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-foreground font-heading">No hay clases programadas</h3>
+            <p className="text-foreground/70 text-sm mt-1">Cuando los instructores programen clases, aparecerán aquí.</p>
           </div>
         )}
 

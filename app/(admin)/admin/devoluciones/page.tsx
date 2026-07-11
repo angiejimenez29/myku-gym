@@ -75,27 +75,27 @@ export default async function AdminDevolucionesPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#0A0A0C] py-8 px-5 md:px-10 text-white">
+    <div className="min-h-screen bg-background py-8 px-5 md:px-10 text-foreground">
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Header */}
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#D6007A]/10 border border-[#D6007A]/20 flex items-center justify-center">
-            <Receipt className="w-6 h-6 text-[#D6007A]" />
+          <div className="w-12 h-12 rounded-2xl bg-cta/10 border border-cta/20 flex items-center justify-center shadow-md">
+            <Receipt className="w-6 h-6 text-cta" />
           </div>
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight">Gestión de Devoluciones</h1>
-            <p className="text-zinc-400 text-sm mt-1">Revisa y procesa reembolsos de reservas canceladas</p>
+            <h1 className="text-3xl font-extrabold tracking-tight font-heading">Gestión de Devoluciones</h1>
+            <p className="text-foreground/70 text-sm mt-1">Revisa y procesa reembolsos de reservas canceladas</p>
           </div>
         </div>
 
         {/* Content */}
-        <div className="bg-[#121218] rounded-3xl p-6 border border-white/5 space-y-8">
+        <div className="bg-container rounded-3xl p-6 border border-foreground/5 space-y-8 shadow-md">
           <div>
-            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-2 font-heading">
               Pendientes
               {pendingRefunds.length > 0 && (
-                <span className="bg-orange-500 text-white text-xs px-2.5 py-0.5 rounded-full font-bold">
+                <span className="bg-status-warning text-white text-xs px-2.5 py-0.5 rounded-full font-bold">
                   {pendingRefunds.length}
                 </span>
               )}
@@ -111,10 +111,10 @@ export default async function AdminDevolucionesPage() {
                   
                   return (
                     <div key={idx} className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm text-zinc-300 bg-white/5 p-3 rounded-xl border border-white/5">
-                        <span>Clase: <strong className="font-bold text-white">{session?.theme || 'Myku'}</strong> - {dateStr}</span>
+                      <div className="flex items-center gap-2 text-sm text-foreground/70 bg-foreground/5 p-3 rounded-xl border border-foreground/5">
+                        <span>Clase: <strong className="font-bold text-foreground">{session?.theme || 'Myku'}</strong> - {dateStr}</span>
                       </div>
-                      <div className="space-y-3 pl-2 border-l-2 border-white/10 ml-2">
+                      <div className="space-y-3 pl-2 border-l-2 border-foreground/10 ml-2">
                         {group.refunds.map(refund => (
                           <AdminRefundItem key={refund.id} refund={refund} hideSessionInfo={true} />
                         ))}
@@ -123,7 +123,7 @@ export default async function AdminDevolucionesPage() {
                   )
                 })
               ) : (
-                <div className="text-center py-10 text-zinc-500 text-sm">
+                <div className="text-center py-10 text-foreground/50 text-sm">
                   No hay devoluciones pendientes.
                 </div>
               )}
@@ -131,10 +131,10 @@ export default async function AdminDevolucionesPage() {
           </div>
 
           {completedRefunds.length > 0 && (
-            <div className="pt-8 border-t border-white/5">
-              <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <div className="pt-8 border-t border-foreground/5">
+              <h2 className="text-lg font-bold mb-4 flex items-center gap-2 font-heading">
                 Completadas
-                <span className="bg-[#00E676]/10 text-[#00E676] text-xs px-2.5 py-0.5 rounded-full font-bold">
+                <span className="bg-status-success/10 text-status-success" >
                   {completedRefunds.length}
                 </span>
               </h2>
