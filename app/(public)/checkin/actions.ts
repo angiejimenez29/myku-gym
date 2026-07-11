@@ -138,3 +138,71 @@ export async function getStreakForCheckin(phone: string) {
 
   return data || null
 }
+
+export async function getReservationForCheckin(reservationId: string): Promise<CheckinReservation | null> {
+  const supabase = createAdminClient()
+  
+  const { data: res, error } = await supabase
+    .from('reservations')
+    .select(`
+      id,
+      client_name,
+      client_phone,
+      session:sessions (
+        session_date,
+        start_time,
+        theme,
+        class_type,
+        status
+      ),
+      spots:reservation_spots (
+        spot:session_spots (
+          spot_number,
+          status
+        )
+      )
+    `)
+    .eq('id', reservationId)
+    .single()
+
+  if (error || !res) {
+    console.error('Error fetching single reservation for checkin:', error)
+    return null
+  }
+
+  if (res.session?.status === 'cancelled') return null
+
+  const session = res.session
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const spotList = (res.spots as any[])?.map((s) => `#${s.spot?.spot_number}`).filter(Boolean) || []
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isCheckedIn = (res.spots as any[])?.some((s) => s.spot?.status === 'present') || false
+  
+  let formattedDate = session?.session_date || ''
+  if (formattedDate) {
+    const [y, m, d] = formattedDate.split('-')
+    formattedDate = `${d}/${m}/${y}`
+  }
+  
+  let formattedTime = session?.start_time || ''
+  if (formattedTime) {
+    const [h, min] = formattedTime.split(':')
+    const hour = parseInt(h, 10)
+    const suffix = hour >= 12 ? 'PM' : 'AM'
+    const h12 = hour % 12 || 12
+    formattedTime = `${h12}:${min} ${suffix}`
+  }
+  
+  const theme = session?.theme 
+    ? `${session.class_type} / ${session.theme}` 
+    : session?.class_type || 'Sin temática'
+
+  return {
+    id: res.id,
+    date: formattedDate,
+    time: formattedTime,
+    theme,
+    spots: spotList,
+    isCheckedIn,
+  }
+}

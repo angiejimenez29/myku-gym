@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import {
   Calendar,
   Clock,
@@ -22,7 +22,8 @@ export interface Reservation {
   isCheckedIn?: boolean
 }
 
-import { getReservationsForCheckin, markAttendanceForReservation, getStreakForCheckin } from './actions'
+import { getReservationsForCheckin, markAttendanceForReservation, getStreakForCheckin, getReservationForCheckin } from './actions'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 // ─── Inline keyframes injected once ─────────────────────────────────────────
@@ -109,7 +110,7 @@ function LogoBadge() {
       >
         <span className="text-white font-extrabold text-sm">M</span>
       </div>
-      <span className="text-white font-semibold tracking-wide text-sm">Meikyo Gym</span>
+      <span className="text-foreground font-semibold tracking-wide text-sm">Myku Gym</span>
     </div>
   )
 }
@@ -143,10 +144,10 @@ function ScreenPhone({
         <Phone size={28} className="text-brand" />
       </div>
 
-      <h1 className="text-[26px] font-extrabold text-white leading-tight mb-3">
+      <h1 className="text-[26px] font-extrabold text-foreground leading-tight mb-3">
         ¡Hola! Registra<br />tu llegada
       </h1>
-      <p className="text-sm leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
+      <p className="text-sm leading-relaxed mb-8 text-foreground/60">
         Ingresa el número de celular con el que reservaste tus sitios.
       </p>
 
@@ -167,7 +168,7 @@ function ScreenPhone({
             onChange(e.target.value.replace(/\D/g, '').slice(0, 12))
           }
           placeholder="Ej. 930154128"
-          className="w-full pl-10 pr-4 py-4 rounded-2xl text-white font-medium text-base outline-none transition-shadow"
+          className="w-full pl-10 pr-4 py-4 rounded-2xl text-foreground font-medium text-base outline-none transition-shadow"
           style={{
             background: 'var(--background)',
             border: '1px solid #86CECB40',
@@ -222,24 +223,19 @@ function ReservationCard({
 }) {
   return (
     <div
-      className="rounded-2xl p-4 flex flex-col gap-3"
-      style={{
-        background: 'rgba(21,18,38,0.9)',
-        border: '1px solid #86CECB45',
-        backdropFilter: 'blur(10px)',
-      }}
+      className="rounded-2xl p-4 flex flex-col gap-3 bg-container border border-foreground/10 shadow-sm"
     >
       {/* Date & time row */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
-          <Calendar size={13} className="text-brand-secondary" />
-          <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.82)' }}>
+          <Calendar size={13} className="text-brand" />
+          <span className="text-sm font-semibold text-foreground">
             {r.date}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Clock size={13} className="text-brand-secondary" />
-          <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.82)' }}>
+          <Clock size={13} className="text-brand" />
+          <span className="text-sm font-semibold text-foreground">
             {r.time}
           </span>
         </div>
@@ -248,12 +244,7 @@ function ReservationCard({
       {/* Theme badge */}
       <div>
         <span
-          className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block"
-          style={{
-            background: '#86CECB18',
-            color: 'var(--brand-secondary)',
-            border: '1px solid #86CECB50',
-          }}
+          className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block bg-brand/10 text-brand border border-brand/20"
         >
           Temática: {r.theme}
         </span>
@@ -262,7 +253,7 @@ function ReservationCard({
       {/* Spots */}
       <div className="flex items-center gap-1.5">
         <Users size={12} className="text-brand shrink-0" />
-        <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
+        <span className="text-xs text-foreground/60">
           Lugares:{' '}
           {r.spots.map((s, i) => (
             <span key={s}>
@@ -280,31 +271,13 @@ function ReservationCard({
         <button
           id={`btn-mark-attendance-${r.id}`}
           onClick={() => onMark(r)}
-          className="w-full py-3 rounded-xl text-sm font-bold transition-all active:scale-95 mt-1"
-          style={{
-            background: 'transparent',
-            border: '1.5px solid #86CECB',
-            color: 'var(--brand)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#86CECB15'
-            e.currentTarget.style.boxShadow = '0 0 14px #86CECB35'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.boxShadow = 'none'
-          }}
+          className="w-full py-3 rounded-xl text-sm font-bold transition-all active:scale-95 mt-1 border border-brand text-brand bg-transparent hover:bg-brand/5 hover:shadow-lg hover:shadow-brand/5 cursor-pointer"
         >
           Marcar Asistencia
         </button>
       ) : (
         <div 
-          className="w-full py-2.5 rounded-xl text-xs font-bold mt-1 flex items-center justify-center gap-1.5"
-          style={{
-            background: 'rgba(214, 0, 122, 0.1)',
-            border: '1px solid rgba(214, 0, 122, 0.2)',
-            color: 'var(--brand)'
-          }}
+          className="w-full py-2.5 rounded-xl text-xs font-bold mt-1 flex items-center justify-center gap-1.5 bg-brand/10 border border-brand/20 text-brand"
         >
           <span>Asistencia registrada</span>
         </div>
@@ -352,10 +325,10 @@ function ScreenReservations({
     <div className="flex flex-col flex-1">
       <LogoBadge />
 
-      <h1 className="text-[26px] font-extrabold text-white leading-tight mb-1">
+      <h1 className="text-[26px] font-extrabold text-foreground leading-tight mb-1">
         Tus próximas<br />reservas
       </h1>
-      <p className="text-xs mb-6" style={{ color: 'rgba(255,255,255,0.38)' }}>
+      <p className="text-xs mb-6 text-foreground/60">
         {pending.length > 0 
           ? "Selecciona la clase a la que vas a asistir hoy."
           : checkedIn.length > 0
@@ -377,13 +350,13 @@ function ScreenReservations({
               <Flame size={24} className={isUrgent ? 'opacity-50' : 'animate-[sparkle-pulse_2s_ease-in-out_infinite]'} />
             </div>
             <div>
-              <p className="text-sm font-bold text-white mb-0.5">{streak.current_week_streak} semanas seguidas</p>
+              <p className="text-sm font-bold text-foreground mb-0.5">{streak.current_week_streak} semanas seguidas</p>
               {isUrgent ? (
                 <p className="text-xs text-status-warning font-semibold max-w-[200px] leading-tight">
                   🔥 ¡No dejes que tu racha se enfríe! Reserva antes de que termine la semana.
                 </p>
               ) : (
-                <p className="text-xs font-medium text-white/60">
+                <p className="text-xs font-medium text-foreground/60">
                   {streak.free_class_available ? (
                     <span className="text-cta">🎉 ¡Tienes una clase gratis disponible!</span>
                   ) : (
@@ -410,7 +383,7 @@ function ScreenReservations({
         {/* PENDING SECTION */}
         {pending.length > 0 && (
           <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold text-white/90">Pendientes</h2>
+            <h2 className="text-sm font-semibold text-foreground/90">Pendientes</h2>
             {pending.map((r) => (
               <ReservationCard key={r.id} reservation={r} onMark={onMark} />
             ))}
@@ -419,13 +392,13 @@ function ScreenReservations({
 
         {/* SEPARATOR */}
         {pending.length > 0 && checkedIn.length > 0 && (
-          <div className="w-full h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
+          <div className="w-full h-px bg-foreground/10" />
         )}
 
         {/* CHECKED IN SECTION */}
         {checkedIn.length > 0 && (
           <div className="flex flex-col gap-4 opacity-75">
-            <h2 className="text-sm font-semibold text-white/70">Asistencia Registrada</h2>
+            <h2 className="text-sm font-semibold text-foreground/70">Asistencia Registrada</h2>
             {checkedIn.map((r) => (
               <ReservationCard key={r.id} reservation={r} onMark={onMark} />
             ))}
@@ -433,12 +406,12 @@ function ScreenReservations({
         )}
         
         {reservations.length === 0 && (
-          <div className="text-center mt-6 flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-white/5">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 text-brand">
+          <div className="text-center mt-6 flex flex-col items-center p-6 rounded-2xl border border-foreground/10 bg-foreground/5">
+            <div className="w-16 h-16 rounded-full bg-foreground/5 flex items-center justify-center mb-4 text-brand">
               <Calendar size={28} />
             </div>
-            <p className="text-sm text-white font-semibold mb-2">Aún no tienes clases reservadas.</p>
-            <p className="text-xs text-white/50 mb-6 leading-relaxed">
+            <p className="text-sm text-foreground font-semibold mb-2">Aún no tienes clases reservadas.</p>
+            <p className="text-xs text-foreground/50 mb-6 leading-relaxed">
               ¡Elige tu próxima sesión y sigue moviéndote! Tenemos nuevas rutinas esperándote.
             </p>
             <Link 
@@ -480,7 +453,7 @@ function ConfirmModal({
       aria-labelledby="modal-title"
     >
       <div
-        className="w-full rounded-3xl p-6 flex flex-col gap-4 relative"
+        className="w-full rounded-3xl p-6 flex flex-col gap-4 relative animate-in fade-in zoom-in duration-200"
         style={{
           background: 'var(--background)',
           border: '1px solid #86CECB65',
@@ -492,14 +465,7 @@ function ConfirmModal({
           id="btn-modal-close"
           onClick={onCancel}
           aria-label="Cerrar modal"
-          className="absolute top-4 right-4 transition-colors"
-          style={{ color: 'rgba(255,255,255,0.3)' }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')
-          }
+          className="absolute top-4 right-4 text-foreground/40 hover:text-foreground/80 transition-colors"
         >
           <X size={18} />
         </button>
@@ -517,28 +483,27 @@ function ConfirmModal({
 
         <h2
           id="modal-title"
-          className="text-lg font-extrabold text-white text-center"
+          className="text-lg font-extrabold text-foreground text-center"
         >
           Confirmar Asistencia
         </h2>
 
         {/* Mini summary card */}
         <div
-          className="rounded-xl p-3 text-center"
-          style={{ background: 'rgba(11,9,20,0.55)', border: '1px solid rgba(134, 206, 203, 0.3)' }}
+          className="rounded-xl p-3 text-center bg-foreground/5 border border-foreground/10"
         >
           <p className="font-semibold text-sm text-brand">
             {reservation.date} · {reservation.time}
           </p>
-          <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          <p className="text-xs mt-0.5 text-foreground/60">
             Lugares: {reservation.spots.join(', ')}
           </p>
         </div>
 
-        <p className="text-sm text-center leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+        <p className="text-sm text-center leading-relaxed text-foreground/70">
           Estás a punto de registrar tu ingreso y el de tus acompañantes para esta
           clase.{' '}
-          <span style={{ color: 'rgba(255,255,255,0.82)' }}>¿Deseas continuar?</span>
+          <span className="text-foreground/90 font-medium">¿Deseas continuar?</span>
         </p>
 
         {/* Action buttons */}
@@ -547,12 +512,7 @@ function ConfirmModal({
             id="btn-modal-cancel"
             onClick={onCancel}
             disabled={isLoading}
-            className="flex-1 py-3 rounded-xl text-sm font-bold transition-all active:scale-95 disabled:opacity-50"
-            style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              color: 'rgba(255,255,255,0.65)',
-            }}
+            className="flex-1 py-3 rounded-xl text-sm font-bold transition-all active:scale-95 disabled:opacity-50 bg-foreground/5 border border-foreground/10 text-foreground/80 hover:bg-foreground/10"
           >
             Cancelar
           </button>
@@ -622,16 +582,15 @@ function ScreenSuccess({ onRestart }: { onRestart: () => void }) {
       </div>
 
       <h1
-        className="text-[32px] font-extrabold text-white leading-tight mb-3 z-10"
+        className="text-[32px] font-extrabold text-foreground leading-tight mb-3 z-10"
         style={{ animation: 'fade-up 0.45s ease 0.85s both' }}
       >
         ¡Asistencia<br />Confirmada!
       </h1>
 
       <p
-        className="text-sm leading-relaxed max-w-[260px] z-10"
+        className="text-sm leading-relaxed max-w-[260px] z-10 text-foreground/60"
         style={{
-          color: 'rgba(255,255,255,0.5)',
           animation: 'fade-up 0.45s ease 1.05s both',
         }}
       >
@@ -662,7 +621,7 @@ function ScreenSuccess({ onRestart }: { onRestart: () => void }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 type Step = 'phone' | 'reservations' | 'confirm' | 'success'
 
-export default function CheckinPage() {
+function CheckinContent() {
   const [step, setStep] = useState<Step>('phone')
   const [phone, setPhone] = useState('')
   const [selectedReservation, setSelectedReservation] =
@@ -671,6 +630,24 @@ export default function CheckinPage() {
   const [reservations, setReservations] = useState<Reservation[]>([])
   const [streak, setStreak] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  const searchParams = useSearchParams()
+  const reservaIdParam = searchParams.get('reservaId')
+
+  useEffect(() => {
+    if (reservaIdParam) {
+      setIsLoading(true)
+      getReservationForCheckin(reservaIdParam)
+        .then((res) => {
+          if (res) {
+            setSelectedReservation(res)
+            setStep('confirm')
+          }
+        })
+        .catch(console.error)
+        .finally(() => setIsLoading(false))
+    }
+  }, [reservaIdParam])
 
   const handleSearch = async () => {
     setIsLoading(true)
@@ -770,7 +747,13 @@ export default function CheckinPage() {
           {step === 'confirm' && selectedReservation && (
             <ConfirmModal
               reservation={selectedReservation}
-              onCancel={() => setStep('reservations')}
+              onCancel={() => {
+                if (reservaIdParam) {
+                  setStep('phone')
+                } else {
+                  setStep('reservations')
+                }
+              }}
               onConfirm={handleConfirm}
               isLoading={isLoading}
             />
@@ -781,5 +764,19 @@ export default function CheckinPage() {
         </div>
       </div>
     </>
+  )
+}
+
+export default function CheckinPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+        <div className="text-center space-y-2">
+          <p className="text-sm font-semibold">Cargando...</p>
+        </div>
+      </div>
+    }>
+      <CheckinContent />
+    </Suspense>
   )
 }

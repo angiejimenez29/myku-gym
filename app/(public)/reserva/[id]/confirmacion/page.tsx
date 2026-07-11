@@ -107,11 +107,11 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-background p-4 rounded-xl border border-foreground/5 space-y-2">
                   <span className="text-brand font-bold text-sm">1. WhatsApp</span>
-                  <p className="text-foreground/75 text-xs">Recibirás un mensaje de confirmación con el ticket digital de tu reserva.</p>
+                  <p className="text-foreground/75 text-xs">Recibirás un mensaje por whatsapp confirmando tu reserva</p>
                 </div>
                 <div className="bg-background p-4 rounded-xl border border-foreground/5 space-y-2">
                   <span className="text-brand-text font-bold text-sm">2. Check-in</span>
-                  <p className="text-foreground/75 text-xs">Al llegar al gimnasio, muestra tu código en recepción o escanéalo para registrar tu asistencia.</p>
+                  <p className="text-foreground/75 text-xs">Al llegar, escanea el código en recepción y registra tu asistencia</p>
                 </div>
               </div>
             </div>

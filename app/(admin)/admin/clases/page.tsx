@@ -87,6 +87,17 @@ export default function AdminClasesPage() {
 
       if (sessErr) throw sessErr
 
+      const now = new Date()
+
+      // Filter out published sessions that are in the past
+      const activeSessions = (sessData || []).filter(session => {
+        if (session.status === 'published') {
+          const sessionDateTime = new Date(`${session.session_date}T${session.start_time}-05:00`)
+          return sessionDateTime.getTime() >= now.getTime()
+        }
+        return true
+      })
+
       // Sort sessions: published first, draft second, cancelled last
       const statusOrder = {
         published: 1,
@@ -94,7 +105,7 @@ export default function AdminClasesPage() {
         cancelled: 3
       }
       
-      const sorted = (sessData || []).sort((a, b) => {
+      const sorted = activeSessions.sort((a, b) => {
         const orderA = statusOrder[a.status as keyof typeof statusOrder] || 99
         const orderB = statusOrder[b.status as keyof typeof statusOrder] || 99
         if (orderA !== orderB) {
