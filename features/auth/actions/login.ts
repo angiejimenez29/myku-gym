@@ -23,6 +23,32 @@ export async function login(prevState: any, formData: FormData) {
     return { error: 'Correo o contraseña incorrectos' }
   }
 
-  // Redirigir al portal de instructor tras el éxito
-  redirect('/panel')
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { error: 'Error al iniciar sesión' }
+  }
+
+  // Verificar si es instructor
+  const { data: instructor } = await supabase
+    .from('instructors')
+    .select('id')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  if (instructor) {
+    redirect('/panel')
+  }
+
+  // Verificar si es admin
+  const { data: admin } = await supabase
+    .from('admins' as any)
+    .select('id')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  if (admin) {
+    redirect('/admin/dashboard')
+  }
+
+  return { error: 'Este usuario no tiene un rol válido asignado' }
 }

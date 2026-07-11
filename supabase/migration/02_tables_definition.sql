@@ -55,8 +55,6 @@ create table public.sessions (
             and capacity <= 40
         ),
 
-    qr_code text unique,
-
     is_featured boolean not null
         default false,
 
